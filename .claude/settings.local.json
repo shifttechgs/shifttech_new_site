@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:www.shifttechgs.com)",
+      "WebFetch(domain:www.scrums.com)",
+      "WebFetch(domain:www.stan.vision)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
