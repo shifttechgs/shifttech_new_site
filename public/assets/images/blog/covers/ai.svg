@@ -1,0 +1,30 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="500" fill="#0C2B24"/>
+  <g stroke="rgba(244,242,234,.5)" stroke-width="3" stroke-dasharray="9 7" stroke-linecap="round">
+    <line x1="16" y1="42" x2="784" y2="42"/>
+    <line x1="16" y1="458" x2="784" y2="458"/>
+    <line x1="42" y1="16" x2="42" y2="484"/>
+    <line x1="758" y1="16" x2="758" y2="484"/>
+  </g>
+  <g fill="#74B812">
+    <circle cx="42" cy="42" r="7"/>
+    <circle cx="758" cy="42" r="7"/>
+    <circle cx="42" cy="458" r="7"/>
+    <circle cx="758" cy="458" r="7"/>
+  </g>
+  <g stroke="rgba(244,242,234,.5)" stroke-width="1.5">
+    <line x1="320" y1="180" x2="400" y2="250"/>
+    <line x1="480" y1="180" x2="400" y2="250"/>
+    <line x1="320" y1="320" x2="400" y2="250"/>
+    <line x1="480" y1="320" x2="400" y2="250"/>
+    <line x1="320" y1="180" x2="320" y2="320"/>
+    <line x1="480" y1="180" x2="480" y2="320"/>
+  </g>
+  <g stroke="none">
+    <circle cx="400" cy="250" r="12" fill="#74B812"/>
+    <circle cx="320" cy="180" r="7" fill="rgba(244,242,234,.85)"/>
+    <circle cx="480" cy="180" r="7" fill="rgba(244,242,234,.85)"/>
+    <circle cx="320" cy="320" r="7" fill="rgba(244,242,234,.85)"/>
+    <circle cx="480" cy="320" r="7" fill="rgba(244,242,234,.85)"/>
+  </g>
+</svg>
