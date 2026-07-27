@@ -40,25 +40,28 @@ class ProcessRecurringInvoices extends Command
                 'business_id'     => $rec->business_id,
                 'client_id'       => $rec->client_id,
                 'job_id'          => $rec->job_id,
+                'invoice_type'    => 'recurring',
                 'invoice_date'    => $today,
                 'due_date'        => $today->copy()->addDays(14),
                 'status'          => 'Sent',
-                'subtotal'        => $rec->total_amount,
-                'vat_amount'      => 0,
+                'sub_total'       => $rec->total_amount,
+                'total_tax'       => 0,
                 'total_amount'    => $rec->total_amount,
                 'balance'         => $rec->total_amount,
                 'internal_notes'  => "Auto-generated from recurring schedule #{$rec->recurring_invoice_id}",
                 'client_message'  => $rec->client_message,
             ]);
 
-            // Copy items
+            // Copy items from recurring template to the new invoice
             foreach ($rec->items as $item) {
+                $lineTotal = $item->quantity * $item->unit_price;
                 InvoiceItem::create([
-                    'invoice_id'  => $invoice->id,
+                    'invoice_id'  => $invoice->invoice_id,
                     'description' => $item->description,
                     'quantity'    => $item->quantity,
                     'unit_price'  => $item->unit_price,
-                    'total'       => $item->total,
+                    'line_total'  => $lineTotal,
+                    'sort_order'  => 0,
                 ]);
             }
 
@@ -92,4 +95,5 @@ class ProcessRecurringInvoices extends Command
         $this->info("Done. Processed {$due->count()} recurring schedules.");
     }
 }
+
 

@@ -4,9 +4,9 @@
     <h1 class="crm-page-title">Edit User</h1></div>
     <a href="{{ route('crm.users.index') }}" class="crm-btn crm-btn-secondary">Back</a>
 </div>
+<div style="max-width:560px;" x-data="{ deactivateOpen: false }">
 <form method="POST" action="{{ route('crm.users.update', $user) }}">
 @csrf @method('PUT')
-<div style="max-width:560px;">
     <div class="crm-card">
         <div class="crm-card-header"><span class="crm-card-title">{{ $user->name }}</span><span style="font-size:0.8125rem;color:var(--color-ink-3);">{{ $user->email }}</span></div>
         <div class="crm-card-body" style="display:flex;flex-direction:column;gap:1rem;">
@@ -31,14 +31,32 @@
     <div style="margin-top:1rem;display:flex;gap:0.5rem;">
         <button type="submit" class="crm-btn crm-btn-primary">Save Changes</button>
         @if($user->id !== auth()->id())
-        <form method="POST" action="{{ route('crm.users.destroy', $user) }}" onsubmit="return confirm('Deactivate this user?')" style="margin:0;">
-            @csrf @method('DELETE')
-            <button type="submit" class="crm-btn crm-btn-danger">Deactivate</button>
-        </form>
+        <button type="button" @click="deactivateOpen = true" class="crm-btn crm-btn-danger">Deactivate</button>
         @endif
         <a href="{{ route('crm.users.index') }}" class="crm-btn crm-btn-ghost">Cancel</a>
     </div>
-</div>
 </form>
+
+@if($user->id !== auth()->id())
+<div x-show="deactivateOpen" class="crm-modal-overlay" @click.self="deactivateOpen = false">
+    <div class="crm-modal" @click.stop style="max-width:420px;">
+        <div class="crm-modal-header">
+            <h3 class="crm-modal-title">Deactivate User</h3>
+            <button type="button" @click="deactivateOpen = false" class="crm-icon-btn"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+        </div>
+        <div class="crm-modal-body">
+            <p style="font-size:0.9375rem;color:var(--color-ink-2);">Are you sure you want to deactivate <strong>{{ $user->name }}</strong>? They will no longer be able to log in.</p>
+        </div>
+        <div class="crm-modal-footer">
+            <button type="button" @click="deactivateOpen = false" class="crm-btn crm-btn-secondary">Cancel</button>
+            <form method="POST" action="{{ route('crm.users.destroy', $user) }}" style="display:inline;">
+                @csrf @method('DELETE')
+                <button type="submit" class="crm-btn crm-btn-danger">Deactivate</button>
+            </form>
+        </div>
+    </div>
+</div>
+@endif
+</div>
 </x-crm::layout>
 

@@ -8,6 +8,10 @@ return new class extends Migration
 {
     public function up(): void
     {
+        if (Schema::hasTable('recurring_invoices')) {
+            return;
+        }
+
         Schema::create('recurring_invoices', function (Blueprint $table) {
             $table->id();
             $table->string('recurring_invoice_id')->unique();
@@ -53,4 +57,5 @@ return new class extends Migration
         Schema::dropIfExists('recurring_invoices');
     }
 };
+
 

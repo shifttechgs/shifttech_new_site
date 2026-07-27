@@ -110,12 +110,27 @@
             </div>
         </div>
         {{-- Danger --}}
-        <div class="crm-card">
+        <div class="crm-card" x-data="{ deleteOpen: false }">
             <div class="crm-card-body">
-                <form method="POST" action="{{ route('crm.quotes.destroy', $quote) }}" onsubmit="return confirm('Delete this quote?')">
-                    @csrf @method('DELETE')
-                    <button type="submit" class="crm-btn crm-btn-danger" style="width:100%;">Delete Quote</button>
-                </form>
+                <button type="button" @click="deleteOpen = true" class="crm-btn crm-btn-danger" style="width:100%;">Delete Quote</button>
+            </div>
+            <div x-show="deleteOpen" class="crm-modal-overlay" @click.self="deleteOpen = false">
+                <div class="crm-modal" @click.stop style="max-width:420px;">
+                    <div class="crm-modal-header">
+                        <h3 class="crm-modal-title">Delete Quote</h3>
+                        <button type="button" @click="deleteOpen = false" class="crm-icon-btn"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+                    </div>
+                    <div class="crm-modal-body">
+                        <p style="font-size:0.9375rem;color:var(--color-ink-2);">Are you sure you want to delete <strong>{{ $quote->quote_id }}</strong>? This action cannot be undone.</p>
+                    </div>
+                    <div class="crm-modal-footer">
+                        <button type="button" @click="deleteOpen = false" class="crm-btn crm-btn-secondary">Cancel</button>
+                        <form method="POST" action="{{ route('crm.quotes.destroy', $quote) }}" style="display:inline;">
+                            @csrf @method('DELETE')
+                            <button type="submit" class="crm-btn crm-btn-danger">Delete Quote</button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

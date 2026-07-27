@@ -6,8 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Mail\InvoiceMail;
 use App\Models\ActivityLog;
 use App\Models\BusinessClient;
+use App\Models\BusinessService;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
+use App\Models\Job;
+use App\Models\RecurringInvoice;
 use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -28,6 +31,9 @@ class InvoiceController extends Controller
         }
         if ($status = $request->get('status')) {
             $query->where('status', $status);
+        }
+        if ($type = $request->get('type')) {
+            $query->where('invoice_type', $type);
         }
 
         $invoices = $query->paginate(25)->withQueryString();
@@ -53,38 +59,59 @@ class InvoiceController extends Controller
 
     public function create(Request $request)
     {
-        $clients = BusinessClient::orderBy('firstname')->get();
-        $selectedClient = $request->get('client_id') ? BusinessClient::find($request->get('client_id')) : null;
-        return view('crm.invoices.create', compact('clients', 'selectedClient'));
+        $clients  = BusinessClient::orderBy('company')->orderBy('firstname')->get();
+        $services = BusinessService::where('is_active', true)->orderBy('category')->orderBy('name')->get();
+        $jobs     = Job::with('items', 'quote')
+                        ->orderBy('created_at', 'desc')
+                        ->get();
+
+        $prefilledJobId    = $request->get('job_id');
+        $prefilledClientId = $request->get('client_id');
+
+        return view('crm.invoices.create', compact('clients', 'services', 'jobs', 'prefilledJobId', 'prefilledClientId'));
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
-            'client_id'      => 'required|string',
-            'invoice_date'   => 'required|date',
-            'due_date'       => 'required|date',
-            'status'         => 'required|in:Draft,Sent,PartiallyPaid,Paid,Overdue,Cancelled',
-            'discount'       => 'nullable|numeric|min:0',
-            'deposit_paid'   => 'nullable|numeric|min:0',
-            'payment_method' => 'nullable|string',
-            'internal_notes' => 'nullable|string',
-            'client_message' => 'nullable|string',
-            'items'              => 'array',
-            'items.*.description'=> 'required|string',
-            'items.*.quantity'   => 'required|numeric|min:0',
-            'items.*.unit_price' => 'required|numeric|min:0',
+            'client_id'        => 'required|string',
+            'job_id'           => 'nullable|string',
+            'invoice_type'     => 'nullable|string',
+            'invoice_date'     => 'required|date',
+            'due_date'         => 'required|date',
+            'status'           => 'required|in:Draft,Sent,PartiallyPaid,Paid,Overdue,Cancelled',
+            'discount'         => 'nullable|numeric|min:0',
+            'deposit_paid'     => 'nullable|numeric|min:0',
+            'payment_method'   => 'nullable|string',
+            'internal_notes'   => 'nullable|string',
+            'client_message'   => 'nullable|string',
+            'send_immediately' => 'nullable|boolean',
+            'currency'         => 'nullable|in:ZAR,USD,EUR,GBP',
+            'is_recurring'     => 'nullable|boolean',
+            'recur_frequency'  => 'nullable|in:Weekly,Monthly,Quarterly,Annually',
+            'recur_start_date' => 'nullable|date',
+            'recur_end_date'   => 'nullable|date',
+            'items'                => 'array',
+            'items.*.description'  => 'required|string',
+            'items.*.quantity'     => 'required|numeric|min:0',
+            'items.*.unit_price'   => 'required|numeric|min:0',
         ]);
+
+        $sendNow = (bool) ($data['send_immediately'] ?? false);
+        $status  = $sendNow ? 'Sent' : ($data['status'] ?? 'Draft');
 
         $invoice = Invoice::create([
             'client_id'      => $data['client_id'],
+            'job_id'         => $data['job_id'] ?? null,
+            'invoice_type'   => $data['invoice_type'] ?? 'project',
             'created_by'     => auth()->id(),
             'invoice_date'   => $data['invoice_date'],
             'due_date'       => $data['due_date'],
-            'status'         => $data['status'],
+            'status'         => $status,
+            'currency'       => $data['currency'] ?? 'ZAR',
             'discount'       => $data['discount'] ?? 0,
             'deposit_paid'   => $data['deposit_paid'] ?? 0,
-            'payment_method' => $data['payment_method'] ?? 'EFT',
+            'payment_method' => $data['payment_method'] ?? null,
             'internal_notes' => $data['internal_notes'] ?? null,
             'client_message' => $data['client_message'] ?? null,
             'sub_total'      => 0,
@@ -93,26 +120,69 @@ class InvoiceController extends Controller
             'balance'        => 0,
         ]);
 
-        if (!empty($data['items'])) {
-            foreach ($data['items'] as $i => $item) {
-                InvoiceItem::create([
-                    'invoice_id'  => $invoice->invoice_id,
-                    'description' => $item['description'],
-                    'quantity'    => $item['quantity'],
-                    'unit_price'  => $item['unit_price'],
-                    'line_total'  => $item['quantity'] * $item['unit_price'],
-                    'sort_order'  => $i,
-                ]);
-            }
+        foreach (($data['items'] ?? []) as $i => $item) {
+            InvoiceItem::create([
+                'invoice_id'  => $invoice->invoice_id,
+                'description' => $item['description'],
+                'quantity'    => $item['quantity'],
+                'unit_price'  => $item['unit_price'],
+                'line_total'  => $item['quantity'] * $item['unit_price'],
+                'sort_order'  => $i,
+            ]);
         }
 
         $invoice->refresh()->load('items');
         $invoice->recalculateTotals();
 
+        // Create recurring schedule if requested
+        if (!empty($data['is_recurring'])) {
+            $startDate = $data['recur_start_date'] ?? now()->toDateString();
+            $frequency = $data['recur_frequency'] ?? 'Monthly';
+            $nextDate  = match ($frequency) {
+                'Weekly'    => \Carbon\Carbon::parse($startDate)->addWeek()->toDateString(),
+                'Quarterly' => \Carbon\Carbon::parse($startDate)->addMonths(3)->toDateString(),
+                'Annually'  => \Carbon\Carbon::parse($startDate)->addYear()->toDateString(),
+                default     => \Carbon\Carbon::parse($startDate)->addMonth()->toDateString(),
+            };
+
+            $rec = RecurringInvoice::create([
+                'client_id'          => $invoice->client_id,
+                'job_id'             => $invoice->job_id,
+                'frequency'          => $frequency,
+                'total_amount'       => $invoice->total_amount,
+                'deposit_paid'       => $invoice->deposit_paid,
+                'payment_due'        => $invoice->balance,
+                'status'             => 'Active',
+                'client_message'     => $invoice->client_message,
+                'internal_notes'     => $invoice->internal_notes,
+                'created_by'         => auth()->id(),
+                'start_date'         => $startDate,
+                'end_date'           => $data['recur_end_date'] ?? null,
+                'next_invoice_date'  => $nextDate,
+                'invoices_generated' => 1,
+            ]);
+
+            foreach ($invoice->items as $item) {
+                $rec->items()->create([
+                    'description' => $item->description,
+                    'quantity'    => $item->quantity,
+                    'unit_price'  => $item->unit_price,
+                    'line_total'  => $item->line_total,
+                ]);
+            }
+
+            $invoice->update(['recurring_invoice_id' => $rec->recurring_invoice_id]);
+        }
+
         ActivityLog::record('created', 'Invoice', $invoice->invoice_id, "Invoice {$invoice->invoice_id} created");
         NotificationService::info('New Invoice', "Invoice {$invoice->invoice_id} created for {$invoice->client->full_name}", route('crm.invoices.show', $invoice));
 
-        return redirect()->route('crm.invoices.show', $invoice)->with('success', 'Invoice created.');
+        if ($sendNow && $invoice->client->email) {
+            Mail::to($invoice->client->email)->send(new InvoiceMail($invoice));
+            ActivityLog::record('sent', 'Invoice', $invoice->invoice_id, "Invoice emailed to {$invoice->client->email} on creation");
+        }
+
+        return redirect()->route('crm.invoices.show', $invoice)->with('success', $sendNow ? 'Invoice created and sent.' : 'Invoice saved as draft.');
     }
 
     public function edit(Invoice $invoice)
@@ -131,6 +201,7 @@ class InvoiceController extends Controller
             'discount'       => 'nullable|numeric|min:0',
             'deposit_paid'   => 'nullable|numeric|min:0',
             'payment_method' => 'nullable|string',
+            'currency'       => 'nullable|in:ZAR,USD,EUR,GBP',
             'internal_notes' => 'nullable|string',
             'client_message' => 'nullable|string',
             'items'              => 'array',
@@ -143,6 +214,7 @@ class InvoiceController extends Controller
             'invoice_date'   => $data['invoice_date'],
             'due_date'       => $data['due_date'],
             'status'         => $data['status'],
+            'currency'       => $data['currency'] ?? $invoice->currency,
             'discount'       => $data['discount'] ?? 0,
             'deposit_paid'   => $data['deposit_paid'] ?? 0,
             'payment_method' => $data['payment_method'] ?? 'EFT',

@@ -3,169 +3,266 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Invoice {{ $invoice->invoice_id }}</title>
-<style>
-    body { margin: 0; padding: 0; background: #f1f5f9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-    .wrapper { max-width: 600px; margin: 32px auto; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,.1); }
-    .header { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); padding: 32px; text-align: center; }
-    .header h1 { color: white; margin: 0; font-size: 22px; font-weight: 700; }
-    .header p { color: rgba(255,255,255,0.6); margin: 6px 0 0; font-size: 14px; }
-    .status-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; margin-top: 10px; }
-    .status-sent { background: #dbeafe; color: #1d4ed8; }
-    .status-overdue { background: #fee2e2; color: #dc2626; }
-    .status-paid { background: #d1fae5; color: #065f46; }
-    .body { padding: 32px; }
-    .greeting { font-size: 16px; color: #1e293b; margin-bottom: 16px; }
-    .invoice-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin: 24px 0; }
-    .invoice-box-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #e2e8f0; font-size: 14px; }
-    .invoice-box-row:last-child { border-bottom: none; }
-    .invoice-box-row .label { color: #64748b; }
-    .invoice-box-row .value { font-weight: 600; color: #1e293b; }
-    .total-row { background: #0f172a; color: white; border-radius: 6px; padding: 12px 16px; display: flex; justify-content: space-between; margin-top: 12px; font-weight: 700; font-size: 16px; }
-    .overdue-banner { background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; padding: 12px 16px; margin-top: 12px; font-size: 13px; color: #991b1b; }
-    .banking-box { background: #1e293b; color: white; border-radius: 8px; padding: 20px; margin: 24px 0; }
-    .banking-box h3 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; color: #94a3b8; margin: 0 0 12px; }
-    .banking-row { display: flex; justify-content: space-between; padding: 5px 0; font-size: 13px; border-bottom: 1px solid #334155; }
-    .banking-row:last-child { border-bottom: none; }
-    .banking-row .bk-label { color: #94a3b8; }
-    .banking-row .bk-value { color: white; font-weight: 500; }
-    .ref-value { color: #fbbf24 !important; font-weight: 700 !important; font-size: 15px !important; }
-    .view-button { display: block; text-align: center; background: #635bff; color: white !important; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-weight: 600; font-size: 15px; margin: 28px 0; }
-    .message-box { background: #f0fdf4; border-left: 4px solid #10b981; padding: 16px; border-radius: 4px; font-size: 14px; color: #065f46; margin: 20px 0; }
-    .footer-note { font-size: 12px; color: #94a3b8; margin-top: 24px; line-height: 1.6; }
-    .footer { background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 20px 32px; text-align: center; }
-    .footer p { font-size: 12px; color: #94a3b8; margin: 0; line-height: 1.6; }
-</style>
+<title>Invoice {{ $invoice->invoice_id }} — {{ $business->business_name }}</title>
 </head>
-<body>
-<div class="wrapper">
+<body style="margin:0;padding:0;background:#f5f3ef;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;">
 
-    <!-- Header -->
-    <div class="header">
-        <h1>{{ $business->business_name }}</h1>
-        <p>Tax Invoice · {{ $invoice->invoice_id }}</p>
-        @php
-            $badgeClass = match($invoice->status) {
-                'Paid'    => 'status-paid',
-                'Overdue' => 'status-overdue',
-                default   => 'status-sent',
-            };
-        @endphp
-        <span class="status-badge {{ $badgeClass }}">{{ $invoice->status }}</span>
-    </div>
+@php
+    // Always compute from items — never trust stale cached DB fields
+    $subTotal    = $invoice->items->sum('line_total');
+    $discount    = (float) ($invoice->discount ?? 0);
+    $totalAmount = max(0, $subTotal - $discount);
+    $depositPaid = (float) ($invoice->deposit_paid ?? 0);
+    $balance     = max(0, $totalAmount - $depositPaid);
+@endphp
 
-    <!-- Body -->
-    <div class="body">
-        <p class="greeting">
-            Dear {{ $invoice->client?->firstname ?? 'Valued Client' }},
-        </p>
+<table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="background:#f5f3ef;padding:44px 16px;">
+<tr><td align="center">
+<table width="600" cellpadding="0" cellspacing="0" role="presentation" style="max-width:600px;width:100%;">
 
-        <p style="color:#475569;font-size:15px;line-height:1.6;">
-            Please find attached your invoice
-            @if($invoice->job_id) for job <strong>{{ $invoice->job_id }}</strong>@endif.
-            @if($invoice->due_date)
-                Payment is due by <strong>{{ $invoice->due_date->format('d M Y') }}</strong>.
+    {{-- Top accent bar --}}
+    <tr>
+        <td style="background:#1a3a2a;height:4px;border-radius:6px 6px 0 0;font-size:0;line-height:0;">&nbsp;</td>
+    </tr>
+
+    {{-- Logo / brand header --}}
+    <tr>
+        <td align="center" style="background:#ffffff;padding:32px 48px 24px;border-bottom:1px solid #ede9e3;">
+            @if(!empty($logoUrl))
+                <img src="{{ $logoUrl }}" alt="{{ $business->business_name }}" style="max-height:42px;max-width:180px;display:block;margin:0 auto 10px;">
+            @else
+                <p style="margin:0;font-size:17px;font-weight:700;color:#1a3a2a;letter-spacing:-0.3px;">{{ $business->business_name }}</p>
             @endif
-        </p>
-
-        @if($invoice->status === 'Overdue')
-        <div class="overdue-banner">
-            ⚠️ <strong>This invoice is overdue.</strong> Please make payment as soon as possible to avoid any disruption of services.
-        </div>
-        @endif
-
-        <!-- Invoice Summary -->
-        <div class="invoice-box">
-            <div class="invoice-box-row">
-                <span class="label">Invoice Number</span>
-                <span class="value">{{ $invoice->invoice_id }}</span>
-            </div>
-            <div class="invoice-box-row">
-                <span class="label">Invoice Date</span>
-                <span class="value">{{ $invoice->invoice_date?->format('d M Y') }}</span>
-            </div>
-            @if($invoice->due_date)
-            <div class="invoice-box-row">
-                <span class="label">Due Date</span>
-                <span class="value">{{ $invoice->due_date->format('d M Y') }}</span>
-            </div>
+            @if($business->website)
+            <p style="margin:4px 0 0;font-size:11px;color:#a8a29e;letter-spacing:0.3px;">{{ $business->website }}</p>
             @endif
-            @if($invoice->deposit_paid > 0)
-            <div class="invoice-box-row">
-                <span class="label">Deposit Paid</span>
-                <span class="value" style="color:#10b981;">-R {{ number_format($invoice->deposit_paid, 2) }}</span>
-            </div>
+        </td>
+    </tr>
+
+    {{-- Body --}}
+    <tr>
+        <td style="background:#ffffff;padding:36px 48px 40px;">
+
+            {{-- Greeting --}}
+            <p style="margin:0 0 8px;font-size:16px;font-weight:600;color:#1c1917;">
+                Dear {{ $invoice->client?->firstname ?? 'Valued Client' }},
+            </p>
+            <p style="margin:0 0 28px;font-size:14px;color:#78716c;line-height:1.75;">
+                Please find attached your invoice from
+                <span style="color:#1c1917;font-weight:600;">{{ $business->business_name }}</span>.
+                @if($invoice->due_date)
+                    Payment is due by <span style="color:#1c1917;font-weight:600;">{{ $invoice->due_date->format('d M Y') }}</span>.
+                @endif
+            </p>
+
+            {{-- Overdue banner --}}
+            @if($invoice->status === 'Overdue')
+            <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin-bottom:20px;">
+                <tr>
+                    <td style="background:#fef2f2;border-left:3px solid #ef4444;padding:12px 16px;border-radius:0 5px 5px 0;">
+                        <p style="margin:0;font-size:13px;color:#991b1b;line-height:1.5;">
+                            <strong>&#9888; This invoice is overdue.</strong>
+                            Please make payment as soon as possible to avoid disruption of services.
+                        </p>
+                    </td>
+                </tr>
+            </table>
             @endif
-        </div>
 
-        <div class="total-row">
-            <span>Amount Due</span>
-            <span>R {{ number_format($invoice->balance ?? $invoice->total_amount, 2) }}</span>
-        </div>
+            {{-- Invoice meta strip --}}
+            <table width="100%" cellpadding="0" cellspacing="0" role="presentation"
+                   style="background:#faf9f7;border:1px solid #ede9e3;border-radius:8px;margin-bottom:24px;">
+                <tr>
+                    <td width="33%" style="padding:16px 20px;border-right:1px solid #ede9e3;">
+                        <p style="margin:0 0 3px;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.9px;color:#a8a29e;">Invoice No.</p>
+                        <p style="margin:0;font-size:12.5px;font-weight:700;color:#1c1917;font-family:monospace;">{{ $invoice->invoice_id }}</p>
+                    </td>
+                    <td width="33%" style="padding:16px 20px;border-right:1px solid #ede9e3;">
+                        <p style="margin:0 0 3px;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.9px;color:#a8a29e;">Issued</p>
+                        <p style="margin:0;font-size:12.5px;font-weight:600;color:#1c1917;">{{ $invoice->invoice_date?->format('d M Y') }}</p>
+                    </td>
+                    <td width="33%" style="padding:16px 20px;">
+                        <p style="margin:0 0 3px;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.9px;color:#a8a29e;">Due Date</p>
+                        <p style="margin:0;font-size:12.5px;font-weight:600;color:{{ $invoice->status === 'Overdue' ? '#dc2626' : '#1c1917' }};">
+                            {{ $invoice->due_date ? $invoice->due_date->format('d M Y') : '—' }}
+                        </p>
+                    </td>
+                </tr>
+            </table>
 
-        @if($invoice->client_message)
-        <div class="message-box" style="margin-top:16px;">
-            <strong>Message:</strong> {{ $invoice->client_message }}
-        </div>
-        @endif
+            {{-- Line items --}}
+            <table width="100%" cellpadding="0" cellspacing="0" role="presentation"
+                   style="border-radius:8px;overflow:hidden;border:1px solid #ede9e3;margin-bottom:6px;">
+                <tr>
+                    <th align="left"  style="background:#1a3a2a;padding:10px 16px;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px;color:#ffffff;">Service / Description</th>
+                    <th align="right" style="background:#1a3a2a;padding:10px 16px;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px;color:#ffffff;width:36px;">Qty</th>
+                    <th align="right" style="background:#1a3a2a;padding:10px 16px;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px;color:#ffffff;width:88px;">Unit</th>
+                    <th align="right" style="background:#1a3a2a;padding:10px 16px;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px;color:#ffffff;width:88px;">Total</th>
+                </tr>
+                @foreach($invoice->items as $i => $item)
+                <tr style="background:{{ $i % 2 === 0 ? '#ffffff' : '#faf9f7' }}">
+                    <td style="padding:10px 16px;font-size:13px;color:#44403c;border-bottom:1px solid #f3f0eb;">{{ $item->description }}</td>
+                    <td align="right" style="padding:10px 16px;font-size:13px;color:#78716c;border-bottom:1px solid #f3f0eb;">{{ $item->quantity }}</td>
+                    <td align="right" style="padding:10px 16px;font-size:13px;color:#78716c;border-bottom:1px solid #f3f0eb;">R&nbsp;{{ number_format($item->unit_price, 2) }}</td>
+                    <td align="right" style="padding:10px 16px;font-size:13px;font-weight:600;color:#1c1917;border-bottom:1px solid #f3f0eb;">R&nbsp;{{ number_format($item->line_total, 2) }}</td>
+                </tr>
+                @endforeach
 
-        <!-- Banking Details -->
-        @if($business->bank_account_number)
-        <div class="banking-box">
-            <h3>EFT Payment Details</h3>
-            @if($business->bank_name)
-            <div class="banking-row"><span class="bk-label">Bank</span><span class="bk-value">{{ $business->bank_name }}</span></div>
+                {{-- Subtotal / Discount rows --}}
+                @if($discount > 0)
+                <tr>
+                    <td colspan="3" align="right" style="padding:10px 16px 4px;font-size:12px;color:#78716c;">Subtotal</td>
+                    <td align="right" style="padding:10px 16px 4px;font-size:12px;color:#78716c;">R&nbsp;{{ number_format($subTotal, 2) }}</td>
+                </tr>
+                <tr>
+                    <td colspan="3" align="right" style="padding:2px 16px 8px;font-size:12px;color:#16a34a;">Discount</td>
+                    <td align="right" style="padding:2px 16px 8px;font-size:12px;color:#16a34a;">&minus;R&nbsp;{{ number_format($discount, 2) }}</td>
+                </tr>
+                @endif
+
+                {{-- Invoice total row --}}
+                <tr style="background:#1a3a2a;">
+                    <td colspan="3" align="right" style="padding:13px 16px;font-size:13px;font-weight:700;color:#ffffff;">Invoice Total</td>
+                    <td align="right" style="padding:13px 16px;font-size:15px;font-weight:700;color:#ffffff;">R&nbsp;{{ number_format($totalAmount, 2) }}</td>
+                </tr>
+            </table>
+
+            {{-- Deposit paid & balance due --}}
+            @if($depositPaid > 0)
+            <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin-top:8px;">
+                <tr>
+                    <td style="background:#fffbeb;border-left:3px solid #f59e0b;padding:10px 14px;border-radius:0 5px 5px 0;">
+                        <p style="margin:0;font-size:12px;color:#92400e;line-height:1.6;">
+                            Deposit paid: <strong>R&nbsp;{{ number_format($depositPaid, 2) }}</strong>
+                            &nbsp;&nbsp;&middot;&nbsp;&nbsp;
+                            <strong style="font-size:13px;">Balance due: R&nbsp;{{ number_format($balance, 2) }}</strong>
+                        </p>
+                    </td>
+                </tr>
+            </table>
             @endif
-            @if($business->bank_account_name)
-            <div class="banking-row"><span class="bk-label">Account Name</span><span class="bk-value">{{ $business->bank_account_name }}</span></div>
+
+            {{-- Client message --}}
+            @if($invoice->client_message)
+            <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin-top:12px;">
+                <tr>
+                    <td style="background:#faf9f7;border-left:3px solid #1a3a2a;padding:10px 14px;border-radius:0 5px 5px 0;">
+                        <p style="margin:0 0 3px;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px;color:#a8a29e;">Note</p>
+                        <p style="margin:0;font-size:13px;color:#44403c;line-height:1.6;">{{ $invoice->client_message }}</p>
+                    </td>
+                </tr>
+            </table>
             @endif
-            <div class="banking-row"><span class="bk-label">Account Number</span><span class="bk-value">{{ $business->bank_account_number }}</span></div>
-            @if($business->bank_branch_code)
-            <div class="banking-row"><span class="bk-label">Branch Code</span><span class="bk-value">{{ $business->bank_branch_code }}</span></div>
+
+            {{-- EFT banking details --}}
+            @if($business->bank_account_number)
+            <table width="100%" cellpadding="0" cellspacing="0" role="presentation"
+                   style="margin-top:28px;background:#1a3a2a;border-radius:8px;">
+                <tr>
+                    <td style="padding:20px 24px;">
+                        <p style="margin:0 0 14px;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.9px;color:rgba(255,255,255,0.5);">EFT Payment Details</p>
+                        <table width="100%" cellpadding="0" cellspacing="0">
+                            @if($business->bank_name)
+                            <tr>
+                                <td style="padding:5px 0;font-size:12px;color:rgba(255,255,255,0.5);width:150px;">Bank</td>
+                                <td style="padding:5px 0;font-size:12px;color:#ffffff;font-weight:500;">{{ $business->bank_name }}</td>
+                            </tr>
+                            @endif
+                            @if($business->bank_account_name)
+                            <tr>
+                                <td style="padding:5px 0;font-size:12px;color:rgba(255,255,255,0.5);width:150px;">Account Name</td>
+                                <td style="padding:5px 0;font-size:12px;color:#ffffff;font-weight:500;">{{ $business->bank_account_name }}</td>
+                            </tr>
+                            @endif
+                            <tr>
+                                <td style="padding:5px 0;font-size:12px;color:rgba(255,255,255,0.5);width:150px;">Account Number</td>
+                                <td style="padding:5px 0;font-size:12px;color:#ffffff;font-weight:500;">{{ $business->bank_account_number }}</td>
+                            </tr>
+                            @if($business->bank_account_type)
+                            <tr>
+                                <td style="padding:5px 0;font-size:12px;color:rgba(255,255,255,0.5);width:150px;">Account Type</td>
+                                <td style="padding:5px 0;font-size:12px;color:#ffffff;font-weight:500;">{{ ucfirst($business->bank_account_type) }}</td>
+                            </tr>
+                            @endif
+                            @if($business->bank_branch_code)
+                            <tr>
+                                <td style="padding:5px 0;font-size:12px;color:rgba(255,255,255,0.5);width:150px;">Branch Code</td>
+                                <td style="padding:5px 0;font-size:12px;color:#ffffff;font-weight:500;">{{ $business->bank_branch_code }}</td>
+                            </tr>
+                            @endif
+                            <tr>
+                                <td style="padding:8px 0 0;font-size:12px;color:rgba(255,255,255,0.5);width:150px;">Reference</td>
+                                <td style="padding:8px 0 0;font-size:14px;color:#fbbf24;font-weight:700;">{{ $invoice->invoice_id }}</td>
+                            </tr>
+                        </table>
+                        @if($business->payment_instructions)
+                        <p style="margin:12px 0 0;font-size:11px;color:rgba(255,255,255,0.4);line-height:1.6;">{{ $business->payment_instructions }}</p>
+                        @endif
+                    </td>
+                </tr>
+            </table>
             @endif
-            <div class="banking-row">
-                <span class="bk-label">Reference</span>
-                <span class="bk-value ref-value">{{ $invoice->invoice_id }}</span>
-            </div>
-            @if($business->payment_instructions)
-            <p style="margin-top:10px;font-size:12px;color:#94a3b8;">{{ $business->payment_instructions }}</p>
-            @endif
-        </div>
-        @endif
 
-        <!-- View Invoice Button -->
-        <a href="{{ url('/client-hub/invoice/' . $invoice->view_token) }}" class="view-button">
-            📄 View Invoice Online
-        </a>
+            {{-- CTA --}}
+            <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin-top:32px;">
+                <tr>
+                    <td align="center">
+                        <a href="{{ url('/client-hub/invoice/' . $invoice->view_token) }}"
+                           style="display:inline-block;background:#1a3a2a;color:#ffffff;text-decoration:none;font-size:14px;font-weight:600;padding:14px 40px;border-radius:6px;letter-spacing:0.1px;">
+                            View Invoice Online
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" style="padding-top:10px;">
+                        <p style="margin:0;font-size:11px;color:#a8a29e;">Or simply reply to this email — we are always happy to help.</p>
+                    </td>
+                </tr>
+            </table>
 
-        <p style="color:#64748b;font-size:14px;line-height:1.6;">
-            A PDF copy of this invoice is attached to this email for your records.
-            If you have any questions about this invoice, please contact us.
-        </p>
+            {{-- Sign-off --}}
+            <table width="100%" cellpadding="0" cellspacing="0" role="presentation"
+                   style="margin-top:36px;padding-top:24px;border-top:1px solid #ede9e3;">
+                <tr>
+                    <td>
+                        <p style="margin:0 0 12px;font-size:13px;color:#78716c;line-height:1.6;">
+                            We look forward to working with you. Please do not hesitate to reach out if you have any questions or would like to discuss anything further.
+                        </p>
+                        <p style="margin:0 0 2px;font-size:13px;color:#78716c;">Warm regards,</p>
+                        <p style="margin:0 0 6px;font-size:14px;font-weight:700;color:#1c1917;">{{ $business->business_name }}</p>
+                        @if($business->email)
+                        <p style="margin:0 0 1px;font-size:12px;color:#a8a29e;">{{ $business->email }}</p>
+                        @endif
+                        @if($business->phone)
+                        <p style="margin:0 0 1px;font-size:12px;color:#a8a29e;">{{ $business->phone }}</p>
+                        @endif
+                    </td>
+                </tr>
+            </table>
 
-        @if($business->invoice_footer_notes)
-        <p style="color:#94a3b8;font-size:13px;margin-top:16px;font-style:italic;">{{ $business->invoice_footer_notes }}</p>
-        @endif
+        </td>
+    </tr>
 
-        <p class="footer-note">
-            Warm regards,<br>
-            <strong>{{ $business->business_name }}</strong><br>
-            @if($business->email)📧 {{ $business->email }}<br>@endif
-            @if($business->phone)📞 {{ $business->phone }}<br>@endif
-            @if($business->website)🌐 {{ $business->website }}@endif
-        </p>
-    </div>
+    {{-- Footer --}}
+    <tr>
+        <td style="background:#faf9f7;border-top:1px solid #ede9e3;padding:20px 48px;text-align:center;border-radius:0 0 6px 6px;">
+            <p style="margin:0;font-size:11px;color:#a8a29e;line-height:1.7;">
+                &copy; {{ date('Y') }} {{ $business->business_name }}.
+                @if($business->vat_number) &middot; VAT: {{ $business->vat_number }}@endif
+                @if($business->registration_number) &middot; Reg: {{ $business->registration_number }}@endif
+                <br>The PDF invoice is attached to this email for your records.
+            </p>
+        </td>
+    </tr>
 
-    <!-- Footer -->
-    <div class="footer">
-        <p>
-            © {{ date('Y') }} {{ $business->business_name }}. All rights reserved.<br>
-            @if($business->vat_number)VAT: {{ $business->vat_number }} · @endif
-            @if($business->registration_number)Reg: {{ $business->registration_number }}@endif
-        </p>
-    </div>
+    {{-- Bottom accent bar --}}
+    <tr>
+        <td style="background:#1a3a2a;height:3px;border-radius:0 0 6px 6px;font-size:0;line-height:0;">&nbsp;</td>
+    </tr>
 
-</div>
+</table>
+</td></tr>
+</table>
+
 </body>
 </html>
-

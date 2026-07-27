@@ -1,5 +1,3 @@
-<div class="flex items-center gap-2">
-    <span class="text-xl font-bold tracking-tight text-white">ShiftTech</span>
-    <span class="rounded-md bg-primary-500 px-2 py-0.5 text-xs font-semibold text-white">CRM</span>
+<div style="display:flex;align-items:center;gap:0;user-select:none;line-height:1;">
+    <span style="font-family:'Inter',sans-serif;font-size:1.1875rem;font-weight:400;color:rgba(255,255,255,0.50);letter-spacing:-0.025em;">use</span><span style="font-family:'Inter',sans-serif;font-size:1.1875rem;font-weight:700;color:#FFD60A;letter-spacing:-0.03em;">Luminii</span><span style="display:inline-flex;align-items:center;justify-content:center;width:21px;height:21px;background:rgba(255,255,255,0.12);border:1.5px solid rgba(255,255,255,0.20);border-radius:50%;margin-left:5px;flex-shrink:0;"><span style="font-family:'Inter',sans-serif;font-size:6px;font-weight:700;color:rgba(255,255,255,0.75);letter-spacing:-0.01em;line-height:1;">.com</span></span>
 </div>
-

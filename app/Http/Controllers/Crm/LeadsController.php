@@ -49,8 +49,10 @@ class LeadsController extends Controller
             'lastname'    => implode(' ', array_slice(explode(' ', $lead->name), 1)) ?: '-',
             'email'       => $lead->email,
             'phone_number'=> $lead->phone,
+            'company'     => $lead->company,
             'client_type' => 'Lead',
             'lead_source' => 'Website',
+            'notes'       => $lead->message,
             'user_id'     => auth()->id(),
         ]);
 
@@ -68,4 +70,5 @@ class LeadsController extends Controller
         return redirect()->route('crm.leads.index')->with('success', 'Lead removed.');
     }
 }
+
 

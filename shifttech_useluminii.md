@@ -247,8 +247,8 @@ Draft → Sent → Accepted → [Job Created]
 ```
 
 ### Quote Features
-- **Line items** with description, quantity, unit price, tax rate, line total
-- **Subtotal / VAT / Discount / Grand Total** auto-calculation
+- **Line items** with description, quantity, unit price and line total (no VAT column)
+- **Subtotal / Discount / Grand Total** auto-calculation — VAT is **not charged** (ShiftTech is not yet VAT registered)
 - **Required deposit** field
 - **Internal notes** (private) + **Client message** (visible to client)
 - **Send via email** — attaches PDF, includes "View Quote" button
@@ -315,8 +315,8 @@ Draft → Sent → PartiallyPaid → Paid
 ```
 
 ### Invoice Features
-- **Line items** with description, quantity, unit price, tax rate, sort order
-- **Subtotal / VAT / Discount / Total / Balance** auto-recalculation
+- **Line items** with description, quantity, unit price and line total (no VAT column)
+- **Subtotal / Discount / Total / Balance** auto-recalculation — VAT is **not charged** (ShiftTech is not yet VAT registered)
 - **Record Payment** action — partial or full, updates balance
 - **Send via email** — attaches PDF with "View Invoice" and "Pay Now" buttons
 - **PDF download** — `/useluminii/pdf/invoice/{invoiceId}` (auth required)
@@ -355,7 +355,7 @@ Client clicks "Pay with PayPal"
 | `jobs` | job_id, client_id, quote_id, job_title, job_status, scheduled_status, assigned_status, job_date_time |
 | `job_items` | job_id, description, quantity, unit_price, line_total |
 | `invoices` | invoice_id, client_id, job_id, status, total_amount, balance, paid_at, view_token, paypal_order_id, paypal_capture_id, payment_method |
-| `invoice_items` | invoice_id, description, quantity, unit_price, tax_rate, line_total, sort_order |
+| `invoice_items` | invoice_id, description, quantity, unit_price, line_total, sort_order |
 
 ### Migrations
 - `2026_04_17_000005_create_jobs_table`
@@ -803,8 +803,35 @@ php artisan crm:overdue-invoices                   # Run manually
 | 2026-04-17 | M5 | Expenses, Pipeline Kanban, Team Members, Recurring Invoices |
 | 2026-04-18 | M6 | Notifications system, Activity Log observers, enhanced dashboard widgets |
 | 2026-04-18 | M7 | Job Calendar (FullCalendar v6), PayPal Checkout (replaced Stripe — not supported in SA) |
+| 2026-04-18 | All | **VAT removed** — ShiftTech not yet VAT registered. Tax rate set to 0 across all quotes, invoices, PDF templates, and client hub views. Will be re-enabled upon SARS VAT registration. |
+
+---
+
+## ⚠️ VAT Status Note
+
+> **ShiftTech General Solutions is not currently VAT registered with SARS.**
+
+All quotes and invoices are issued **excluding VAT**. The following changes reflect this:
+
+- `tax_rate` on all line items defaults to `0` and is **hidden** from forms and PDFs
+- `total_tax` is always `0` and not displayed on client-facing documents
+- PDF invoice title changed from **"TAX INVOICE"** to **"INVOICE"**
+- VAT row removed from all quote/invoice totals sections (Filament forms, client hub views, PDFs, emails)
+- `business_setup.default_tax_rate` set to `0`
+
+**When ShiftTech becomes VAT registered:**
+1. Update `default_tax_rate` to `15` in Business Settings (`/useluminii/business-settings`)
+2. Re-add `tax_rate` field to `QuoteResource` and `InvoiceResource` line item repeaters
+3. Restore `total_tax` to totals sections in both resources
+4. Restore VAT row in PDF templates (`resources/views/pdf/invoice.blade.php`, `quote.blade.php`)
+5. Change PDF invoice title back to "TAX INVOICE"
+6. Update `recalculateTotals()` in `Quote` and `Invoice` models to include `$totalTax` calculation
 
 ---
 
 *Built by ShiftTech · Powered by Laravel + Filament*
+
+
+
+
 

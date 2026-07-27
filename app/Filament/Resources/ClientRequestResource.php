@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ClientRequestResource\Pages;
 use App\Models\ClientRequest;
 use App\Models\BusinessClient;
+use App\Models\BusinessService;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -37,10 +38,10 @@ class ClientRequestResource extends Resource
                     Forms\Components\Select::make('client_id')
                         ->label('Client')
                         ->options(
-                            BusinessClient::orderBy('firstname')
+                            BusinessClient::orderBy('company')->orderBy('firstname')
                                 ->get()
                                 ->mapWithKeys(fn ($c) => [
-                                    $c->client_id => "{$c->firstname} {$c->lastname}" . ($c->company ? " — {$c->company}" : '')
+                                    $c->client_id => ($c->company ? "{$c->company} — " : '') . "{$c->firstname} {$c->lastname}"
                                 ])
                         )
                         ->searchable()
@@ -49,7 +50,7 @@ class ClientRequestResource extends Resource
                     Forms\Components\Select::make('assigned_to')
                         ->label('Assigned To')
                         ->options(
-                            User::whereIn('role', ['Admin', 'SalesRep', 'SuperAdmin'])
+                            User::whereIn('role', ['Admin', 'SalesRep', 'SuperAdmin', 'Engineer'])
                                 ->pluck('name', 'id')
                         )
                         ->searchable()
@@ -58,6 +59,20 @@ class ClientRequestResource extends Resource
                     Forms\Components\TextInput::make('title')
                         ->label('Request Title')
                         ->required()
+                        ->columnSpanFull(),
+
+                    Forms\Components\Select::make('service_id')
+                        ->label('Service')
+                        ->options(
+                            BusinessService::where('is_active', true)
+                                ->orderBy('category')->orderBy('name')
+                                ->get()
+                                ->groupBy('category')
+                                ->map(fn ($group) => $group->pluck('name', 'service_id'))
+                                ->toArray()
+                        )
+                        ->searchable()
+                        ->nullable()
                         ->columnSpanFull(),
 
                     Forms\Components\Textarea::make('description')
@@ -107,15 +122,27 @@ class ClientRequestResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('request_id')
                     ->label('ID')
+                    ->fontFamily('mono')
+                    ->size(Tables\Columns\TextColumn\TextColumnSize::ExtraSmall)
+                    ->color('gray')
+                    ->copyable()
                     ->sortable()
-                    ->searchable()
-                    ->copyable(),
+                    ->searchable(),
 
                 Tables\Columns\TextColumn::make('title')
                     ->label('Request')
                     ->limit(45)
                     ->searchable()
-                    ->description(fn ($record) => optional($record->client)->firstname . ' ' . optional($record->client)->lastname),
+                    ->weight(\Filament\Support\Enums\FontWeight::SemiBold)
+                    ->description(fn ($record) => ($c = $record->client)
+                        ? ($c->company ?: "{$c->firstname} {$c->lastname}")
+                        : null),
+
+                Tables\Columns\TextColumn::make('service.name')
+                    ->label('Service')
+                    ->placeholder('—')
+                    ->badge()
+                    ->color('info'),
 
                 Tables\Columns\BadgeColumn::make('priority')
                     ->colors([
@@ -126,6 +153,10 @@ class ClientRequestResource extends Resource
                     ]),
 
                 Tables\Columns\BadgeColumn::make('status')
+                    ->formatStateUsing(fn ($state) => match ($state) {
+                        'InReview' => 'In Review',
+                        default    => $state,
+                    })
                     ->colors([
                         'gray'    => 'New',
                         'warning' => 'InReview',
@@ -135,13 +166,41 @@ class ClientRequestResource extends Resource
                     ]),
 
                 Tables\Columns\TextColumn::make('assignedTo.name')
-                    ->label('Assigned To')
-                    ->placeholder('—'),
+                    ->label('Assigned')
+                    ->placeholder('—')
+                    ->color('gray')
+                    ->size(Tables\Columns\TextColumn\TextColumnSize::Small),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Received')
                     ->since()
-                    ->sortable(),
+                    ->sortable()
+                    ->color('gray')
+                    ->size(Tables\Columns\TextColumn\TextColumnSize::ExtraSmall),
+
+                Tables\Columns\TextColumn::make('next_action')
+                    ->label('Next Action')
+                    ->getStateUsing(function ($record) {
+                        $days = $record->updated_at->diffInDays();
+                        return match(true) {
+                            $record->status === 'Closed'                      => '— Closed',
+                            $record->status === 'New' && $record->priority === 'Urgent' => '🔴 Review immediately',
+                            $record->status === 'New'                         => '👁 Review request',
+                            $record->status === 'InReview' && $days > 3      => '⏰ Send quote now',
+                            $record->status === 'InReview'                    => '📄 Prepare quote',
+                            $record->status === 'Quoted' && $days > 5        => '⏰ Chase approval',
+                            $record->status === 'Quoted'                      => '⏳ Awaiting approval',
+                            $record->status === 'Approved'                    => '🚀 Start the job',
+                            default                                           => '—',
+                        };
+                    })
+                    ->badge()
+                    ->color(fn ($state) => match(true) {
+                        str_contains($state, '🔴') || str_contains($state, '⏰') => 'danger',
+                        str_contains($state, '🚀') || str_contains($state, '👁')  => 'success',
+                        str_contains($state, '📄') || str_contains($state, '⏳')  => 'warning',
+                        default                                                    => 'gray',
+                    }),
             ])
             ->filters([
                 SelectFilter::make('status')
@@ -159,8 +218,8 @@ class ClientRequestResource extends Resource
                     ]),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make()->iconButton()->tooltip('View'),
+                Tables\Actions\EditAction::make()->iconButton()->tooltip('Edit'),
 
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\Action::make('move_in_review')
@@ -198,12 +257,14 @@ class ClientRequestResource extends Resource
                         ->color('danger')
                         ->visible(fn ($record) => $record->status !== 'Closed')
                         ->requiresConfirmation()
+                        ->modalHeading('Close this request?')
+                        ->modalDescription('This will mark the request as closed. You can reopen it by editing.')
                         ->action(function ($record) {
                             $record->update(['status' => 'Closed']);
                             \App\Models\ActivityLog::record('updated', 'ClientRequest', $record->request_id, "Request '{$record->title}' closed");
                             \Filament\Notifications\Notification::make()->title('Request closed')->danger()->send();
                         }),
-                ])->label('Actions')->icon('heroicon-m-ellipsis-vertical'),
+                ])->icon('heroicon-m-ellipsis-vertical')->tooltip('More'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -216,7 +277,11 @@ class ClientRequestResource extends Resource
                         ->action(fn ($records) => $records->each->update(['status' => 'Closed'])),
                 ]),
             ])
-            ->defaultSort('created_at', 'desc');
+            ->modifyQueryUsing(fn ($query) => $query
+                ->orderByRaw("FIELD(priority, 'Urgent', 'High', 'Normal', 'Low')")
+                ->orderBy('created_at', 'asc')
+            )
+            ->striped();
     }
 
     public static function getPages(): array
@@ -229,4 +294,5 @@ class ClientRequestResource extends Resource
         ];
     }
 }
+
 

@@ -49,12 +49,27 @@
             </td>
             <td style="font-weight:600;">R {{ number_format($exp->amount, 2) }}</td>
             <td style="color:var(--color-ink-3);">{{ $exp->expense_date ? $exp->expense_date->format('d M Y') : '—' }}</td>
-            <td style="display:flex;gap:0.375rem;">
+            <td style="display:flex;gap:0.375rem;" x-data="{ open: false }">
                 <a href="{{ route('crm.expenses.edit', $exp) }}" class="crm-btn crm-btn-ghost crm-btn-sm">Edit</a>
-                <form method="POST" action="{{ route('crm.expenses.destroy', $exp) }}" onsubmit="return confirm('Delete?')">
-                    @csrf @method('DELETE')
-                    <button type="submit" class="crm-btn crm-btn-ghost crm-btn-sm" style="color:var(--color-danger-text);">Delete</button>
-                </form>
+                <button type="button" @click="open = true" class="crm-btn crm-btn-ghost crm-btn-sm" style="color:var(--color-danger-text);">Delete</button>
+                <div x-show="open" class="crm-modal-overlay" @click.self="open=false">
+                    <div class="crm-modal" @click.stop style="max-width:380px;">
+                        <div class="crm-modal-header">
+                            <h3 class="crm-modal-title">Delete Expense</h3>
+                            <button type="button" @click="open=false" class="crm-icon-btn"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+                        </div>
+                        <div class="crm-modal-body">
+                            <p style="font-size:0.9375rem;color:var(--color-ink-2);">Are you sure you want to delete this expense? This action cannot be undone.</p>
+                        </div>
+                        <div class="crm-modal-footer">
+                            <button type="button" @click="open=false" class="crm-btn crm-btn-secondary">Cancel</button>
+                            <form method="POST" action="{{ route('crm.expenses.destroy', $exp) }}" style="display:inline;">
+                                @csrf @method('DELETE')
+                                <button type="submit" class="crm-btn crm-btn-danger">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </td>
         </tr>
         @empty

@@ -3,124 +3,191 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Quotation {{ $quote->quote_id }}</title>
-<style>
-    body { margin: 0; padding: 0; background: #f1f5f9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-    .wrapper { max-width: 600px; margin: 32px auto; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,.1); }
-    .header { background: linear-gradient(135deg, #635bff 0%, #4f46e5 100%); padding: 32px; text-align: center; }
-    .header h1 { color: white; margin: 0; font-size: 22px; font-weight: 700; }
-    .header p { color: rgba(255,255,255,0.8); margin: 6px 0 0; font-size: 14px; }
-    .body { padding: 32px; }
-    .greeting { font-size: 16px; color: #1e293b; margin-bottom: 16px; }
-    .quote-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin: 24px 0; }
-    .quote-box-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #e2e8f0; font-size: 14px; }
-    .quote-box-row:last-child { border-bottom: none; }
-    .quote-box-row .label { color: #64748b; }
-    .quote-box-row .value { font-weight: 600; color: #1e293b; }
-    .total-row { background: #635bff; color: white; border-radius: 6px; padding: 12px 16px; display: flex; justify-content: space-between; margin-top: 12px; font-weight: 700; font-size: 16px; }
-    .deposit-note { background: #fffbeb; border: 1px solid #fde68a; border-radius: 6px; padding: 12px 16px; margin-top: 12px; font-size: 13px; color: #92400e; }
-    .cta-button { display: block; text-align: center; background: #635bff; color: white !important; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-weight: 600; font-size: 15px; margin: 28px 0; }
-    .message-box { background: #f0fdf4; border-left: 4px solid #10b981; padding: 16px; border-radius: 4px; font-size: 14px; color: #065f46; margin: 20px 0; }
-    .footer-note { font-size: 12px; color: #94a3b8; margin-top: 24px; line-height: 1.6; }
-    .footer { background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 20px 32px; text-align: center; }
-    .footer p { font-size: 12px; color: #94a3b8; margin: 0; line-height: 1.6; }
-    .validity-banner { background: #fefce8; border: 1px solid #fde047; border-radius: 6px; padding: 10px 16px; font-size: 13px; color: #854d0e; margin-top: 12px; }
-</style>
+<title>Quotation {{ $quote->quote_id }} — {{ $business->business_name }}</title>
 </head>
-<body>
-<div class="wrapper">
+<body style="margin:0;padding:0;background:#f5f3ef;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;">
 
-    <!-- Header -->
-    <div class="header">
-        <h1>{{ $business->business_name }}</h1>
-        <p>Quotation · {{ $quote->quote_id }}</p>
-    </div>
+<table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="background:#f5f3ef;padding:44px 16px;">
+<tr><td align="center">
+<table width="600" cellpadding="0" cellspacing="0" role="presentation" style="max-width:600px;width:100%;">
 
-    <!-- Body -->
-    <div class="body">
-        <p class="greeting">
-            Dear {{ $quote->client?->firstname ?? 'Valued Client' }},
-        </p>
+    {{-- Top bar --}}
+    <tr>
+        <td style="background:#1a3a2a;height:4px;border-radius:6px 6px 0 0;font-size:0;line-height:0;">&nbsp;</td>
+    </tr>
 
-        <p style="color:#475569;font-size:15px;line-height:1.6;">
-            Thank you for your interest in our services. Please find attached your quotation for
-            <strong>{{ $quote->job_title }}</strong>.
-        </p>
-
-        <!-- Quote Summary Box -->
-        <div class="quote-box">
-            <div class="quote-box-row">
-                <span class="label">Quote Number</span>
-                <span class="value">{{ $quote->quote_id }}</span>
-            </div>
-            <div class="quote-box-row">
-                <span class="label">Date</span>
-                <span class="value">{{ $quote->quote_date?->format('d M Y') }}</span>
-            </div>
-            @if($quote->expiry_date)
-            <div class="quote-box-row">
-                <span class="label">Valid Until</span>
-                <span class="value">{{ $quote->expiry_date->format('d M Y') }}</span>
-            </div>
+    {{-- Logo / brand header --}}
+    <tr>
+        <td align="center" style="background:#ffffff;padding:32px 48px 24px;border-bottom:1px solid #ede9e3;">
+            @if(!empty($logoUrl))
+                <img src="{{ $logoUrl }}" alt="{{ $business->business_name }}" style="max-height:42px;max-width:180px;display:block;margin:0 auto 10px;">
+            @else
+                <p style="margin:0;font-size:17px;font-weight:700;color:#1a3a2a;letter-spacing:-0.3px;">{{ $business->business_name }}</p>
             @endif
-            <div class="quote-box-row">
-                <span class="label">Items</span>
-                <span class="value">{{ $quote->items->count() }} line item(s)</span>
-            </div>
-        </div>
+            @if($business->website)
+            <p style="margin:4px 0 0;font-size:11px;color:#a8a29e;letter-spacing:0.3px;">{{ $business->website }}</p>
+            @endif
+        </td>
+    </tr>
 
-        <div class="total-row">
-            <span>Grand Total</span>
-            <span>R {{ number_format($quote->grand_total, 2) }}</span>
-        </div>
+    {{-- Body --}}
+    <tr>
+        <td style="background:#ffffff;padding:36px 48px 40px;">
 
-        @if($quote->required_deposit > 0)
-        <div class="deposit-note">
-            💳 A deposit of <strong>R {{ number_format($quote->required_deposit, 2) }}</strong> is required to confirm this booking.
-        </div>
-        @endif
+            {{-- Greeting --}}
+            <p style="margin:0 0 8px;font-size:16px;font-weight:600;color:#1c1917;">
+                Dear {{ $quote->client?->firstname ?? 'Valued Client' }},
+            </p>
+            <p style="margin:0 0 28px;font-size:14px;color:#78716c;line-height:1.75;">
+                Thank you for considering us. We have prepared a quotation for
+                <span style="color:#1c1917;font-weight:600;">{{ $quote->job_title }}</span>
+                and attached it to this email as a PDF. A summary is included below.
+            </p>
 
-        @if($quote->expiry_date)
-        <div class="validity-banner">
-            ⏳ This quote expires on <strong>{{ $quote->expiry_date->format('d M Y') }}</strong>. Kindly respond before this date.
-        </div>
-        @endif
+            {{-- Quote meta strip --}}
+            <table width="100%" cellpadding="0" cellspacing="0" role="presentation"
+                   style="background:#faf9f7;border:1px solid #ede9e3;border-radius:8px;margin-bottom:24px;">
+                <tr>
+                    <td width="33%" style="padding:16px 20px;border-right:1px solid #ede9e3;">
+                        <p style="margin:0 0 3px;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.9px;color:#a8a29e;">Quote No.</p>
+                        <p style="margin:0;font-size:12.5px;font-weight:700;color:#1c1917;font-family:monospace;">{{ $quote->quote_id }}</p>
+                    </td>
+                    <td width="33%" style="padding:16px 20px;border-right:1px solid #ede9e3;">
+                        <p style="margin:0 0 3px;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.9px;color:#a8a29e;">Issued</p>
+                        <p style="margin:0;font-size:12.5px;font-weight:600;color:#1c1917;">{{ $quote->quote_date?->format('d M Y') }}</p>
+                    </td>
+                    <td width="33%" style="padding:16px 20px;">
+                        <p style="margin:0 0 3px;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.9px;color:#a8a29e;">Valid Until</p>
+                        <p style="margin:0;font-size:12.5px;font-weight:600;color:#1c1917;">
+                            {{ $quote->expiry_date ? $quote->expiry_date->format('d M Y') : '—' }}
+                        </p>
+                    </td>
+                </tr>
+            </table>
 
-        @if($quote->client_notes)
-        <div class="message-box">
-            <strong>Note:</strong> {{ $quote->client_notes }}
-        </div>
-        @endif
+            {{-- Line items --}}
+            <table width="100%" cellpadding="0" cellspacing="0" role="presentation"
+                   style="border-radius:8px;overflow:hidden;border:1px solid #ede9e3;margin-bottom:6px;">
+                <tr>
+                    <th align="left"  style="background:#1a3a2a;padding:10px 16px;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px;color:#ffffff;">Description</th>
+                    <th align="right" style="background:#1a3a2a;padding:10px 16px;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px;color:#ffffff;width:36px;">Qty</th>
+                    <th align="right" style="background:#1a3a2a;padding:10px 16px;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px;color:#ffffff;width:88px;">Unit</th>
+                    <th align="right" style="background:#1a3a2a;padding:10px 16px;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px;color:#ffffff;width:88px;">Total</th>
+                </tr>
+                @foreach($quote->items as $i => $item)
+                <tr style="background:{{ $i % 2 === 0 ? '#ffffff' : '#faf9f7' }}">
+                    <td style="padding:10px 16px;font-size:13px;color:#44403c;border-bottom:1px solid #f3f0eb;">{{ $item->description }}</td>
+                    <td align="right" style="padding:10px 16px;font-size:13px;color:#78716c;border-bottom:1px solid #f3f0eb;">{{ $item->quantity }}</td>
+                    <td align="right" style="padding:10px 16px;font-size:13px;color:#78716c;border-bottom:1px solid #f3f0eb;">R&nbsp;{{ number_format($item->unit_price, 2) }}</td>
+                    <td align="right" style="padding:10px 16px;font-size:13px;font-weight:600;color:#1c1917;border-bottom:1px solid #f3f0eb;">R&nbsp;{{ number_format($item->line_total, 2) }}</td>
+                </tr>
+                @endforeach
 
-        <!-- CTA -->
-        <a href="{{ url('/client-hub/quote/' . $quote->accepted_token) }}" class="cta-button">
-            ✅ View & Accept Quote Online
-        </a>
+                {{-- Subtotal / discount --}}
+                @if($quote->discount > 0)
+                <tr>
+                    <td colspan="3" align="right" style="padding:10px 16px 4px;font-size:12px;color:#78716c;">Subtotal</td>
+                    <td align="right" style="padding:10px 16px 4px;font-size:12px;color:#78716c;">R&nbsp;{{ number_format($quote->sub_total, 2) }}</td>
+                </tr>
+                <tr>
+                    <td colspan="3" align="right" style="padding:2px 16px 8px;font-size:12px;color:#16a34a;">Discount</td>
+                    <td align="right" style="padding:2px 16px 8px;font-size:12px;color:#16a34a;">&minus;R&nbsp;{{ number_format($quote->discount, 2) }}</td>
+                </tr>
+                @endif
 
-        <p style="color:#64748b;font-size:14px;line-height:1.6;">
-            The full quotation PDF is attached to this email for your records.<br>
-            If you have any questions, please don't hesitate to reach out.
-        </p>
+                {{-- Grand total --}}
+                <tr style="background:#1a3a2a;">
+                    <td colspan="3" align="right" style="padding:13px 16px;font-size:13px;font-weight:700;color:#ffffff;">Grand Total</td>
+                    <td align="right" style="padding:13px 16px;font-size:15px;font-weight:700;color:#ffffff;">R&nbsp;{{ number_format($quote->grand_total, 2) }}</td>
+                </tr>
+            </table>
 
-        <p class="footer-note">
-            Warm regards,<br>
-            <strong>{{ $business->business_name }}</strong><br>
-            @if($business->email)📧 {{ $business->email }}<br>@endif
-            @if($business->phone)📞 {{ $business->phone }}<br>@endif
-            @if($business->website)🌐 {{ $business->website }}@endif
-        </p>
-    </div>
+            {{-- Deposit --}}
+            @if($quote->required_deposit > 0)
+            <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin-top:10px;">
+                <tr>
+                    <td style="background:#fffbeb;border-left:3px solid #f59e0b;padding:10px 14px;border-radius:0 5px 5px 0;">
+                        <p style="margin:0;font-size:12px;color:#92400e;line-height:1.5;">
+                            A deposit of <strong>R {{ number_format($quote->required_deposit, 2) }}</strong> is required to confirm this booking.
+                        </p>
+                    </td>
+                </tr>
+            </table>
+            @endif
 
-    <!-- Footer -->
-    <div class="footer">
-        <p>
-            © {{ date('Y') }} {{ $business->business_name }}. All rights reserved.<br>
-            @if($business->vat_number)VAT: {{ $business->vat_number }} · @endif
-            @if($business->registration_number)Reg: {{ $business->registration_number }}@endif
-        </p>
-    </div>
+            {{-- Client notes --}}
+            @if($quote->client_notes)
+            <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin-top:10px;">
+                <tr>
+                    <td style="background:#faf9f7;border-left:3px solid #1a3a2a;padding:10px 14px;border-radius:0 5px 5px 0;">
+                        <p style="margin:0 0 3px;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px;color:#a8a29e;">Note</p>
+                        <p style="margin:0;font-size:13px;color:#44403c;line-height:1.6;">{{ $quote->client_notes }}</p>
+                    </td>
+                </tr>
+            </table>
+            @endif
 
-</div>
+            {{-- CTA --}}
+            @if($quote->accepted_token)
+            <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin-top:32px;">
+                <tr>
+                    <td align="center">
+                        <a href="{{ url('/client-hub/quote/' . $quote->accepted_token) }}"
+                           style="display:inline-block;background:#1a3a2a;color:#ffffff;text-decoration:none;font-size:14px;font-weight:600;padding:14px 40px;border-radius:6px;letter-spacing:0.1px;">
+                            View &amp; Accept Quote
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" style="padding-top:10px;">
+                        <p style="margin:0;font-size:11px;color:#a8a29e;">Or simply reply to this email — we are always happy to help.</p>
+                    </td>
+                </tr>
+            </table>
+            @endif
+
+            {{-- Sign-off --}}
+            <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin-top:36px;padding-top:24px;border-top:1px solid #ede9e3;">
+                <tr>
+                    <td>
+                        <p style="margin:0 0 12px;font-size:13px;color:#78716c;line-height:1.6;">
+                            We look forward to working with you. Please do not hesitate to reach out if you have any questions or would like to discuss anything further.
+                        </p>
+                        <p style="margin:0 0 2px;font-size:13px;color:#78716c;">Warm regards,</p>
+                        <p style="margin:0 0 6px;font-size:14px;font-weight:700;color:#1c1917;">{{ $business->business_name }}</p>
+                        @if($business->email)
+                        <p style="margin:0 0 1px;font-size:12px;color:#a8a29e;">{{ $business->email }}</p>
+                        @endif
+                        @if($business->phone)
+                        <p style="margin:0 0 1px;font-size:12px;color:#a8a29e;">{{ $business->phone }}</p>
+                        @endif
+                    </td>
+                </tr>
+            </table>
+
+        </td>
+    </tr>
+
+    {{-- Footer --}}
+    <tr>
+        <td style="background:#faf9f7;border-top:1px solid #ede9e3;padding:20px 48px;text-align:center;border-radius:0 0 6px 6px;">
+            <p style="margin:0;font-size:11px;color:#a8a29e;line-height:1.7;">
+                &copy; {{ date('Y') }} {{ $business->business_name }}.
+                @if($business->vat_number) &middot; VAT: {{ $business->vat_number }}@endif
+                @if($business->registration_number) &middot; Reg: {{ $business->registration_number }}@endif
+                <br>The PDF quotation is attached to this email for your records.
+            </p>
+        </td>
+    </tr>
+
+    {{-- Bottom bar --}}
+    <tr>
+        <td style="background:#1a3a2a;height:3px;border-radius:0 0 6px 6px;font-size:0;line-height:0;">&nbsp;</td>
+    </tr>
+
+</table>
+</td></tr>
+</table>
+
 </body>
 </html>
-

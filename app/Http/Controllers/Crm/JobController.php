@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Crm;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\BusinessClient;
+use App\Models\BusinessService;
+use App\Models\ClientRequest;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use App\Models\Job;
@@ -53,17 +55,75 @@ class JobController extends Controller
 
     public function create(Request $request)
     {
-        $clients = BusinessClient::orderBy('firstname')->get();
-        $quotes  = Quote::where('status', 'Accepted')->orderBy('created_at','desc')->get();
-        $team    = User::where('is_active', true)->orderBy('name')->get();
+        $clients  = BusinessClient::orderBy('company')->orderBy('firstname')->get();
+        $quotes   = Quote::where('status', 'Accepted')->orderBy('created_at', 'desc')->get();
+        $team     = User::where('is_active', true)->orderBy('name')->get();
+        $services = BusinessService::where('is_active', true)->orderBy('category')->orderBy('name')->get();
         $selectedClient = $request->get('client_id') ? BusinessClient::find($request->get('client_id')) : null;
-        return view('crm.jobs.create', compact('clients', 'quotes', 'team', 'selectedClient'));
+
+        // Pre-load requests for the selected client
+        $selectedClientRequests = $selectedClient
+            ? ClientRequest::with('service')
+                ->where('client_id', $selectedClient->client_id)
+                ->whereIn('status', ['New', 'InReview'])
+                ->orderBy('created_at', 'desc')
+                ->get()
+            : collect();
+
+        return view('crm.jobs.create', compact(
+            'clients', 'quotes', 'team', 'services', 'selectedClient', 'selectedClientRequests'
+        ));
+    }
+
+    // ── AJAX: open requests for a client ────────────────────────────────────
+    public function clientRequests(Request $request)
+    {
+        $requests = ClientRequest::with('service')
+            ->where('client_id', $request->get('client_id'))
+            ->whereIn('status', ['New', 'InReview'])
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(fn($r) => [
+                'id'               => $r->id,
+                'request_id'       => $r->request_id,
+                'title'            => $r->title,
+                'description'      => $r->description,
+                'assessment_notes' => $r->assessment_notes,
+                'priority'         => $r->priority,
+                'service'          => $r->service ? [
+                    'service_id'  => $r->service->service_id,
+                    'name'        => $r->service->name,
+                    'description' => $r->service->description,
+                    'unit_price'  => (float) $r->service->unit_price,
+                    'unit_type'   => $r->service->unit_type,
+                ] : null,
+            ]);
+        return response()->json($requests);
+    }
+
+    // ── AJAX: active services catalogue ─────────────────────────────────────
+    public function servicesCatalogue()
+    {
+        $services = BusinessService::where('is_active', true)
+            ->orderBy('category')
+            ->orderBy('name')
+            ->get()
+            ->map(fn($s) => [
+                'service_id'  => $s->service_id,
+                'name'        => $s->name,
+                'description' => $s->description,
+                'category'    => $s->category,
+                'unit_price'  => (float) $s->unit_price,
+                'unit_type'   => $s->unit_type,
+            ]);
+        return response()->json($services);
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
             'client_id'               => 'required|string',
+            'request_id'              => 'nullable|string',
             'job_title'               => 'required|string|max:255',
             'quote_id'                => 'nullable|string',
             'job_status'              => 'required|in:New,Scheduled,InProgress,Completed,Cancelled',
@@ -81,6 +141,7 @@ class JobController extends Controller
             'client_id'               => $data['client_id'],
             'user_id'                 => auth()->id(),
             'quote_id'                => $data['quote_id'] ?? null,
+            'request_id'              => $data['request_id'] ?? null,
             'job_title'               => $data['job_title'],
             'job_status'              => $data['job_status'],
             'job_date_time'           => $data['job_date_time'] ?? null,
@@ -104,6 +165,12 @@ class JobController extends Controller
             }
         }
 
+        // Move linked request to Quoted status
+        if (!empty($data['request_id'])) {
+            ClientRequest::where('request_id', $data['request_id'])
+                ->update(['status' => 'Quoted']);
+        }
+
         ActivityLog::record('created', 'Job', $job->job_id, "Job {$job->job_id} created");
 
         return redirect()->route('crm.jobs.show', $job)->with('success', 'Job created.');
@@ -111,7 +178,7 @@ class JobController extends Controller
 
     public function edit(Job $job)
     {
-        $job->load(['client', 'items']);
+        $job->load(['client', 'items', 'quote.items']);
         $clients = BusinessClient::orderBy('firstname')->get();
         $quotes  = Quote::where('status', 'Accepted')->orderBy('created_at','desc')->get();
         $team    = User::where('is_active', true)->orderBy('name')->get();
@@ -175,19 +242,32 @@ class JobController extends Controller
 
     public function createInvoice(Job $job)
     {
-        $job->load('items', 'client');
+        // Return existing invoice if already created (e.g. by observer)
+        if ($existing = Invoice::where('job_id', $job->job_id)->first()) {
+            return redirect()->route('crm.invoices.edit', $existing)->with('info', 'An invoice already exists for this job.');
+        }
+
+        $job->load('items', 'client', 'quote');
+
+        // Apply deposit from quote if one was received
+        $depositPaid = 0;
+        if ($job->quote && $job->quote->deposit_received && $job->quote->required_deposit > 0) {
+            $depositPaid = $job->quote->required_deposit;
+        }
 
         $invoice = Invoice::create([
             'client_id'      => $job->client_id,
             'job_id'         => $job->job_id,
+            'invoice_type'   => 'project',
             'created_by'     => auth()->id(),
             'invoice_date'   => now(),
-            'due_date'       => now()->addDays(30),
+            'due_date'       => now()->addDays(14),
             'status'         => 'Draft',
             'sub_total'      => 0,
             'total_tax'      => 0,
             'total_amount'   => 0,
             'discount'       => 0,
+            'deposit_paid'   => $depositPaid,
             'balance'        => 0,
             'payment_method' => 'EFT',
         ]);

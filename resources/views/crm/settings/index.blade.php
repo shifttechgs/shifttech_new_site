@@ -12,8 +12,7 @@
         <div class="crm-card-header"><span class="crm-card-title">Business Profile</span></div>
         <div class="crm-card-body" style="display:flex;flex-direction:column;gap:1rem;">
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
-                <div><label class="crm-label">Business Name <span style="color:var(--color-danger);">*</span></label><input type="text" name="business_name" value="{{ old('business_name', $setup->business_name) }}" class="crm-input" required></div>
-                <div><label class="crm-label">Trading Name</label><input type="text" name="trading_name" value="{{ old('trading_name', $setup->trading_name) }}" class="crm-input"></div>
+                <div style="grid-column:1/-1;"><label class="crm-label">Business Name <span style="color:var(--color-danger);">*</span></label><input type="text" name="business_name" value="{{ old('business_name', $setup->business_name) }}" class="crm-input" required></div>
                 <div><label class="crm-label">Registration Number</label><input type="text" name="registration_number" value="{{ old('registration_number', $setup->registration_number) }}" class="crm-input"></div>
                 <div><label class="crm-label">VAT Number <span class="crm-label-hint">(when registered)</span></label><input type="text" name="vat_number" value="{{ old('vat_number', $setup->vat_number) }}" class="crm-input" placeholder="Not yet registered"></div>
                 <div><label class="crm-label">Email <span style="color:var(--color-danger);">*</span></label><input type="email" name="email" value="{{ old('email', $setup->email) }}" class="crm-input" required></div>
@@ -22,7 +21,7 @@
             </div>
             <div>
                 <label class="crm-label">Logo</label>
-                @if($setup->logo)<div style="margin-bottom:0.5rem;"><img src="{{ Storage::url($setup->logo) }}" style="height:48px;object-fit:contain;"></div>@endif
+                @if($setup->logo_path)<div style="margin-bottom:0.5rem;"><img src="{{ \Illuminate\Support\Facades\Storage::url($setup->logo_path) }}" style="height:48px;object-fit:contain;"></div>@endif
                 <input type="file" name="logo" class="crm-input" accept=".jpg,.jpeg,.png,.svg" style="padding:0.375rem;">
             </div>
         </div>
@@ -46,10 +45,10 @@
             <div class="crm-card-header"><span class="crm-card-title">Banking Details</span><span class="crm-badge crm-badge-warning">Printed on invoices</span></div>
             <div class="crm-card-body" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
                 <div><label class="crm-label">Bank Name</label><input type="text" name="bank_name" value="{{ old('bank_name', $setup->bank_name) }}" class="crm-input"></div>
-                <div><label class="crm-label">Account Name</label><input type="text" name="account_name" value="{{ old('account_name', $setup->account_name) }}" class="crm-input"></div>
-                <div><label class="crm-label">Account Number</label><input type="text" name="account_number" value="{{ old('account_number', $setup->account_number) }}" class="crm-input"></div>
-                <div><label class="crm-label">Branch Code</label><input type="text" name="branch_code" value="{{ old('branch_code', $setup->branch_code) }}" class="crm-input"></div>
-                <div style="grid-column:1/-1;"><label class="crm-label">Account Type</label><input type="text" name="account_type" value="{{ old('account_type', $setup->account_type) }}" class="crm-input" placeholder="Current / Savings / Cheque"></div>
+                <div><label class="crm-label">Account Name</label><input type="text" name="bank_account_name" value="{{ old('bank_account_name', $setup->bank_account_name) }}" class="crm-input"></div>
+                <div><label class="crm-label">Account Number</label><input type="text" name="bank_account_number" value="{{ old('bank_account_number', $setup->bank_account_number) }}" class="crm-input"></div>
+                <div><label class="crm-label">Branch Code</label><input type="text" name="bank_branch_code" value="{{ old('bank_branch_code', $setup->bank_branch_code) }}" class="crm-input"></div>
+                <div style="grid-column:1/-1;"><label class="crm-label">Account Type</label><input type="text" name="bank_account_type" value="{{ old('bank_account_type', $setup->bank_account_type) }}" class="crm-input" placeholder="Current / Savings / Cheque"></div>
                 <div style="grid-column:1/-1;"><label class="crm-label">Payment Instructions</label><textarea name="payment_instructions" class="crm-textarea" rows="3">{{ old('payment_instructions', $setup->payment_instructions) }}</textarea></div>
             </div>
         </div>
@@ -61,7 +60,7 @@
             <svg fill="none" viewBox="0 0 24 24" stroke="#f79009" style="width:1.25rem;height:1.25rem;flex-shrink:0;margin-top:2px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
             <div>
                 <p style="font-size:0.875rem;font-weight:600;color:#b54708;">VAT — Not Yet Registered</p>
-                <p style="font-size:0.8125rem;color:#b54708;margin-top:0.125rem;">ShiftTech is not currently VAT registered with SARS. All quotes and invoices are issued excluding VAT. Tax rate is set to 0.</p>
+                <p style="font-size:0.8125rem;color:#b54708;margin-top:0.125rem;">ShiftTech is not currently VAT registered with SARS. All quotes and invoices are issued excluding VAT.</p>
             </div>
         </div>
     </div>

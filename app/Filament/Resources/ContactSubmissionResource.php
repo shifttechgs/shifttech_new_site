@@ -19,6 +19,7 @@ class ContactSubmissionResource extends Resource
     protected static ?string $navigationGroup = 'CRM';
     protected static ?string $navigationLabel = 'Website Leads';
     protected static ?int    $navigationSort  = 3;
+    protected static bool    $shouldRegisterNavigation = false;
 
     public static function getNavigationBadge(): ?string
     {
@@ -32,10 +33,13 @@ class ContactSubmissionResource extends Resource
             Forms\Components\Section::make('Submission Details')->columns(2)->schema([
                 Forms\Components\TextInput::make('name')->disabled(),
                 Forms\Components\TextInput::make('email')->disabled(),
-                Forms\Components\TextInput::make('phone')->disabled(),
-                Forms\Components\TextInput::make('company')->disabled(),
-                Forms\Components\TextInput::make('subject')->disabled(),
-                Forms\Components\TextInput::make('service_interest')->label('Service Interest')->disabled(),
+                Forms\Components\TextInput::make('phone')->disabled()->placeholder('Not provided'),
+                Forms\Components\TextInput::make('company')->disabled()->placeholder('Not provided'),
+                Forms\Components\TextInput::make('service_interest')
+                    ->label('Services Requested')
+                    ->disabled()
+                    ->placeholder('Not specified')
+                    ->columnSpanFull(),
                 Forms\Components\Textarea::make('message')->disabled()->columnSpanFull(),
             ]),
             Forms\Components\Section::make('CRM Management')->columns(2)->schema([
@@ -64,13 +68,28 @@ class ContactSubmissionResource extends Resource
                 SelectFilter::make('status')->options(['New'=>'New','Contacted'=>'Contacted','Converted'=>'Converted','Closed'=>'Closed']),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make()
+                    ->iconButton()
+                    ->icon('heroicon-o-eye')
+                    ->tooltip('View submission')
+                    ->color('gray'),
+                Tables\Actions\EditAction::make()
+                    ->iconButton()
+                    ->icon('heroicon-o-pencil-square')
+                    ->tooltip('Edit / update status')
+                    ->color('gray'),
                 Tables\Actions\Action::make('convert_to_lead')
                     ->label('Create Lead')
                     ->icon('heroicon-o-user-plus')
                     ->color('success')
+                    ->button()
+                    ->size('sm')
+                    ->tooltip('Convert this submission into a CRM lead')
                     ->visible(fn ($record) => $record->status !== 'Converted')
+                    ->requiresConfirmation()
+                    ->modalHeading('Create lead from submission?')
+                    ->modalDescription('This will create a new Lead in the CRM and mark this submission as Converted.')
+                    ->modalSubmitActionLabel('Yes, create lead')
                     ->action(function ($record) {
                         $client = BusinessClient::create([
                             'firstname'   => explode(' ', $record->name)[0],

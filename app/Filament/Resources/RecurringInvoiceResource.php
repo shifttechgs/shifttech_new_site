@@ -11,6 +11,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Support\Enums\FontWeight;
 
 class RecurringInvoiceResource extends Resource
 {
@@ -18,7 +19,7 @@ class RecurringInvoiceResource extends Resource
     protected static ?string $navigationIcon  = 'heroicon-o-arrow-path';
     protected static ?string $navigationGroup = 'Finance';
     protected static ?string $navigationLabel = 'Recurring Invoices';
-    protected static ?int    $navigationSort  = 3;
+    protected static ?int    $navigationSort  = 2;
 
     public static function form(Form $form): Form
     {
@@ -26,8 +27,8 @@ class RecurringInvoiceResource extends Resource
             Forms\Components\Section::make('Recurring Invoice Details')->columns(2)->schema([
                 Forms\Components\Select::make('client_id')
                     ->label('Client')
-                    ->options(BusinessClient::orderBy('firstname')->get()->mapWithKeys(fn ($c) =>
-                        [$c->client_id => trim("{$c->firstname} {$c->lastname}") . ($c->company ? " ({$c->company})" : '')]
+                    ->options(BusinessClient::orderBy('company')->orderBy('firstname')->get()->mapWithKeys(fn ($c) =>
+                        [$c->client_id => ($c->company ? "{$c->company} — " : '') . "{$c->firstname} {$c->lastname}"]
                     ))
                     ->searchable()
                     ->required(),
@@ -86,11 +87,19 @@ class RecurringInvoiceResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('recurring_invoice_id')->label('ID')->searchable()->copyable(),
+                Tables\Columns\TextColumn::make('recurring_invoice_id')
+                    ->label('ID')->copyable()->sortable()->searchable()
+                    ->fontFamily('mono')
+                    ->size(Tables\Columns\TextColumn\TextColumnSize::ExtraSmall)
+                    ->color('gray'),
+
                 Tables\Columns\TextColumn::make('client.firstname')
                     ->label('Client')
-                    ->formatStateUsing(fn ($record) => trim(optional($record->client)->firstname . ' ' . optional($record->client)->lastname))
+                    ->formatStateUsing(fn ($record) => optional($record->client)->full_name ?? trim(optional($record->client)->firstname . ' ' . optional($record->client)->lastname) ?: '—')
+                    ->weight(FontWeight::SemiBold)
+                    ->description(fn ($record) => optional($record->client)->company ?: optional($record->client)->email)
                     ->searchable(),
+
                 Tables\Columns\TextColumn::make('frequency')->badge()
                     ->color(fn (string $state) => match ($state) {
                         'Weekly'    => 'info',
@@ -99,7 +108,7 @@ class RecurringInvoiceResource extends Resource
                         'Annually'  => 'success',
                         default     => 'gray',
                     }),
-                Tables\Columns\TextColumn::make('total_amount')->money('ZAR')->label('Amount')->sortable(),
+
                 Tables\Columns\TextColumn::make('status')->badge()
                     ->color(fn (string $state) => match ($state) {
                         'Active'    => 'success',
@@ -108,10 +117,33 @@ class RecurringInvoiceResource extends Resource
                         'Completed' => 'gray',
                         default     => 'gray',
                     }),
-                Tables\Columns\TextColumn::make('start_date')->date()->sortable(),
-                Tables\Columns\TextColumn::make('end_date')->date()->placeholder('Ongoing'),
-                Tables\Columns\TextColumn::make('next_invoice_date')->label('Next Invoice')->date()->placeholder('—'),
-                Tables\Columns\TextColumn::make('invoices_generated')->label('Generated')->sortable(),
+
+                Tables\Columns\TextColumn::make('total_amount')->label('Amount')->money(\App\Models\BusinessSetup::current()->currency)->sortable(),
+
+                Tables\Columns\TextColumn::make('next_invoice_date')
+                    ->label('Next Invoice')->date()->sortable()->placeholder('—'),
+
+                Tables\Columns\TextColumn::make('next_action')
+                    ->label('Next Action')
+                    ->getStateUsing(function ($record) {
+                        return match (true) {
+                            $record->status === 'Cancelled'                                                          => '— Cancelled',
+                            $record->status === 'Completed'                                                          => '— Completed',
+                            $record->status === 'Paused'                                                             => '▶ Resume or review',
+                            $record->status === 'Active' && $record->next_invoice_date && \Carbon\Carbon::parse($record->next_invoice_date)->diffInDays(now(), false) >= 0 => '📤 Generate invoice',
+                            $record->status === 'Active' && $record->next_invoice_date && \Carbon\Carbon::parse($record->next_invoice_date)->diffInDays() <= 3              => '📅 Invoice due soon',
+                            $record->status === 'Active'                                                             => '✅ Running',
+                            default                                                                                  => '—',
+                        };
+                    })
+                    ->badge()
+                    ->color(fn ($state) => match (true) {
+                        str_contains($state, '📤')  => 'danger',
+                        str_contains($state, '📅')  => 'warning',
+                        str_contains($state, '▶')   => 'warning',
+                        str_contains($state, '✅')  => 'success',
+                        default                      => 'gray',
+                    }),
             ])
             ->filters([
                 SelectFilter::make('frequency')
@@ -120,21 +152,29 @@ class RecurringInvoiceResource extends Resource
                     ->options(['Active'=>'Active','Paused'=>'Paused','Cancelled'=>'Cancelled','Completed'=>'Completed']),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\Action::make('pause')
-                    ->label('Pause')
-                    ->icon('heroicon-o-pause-circle')
-                    ->color('warning')
-                    ->visible(fn (RecurringInvoice $r) => $r->status === 'Active')
-                    ->action(fn (RecurringInvoice $r) => $r->update(['status' => 'Paused'])),
-                Tables\Actions\Action::make('activate')
-                    ->label('Activate')
-                    ->icon('heroicon-o-play-circle')
-                    ->color('success')
-                    ->visible(fn (RecurringInvoice $r) => $r->status === 'Paused')
-                    ->action(fn (RecurringInvoice $r) => $r->update(['status' => 'Active'])),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\EditAction::make()->iconButton()->tooltip('Edit'),
+
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\Action::make('pause')
+                        ->label('Pause Schedule')
+                        ->icon('heroicon-o-pause-circle')
+                        ->color('warning')
+                        ->visible(fn (RecurringInvoice $r) => $r->status === 'Active')
+                        ->requiresConfirmation()
+                        ->action(fn (RecurringInvoice $r) => $r->update(['status' => 'Paused'])),
+
+                    Tables\Actions\Action::make('activate')
+                        ->label('Resume Schedule')
+                        ->icon('heroicon-o-play-circle')
+                        ->color('success')
+                        ->visible(fn (RecurringInvoice $r) => $r->status === 'Paused')
+                        ->requiresConfirmation()
+                        ->action(fn (RecurringInvoice $r) => $r->update(['status' => 'Active'])),
+
+                    Tables\Actions\DeleteAction::make(),
+                ])->icon('heroicon-m-ellipsis-vertical')->tooltip('More'),
             ])
+            ->striped()
             ->defaultSort('created_at', 'desc');
     }
 

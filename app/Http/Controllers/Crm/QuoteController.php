@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Mail\QuoteMail;
 use App\Models\ActivityLog;
 use App\Models\BusinessClient;
+use App\Models\BusinessService;
+use App\Models\ClientRequest;
 use App\Models\Job;
 use App\Models\Quote;
 use App\Models\QuoteItem;
@@ -54,16 +56,71 @@ class QuoteController extends Controller
     public function create(Request $request)
     {
         $clients = BusinessClient::where('client_type', '!=', 'Inactive')->orderBy('firstname')->get();
+        $services = BusinessService::where('is_active', true)->orderBy('category')->orderBy('name')->get();
         $selectedClient = $request->get('client_id')
             ? BusinessClient::find($request->get('client_id'))
             : null;
-        return view('crm.quotes.create', compact('clients', 'selectedClient'));
+        // Pre-load selected client's open requests for initial render
+        $selectedClientRequests = $selectedClient
+            ? ClientRequest::with('service')
+                ->where('client_id', $selectedClient->client_id)
+                ->whereIn('status', ['New', 'InReview'])
+                ->orderBy('created_at', 'desc')
+                ->get()
+            : collect();
+        return view('crm.quotes.create', compact('clients', 'services', 'selectedClient', 'selectedClientRequests'));
+    }
+
+    // ── AJAX: fetch open requests for a client ──────────────────────────────
+    public function clientRequests(Request $request)
+    {
+        $clientId = $request->get('client_id');
+        $requests = ClientRequest::with('service')
+            ->where('client_id', $clientId)
+            ->whereIn('status', ['New', 'InReview'])
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(fn($r) => [
+                'id'               => $r->id,
+                'request_id'       => $r->request_id,
+                'title'            => $r->title,
+                'description'      => $r->description,
+                'assessment_notes' => $r->assessment_notes,
+                'priority'         => $r->priority,
+                'service'          => $r->service ? [
+                    'service_id'  => $r->service->service_id,
+                    'name'        => $r->service->name,
+                    'description' => $r->service->description,
+                    'unit_price'  => (float) $r->service->unit_price,
+                    'unit_type'   => $r->service->unit_type,
+                ] : null,
+            ]);
+        return response()->json($requests);
+    }
+
+    // ── AJAX: all active services catalogue ─────────────────────────────────
+    public function services()
+    {
+        $services = BusinessService::where('is_active', true)
+            ->orderBy('category')
+            ->orderBy('name')
+            ->get()
+            ->map(fn($s) => [
+                'service_id'  => $s->service_id,
+                'name'        => $s->name,
+                'description' => $s->description,
+                'category'    => $s->category,
+                'unit_price'  => (float) $s->unit_price,
+                'unit_type'   => $s->unit_type,
+            ]);
+        return response()->json($services);
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
             'client_id'          => 'required|string',
+            'source_request_id'  => 'nullable|exists:client_requests,id',
             'job_title'          => 'required|string|max:255',
             'status'             => 'required|in:Draft,Sent,Accepted,Declined,Expired',
             'quote_date'         => 'required|date',
@@ -73,17 +130,21 @@ class QuoteController extends Controller
             'discount_type'      => 'nullable|in:Fixed,Percent',
             'internal_notes'     => 'nullable|string',
             'client_notes'       => 'nullable|string',
+            'send_immediately'   => 'nullable|boolean',
+            'currency'           => 'nullable|in:ZAR,USD,EUR,GBP',
             'items'              => 'array',
             'items.*.description'=> 'required|string',
             'items.*.quantity'   => 'required|numeric|min:0',
             'items.*.unit_price' => 'required|numeric|min:0',
         ]);
 
+        $sendNow = !empty($data['send_immediately']);
+
         $quote = Quote::create([
             'client_id'        => $data['client_id'],
             'user_id'          => auth()->id(),
             'job_title'        => $data['job_title'],
-            'status'           => $data['status'],
+            'status'           => $sendNow ? 'Sent' : $data['status'],
             'quote_date'       => $data['quote_date'],
             'expiry_date'      => $data['expiry_date'] ?? null,
             'required_deposit' => $data['required_deposit'] ?? 0,
@@ -91,6 +152,7 @@ class QuoteController extends Controller
             'discount_type'    => $data['discount_type'] ?? 'Fixed',
             'internal_notes'   => $data['internal_notes'] ?? null,
             'client_notes'     => $data['client_notes'] ?? null,
+            'currency'         => $data['currency'] ?? 'ZAR',
             'sub_total'        => 0,
             'total_tax'        => 0,
             'grand_total'      => 0,
@@ -111,13 +173,37 @@ class QuoteController extends Controller
             }
         }
 
-        $quote->refresh()->load('items');
+        $quote->refresh()->load(['items', 'client']);
         $quote->recalculateTotals();
+
+        // ── Auto-advance the linked client request to Quoted ──
+        if (!empty($data['source_request_id'])) {
+            ClientRequest::where('id', $data['source_request_id'])
+                ->update(['status' => 'Quoted']);
+            ActivityLog::record('status_changed', 'ClientRequest', $data['source_request_id'], "Auto-moved to Quoted — quote {$quote->quote_id} created");
+        }
 
         ActivityLog::record('created', 'Quote', $quote->quote_id, "Quote {$quote->quote_id} created");
         NotificationService::info('New Quote Created', "Quote {$quote->quote_id} for {$quote->client->full_name}", route('crm.quotes.show', $quote));
 
-        return redirect()->route('crm.quotes.show', $quote)->with('success', 'Quote created.');
+        // ── Send immediately if requested ──
+        if ($sendNow) {
+            if (!$quote->client->email) {
+                return redirect()->route('crm.quotes.show', $quote)
+                    ->with('warning', 'Quote created but client has no email address — could not send.');
+            }
+            try {
+                Mail::to($quote->client->email)->send(new QuoteMail($quote));
+                ActivityLog::record('sent', 'Quote', $quote->quote_id, "Quote emailed to {$quote->client->email}");
+                return redirect()->route('crm.quotes.show', $quote)
+                    ->with('success', "Quote created and sent to {$quote->client->email} ✓");
+            } catch (\Exception $e) {
+                return redirect()->route('crm.quotes.show', $quote)
+                    ->with('warning', 'Quote created but email failed: ' . $e->getMessage());
+            }
+        }
+
+        return redirect()->route('crm.quotes.show', $quote)->with('success', 'Quote created as draft.');
     }
 
     public function edit(Quote $quote)
@@ -139,6 +225,7 @@ class QuoteController extends Controller
             'discount_type'      => 'nullable|in:Fixed,Percent',
             'internal_notes'     => 'nullable|string',
             'client_notes'       => 'nullable|string',
+            'currency'           => 'nullable|in:ZAR,USD,EUR,GBP',
             'items'              => 'array',
             'items.*.description'=> 'required|string',
             'items.*.quantity'   => 'required|numeric|min:0',
@@ -155,6 +242,7 @@ class QuoteController extends Controller
             'discount_type'    => $data['discount_type'] ?? 'Fixed',
             'internal_notes'   => $data['internal_notes'] ?? null,
             'client_notes'     => $data['client_notes'] ?? null,
+            'currency'         => $data['currency'] ?? $quote->currency,
         ]);
 
         // Replace line items
@@ -204,19 +292,37 @@ class QuoteController extends Controller
 
     public function convertToJob(Quote $quote)
     {
+        $quote->load('items');
+
         $job = Job::create([
-            'client_id'    => $quote->client_id,
-            'quote_id'     => $quote->quote_id,
-            'user_id'      => auth()->id(),
-            'job_title'    => $quote->job_title,
-            'job_status'   => 'New',
+            'client_id'        => $quote->client_id,
+            'quote_id'         => $quote->quote_id,
+            'request_id'       => $quote->request_id,
+            'user_id'          => auth()->id(),
+            'job_title'        => $quote->job_title,
+            'job_status'       => 'New',
             'scheduled_status' => 'Unscheduled',
             'assigned_status'  => 'Unassigned',
         ]);
+
+        foreach ($quote->items as $item) {
+            $job->items()->create([
+                'description' => $item->description,
+                'quantity'    => $item->quantity,
+                'unit_price'  => $item->unit_price,
+                'tax_rate'    => $item->tax_rate ?? 0,
+                'line_total'  => $item->line_total,
+                'sort_order'  => $item->sort_order,
+            ]);
+        }
 
         ActivityLog::record('converted', 'Quote', $quote->quote_id, "Quote converted to job {$job->job_id}");
 
         return redirect()->route('crm.jobs.show', $job)->with('success', 'Job created from quote.');
     }
 }
+
+
+
+
 

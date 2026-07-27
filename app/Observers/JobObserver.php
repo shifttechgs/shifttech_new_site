@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Job;
+use App\Models\Invoice;
 use App\Models\ActivityLog;
 use App\Services\NotificationService;
 
@@ -29,6 +30,11 @@ class JobObserver
                     "{$job->job_title} has been marked as completed.",
                     '/useluminii/jobs'
                 );
+
+                // Auto-create a draft invoice if one doesn't already exist
+                if (!Invoice::where('job_id', $job->job_id)->exists()) {
+                    Invoice::autoCreateFromJob($job);
+                }
             } elseif ($new === 'Cancelled') {
                 NotificationService::warning(
                     "Job Cancelled: {$job->job_id}",

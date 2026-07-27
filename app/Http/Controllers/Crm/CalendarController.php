@@ -54,11 +54,12 @@ class CalendarController extends Controller
                 'borderColor'     => $color['border'],
                 'textColor'       => '#ffffff',
                 'extendedProps'   => [
-                    'job_id'      => $sj->job->job_id ?? null,
-                    'client'      => $sj->job->client->full_name ?? 'N/A',
-                    'status'      => $status,
-                    'location'    => $sj->location,
-                    'notes'       => $sj->notes ?? null,
+                    'job_id'   => $sj->job->job_id ?? null,
+                    'client'   => $sj->job->client->full_name ?? 'N/A',
+                    'status'   => $status,
+                    'location' => $sj->location,
+                    'notes'    => $sj->notes ?? null,
+                    'member'   => $sj->teamMember->name ?? 'Unassigned',
                 ],
             ];
         });

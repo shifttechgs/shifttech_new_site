@@ -93,53 +93,125 @@ class ClientResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('client_id')->label('ID')->sortable()->searchable()->copyable(),
-                Tables\Columns\TextColumn::make('firstname')->label('Name')
+                Tables\Columns\TextColumn::make('client_id')
+                    ->label('ID')
+                    ->fontFamily('mono')
+                    ->size(Tables\Columns\TextColumn\TextColumnSize::ExtraSmall)
+                    ->color('gray')
+                    ->copyable()
+                    ->sortable()
+                    ->searchable(),
+
+                Tables\Columns\TextColumn::make('firstname')
+                    ->label('Client')
                     ->formatStateUsing(fn ($record) => "{$record->firstname} {$record->lastname}")
-                    ->sortable()->searchable(),
-                Tables\Columns\TextColumn::make('company')->searchable()->placeholder('—'),
-                Tables\Columns\TextColumn::make('email')->searchable()->copyable(),
-                Tables\Columns\TextColumn::make('phone_number')->label('Phone')->placeholder('—'),
+                    ->description(fn ($record) => $record->company ?: null)
+                    ->searchable(['firstname', 'lastname', 'company'])
+                    ->sortable()
+                    ->weight(\Filament\Support\Enums\FontWeight::SemiBold),
+
+                Tables\Columns\TextColumn::make('email')
+                    ->label('Contact')
+                    ->description(fn ($record) => $record->phone_number ?: null)
+                    ->searchable()
+                    ->copyable()
+                    ->color('gray'),
+
                 Tables\Columns\BadgeColumn::make('client_type')
+                    ->label('Type')
                     ->colors([
                         'warning' => 'Lead',
                         'info'    => 'Prospect',
                         'success' => 'Client',
                     ]),
+
                 Tables\Columns\BadgeColumn::make('status')
                     ->colors(['success' => 'Active', 'danger' => 'Inactive']),
-                Tables\Columns\TextColumn::make('lead_source')->label('Source')->placeholder('—'),
-                Tables\Columns\TextColumn::make('created_at')->label('Added')->date()->sortable(),
+
+                Tables\Columns\TextColumn::make('lead_source')
+                    ->label('Source')
+                    ->formatStateUsing(fn ($state) => match ($state) {
+                        'website'   => 'Website',
+                        'referral'  => 'Referral',
+                        'social'    => 'Social',
+                        'walk-in'   => 'Walk-In',
+                        'cold-call' => 'Cold Call',
+                        default     => ucfirst($state ?? '—'),
+                    })
+                    ->badge()
+                    ->color('gray')
+                    ->placeholder('—'),
+
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label('Added')
+                    ->since()
+                    ->sortable()
+                    ->color('gray')
+                    ->size(Tables\Columns\TextColumn\TextColumnSize::ExtraSmall),
+
+                Tables\Columns\TextColumn::make('next_action')
+                    ->label('Next Action')
+                    ->getStateUsing(function ($record) {
+                        $days = $record->created_at->diffInDays();
+                        return match(true) {
+                            $record->status === 'Inactive'                                    => '💬 Re-engage',
+                            $record->client_type === 'Lead' && $days > 5                      => '⏰ Contact overdue',
+                            $record->client_type === 'Lead'                                    => '📞 Make first contact',
+                            $record->client_type === 'Prospect'                                => '🎯 Qualify prospect',
+                            $record->client_type === 'Client' && $record->status === 'Active' => '✅ Maintain relationship',
+                            default                                                            => '—',
+                        };
+                    })
+                    ->badge()
+                    ->color(fn ($state) => match(true) {
+                        str_contains($state, '⏰') || str_contains($state, '💬') => 'danger',
+                        str_contains($state, '📞')                                => 'warning',
+                        str_contains($state, '🎯')                                => 'primary',
+                        str_contains($state, '✅')                                => 'success',
+                        default                                                   => 'gray',
+                    }),
             ])
             ->filters([
                 SelectFilter::make('client_type')
+                    ->label('Type')
                     ->options(['Lead' => 'Lead', 'Prospect' => 'Prospect', 'Client' => 'Client']),
                 SelectFilter::make('status')
                     ->options(['Active' => 'Active', 'Inactive' => 'Inactive']),
                 SelectFilter::make('lead_source')
+                    ->label('Source')
                     ->options([
                         'website'   => 'Website',
                         'referral'  => 'Referral',
                         'social'    => 'Social Media',
                         'walk-in'   => 'Walk-In',
+                        'cold-call' => 'Cold Call',
                     ]),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make()->iconButton()->tooltip('View'),
+                Tables\Actions\EditAction::make()->iconButton()->tooltip('Edit'),
                 Tables\Actions\Action::make('convert')
-                    ->label('Convert to Client')
-                    ->icon('heroicon-o-arrow-up-circle')
+                    ->label('Make Client')
+                    ->icon('heroicon-o-check-badge')
                     ->color('success')
+                    ->size(\Filament\Support\Enums\ActionSize::Small)
+                    ->button()
                     ->visible(fn ($record) => $record->client_type !== 'Client')
-                    ->action(fn ($record) => $record->update(['client_type' => 'Client'])),
+                    ->requiresConfirmation()
+                    ->modalHeading('Convert to Client')
+                    ->modalDescription('Mark this contact as a full client?')
+                    ->action(fn ($record) => $record->update(['client_type' => 'Client', 'status' => 'Active'])),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
-            ->defaultSort('created_at', 'desc');
+            ->modifyQueryUsing(fn ($query) => $query
+                ->orderByRaw("FIELD(client_type, 'Lead', 'Prospect', 'Client')")
+                ->orderBy('created_at', 'asc')
+            )
+            ->striped();
     }
 
     public static function getRelations(): array

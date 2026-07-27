@@ -8,12 +8,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class RecurringInvoiceItem extends Model
 {
     protected $fillable = [
-        'recurring_invoice_id', 'description', 'quantity', 'unit_price', 'total',
+        'recurring_invoice_id', 'description', 'quantity', 'unit_price', 'line_total',
     ];
 
     protected $casts = [
         'unit_price' => 'decimal:2',
-        'total'      => 'decimal:2',
+        'line_total' => 'decimal:2',
     ];
 
     public function invoice(): BelongsTo

@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('jobs', function (Blueprint $table) {
+        Schema::create('crm_jobs', function (Blueprint $table) {
             $table->id();
             $table->string('job_id')->unique();
             $table->string('business_id')->nullable();
@@ -33,7 +33,7 @@ return new class extends Migration
 
         Schema::create('job_items', function (Blueprint $table) {
             $table->id();
-            $table->string('job_id');
+            $table->string('job_id'); // references crm_jobs.job_id
             $table->string('description');
             $table->integer('quantity')->default(1);
             $table->decimal('unit_price', 10, 2)->default(0);
@@ -58,7 +58,10 @@ return new class extends Migration
     {
         Schema::dropIfExists('scheduled_jobs');
         Schema::dropIfExists('job_items');
-        Schema::dropIfExists('jobs');
+        Schema::dropIfExists('crm_jobs');
     }
 };
+
+
+
 

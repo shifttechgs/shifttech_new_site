@@ -45,7 +45,14 @@ class UserResource extends Resource
                 Tables\Columns\TextColumn::make('email')->searchable()->copyable(),
                 Tables\Columns\TextColumn::make('phone')->placeholder('—'),
                 Tables\Columns\BadgeColumn::make('role')
-                    ->colors(['danger'=>'SuperAdmin','warning'=>'Admin','info'=>'SalesRep','gray'=>'Technician']),
+                    ->colors([
+                        'danger'  => 'SuperAdmin',
+                        'warning' => 'Admin',
+                        'info'    => 'SalesRep',
+                        'gray'    => 'Technician',
+                        'success' => 'Engineer',
+                        'primary' => 'Accountant',
+                    ]),
                 Tables\Columns\IconColumn::make('is_active')->label('Active')->boolean(),
                 Tables\Columns\TextColumn::make('last_login_at')->label('Last Login')->since()->placeholder('Never'),
             ])
@@ -62,4 +69,5 @@ class UserResource extends Resource
         ];
     }
 }
+
 

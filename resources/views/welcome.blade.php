@@ -1,1138 +1,569 @@
-@extends("layouts.master")
-@section("content")
-    <div id="smooth-content">
-    <!-- ============================== Bottom Features Section start ============================== -->
-    <div class="bg-main-600 border-top border-neutral-100 tw-py-4 common-shadow-one" style="margin-top: 5px">
-        <div class="container">
-            <div class="top-features-slider overflow-hidden  position-relative" style="margin-top: 5px">
-                    <div class="d-flex align-items-center tw-gap-3">
-                        <i class="ph-bold ph-currency-circle-dollar tw-text-2xl" style="color: #74b812; line-height: 1;"></i>
-                        <span class="fw-medium tw-text-base" style="color: #ffffff !important; line-height: 1; margin: 0;">60% lower costs. Zero quality compromise</span>
-                    </div>
+@extends('layouts.site')
 
-                    <div class="d-flex align-items-center tw-gap-3">
-                        <i class="ph-bold ph-rocket-launch tw-text-2xl" style="color: #74b812; line-height: 1;"></i>
-                        <span class="fw-medium tw-text-base" style="color: #ffffff !important; line-height: 1; margin: 0;">Ship MVPs in 1–2 weeks, not 6 months</span>
-                    </div>
+@section('title', 'ShiftTech: Software that runs your business')
+@section('meta_description', 'Founder-led software engineering studio in Cape Town and Harare. Web platforms, mobile apps and operations systems, built by the person you actually talk to. Book a free discovery call.')
+@section('body_class', 'has-dark-hero')
 
-                    <div class="d-flex align-items-center tw-gap-3">
-                        <i class="ph-bold ph-globe tw-text-2xl" style="color: #74b812; line-height: 1;"></i>
-                        <span class="fw-medium tw-text-base" style="color: #ffffff !important; line-height: 1; margin: 0;">African engineering. Silicon Valley standards</span>
-                    </div>
+@php
+    $contact = url('/contact');
 
-                    <div class="d-flex align-items-center tw-gap-3">
-                        <i class="ph-bold ph-check-circle tw-text-2xl" style="color: #74b812; line-height: 1;"></i>
-                        <span class="fw-medium tw-text-base" style="color: #ffffff !important; line-height: 1; margin: 0;">150+ successful launches. Proven results</span>
-                    </div>
+    // --- Statistics (edit these to your verified numbers) ---
+    $stats = [
+        ['num' => '100%', 'label' => 'Founder-led, start to finish'],
+        ['num' => '10+',  'label' => 'Systems shipped & still running'],
+        ['num' => '90%+', 'label' => 'Repeat partnerships, built on sustained trust'],
+    ];
 
-                    <div class="d-flex align-items-center tw-gap-3">
-                        <i class="ph-bold ph-users-three tw-text-2xl" style="color: #74b812; line-height: 1;"></i>
-                        <span class="fw-medium tw-text-base" style="color: #ffffff !important; line-height: 1; margin: 0;">Dedicated teams. Direct access. Real partnership</span>
-                    </div>
+    // --- Case studies (auto-advancing carousel) ---
+    $caseStudies = [
+        ['client' => 'BSL Auction',      'title' => 'The admin platform that runs the whole auction house.',      'tags' => 'Web · Admin platform · Dashboard',  'img' => 'assets/images/thumbs/work/bsl-auction',     'alt' => 'BSL Auction operations dashboard built by ShiftTech', 'w' => 1280, 'h' => 694],
+        ['client' => 'Luminii',          'title' => 'The CRM this studio runs on, and our clients too.',          'tags' => 'SaaS · CRM · Invoicing',            'img' => 'assets/images/thumbs/work/luminii',         'alt' => 'Luminii CRM built by ShiftTech', 'w' => 1280, 'h' => 698],
+        ['client' => 'SpringKleaners',   'title' => 'A website built to turn visitors into booked cleans.',        'tags' => 'Web · Lead generation · Cape Town', 'img' => 'assets/images/thumbs/work/springkleaners',  'alt' => 'SpringKleaners cleaning service website built by ShiftTech', 'w' => 1280, 'h' => 691],
+        ['client' => 'Ribbon Plumbing',  'title' => 'A conversion-first site for a 24/7 plumbing & gas company.',  'tags' => 'Web · Lead generation · Booking',   'img' => 'assets/images/thumbs/work/ribbon-plumbing', 'alt' => 'Ribbon Plumbing website built by ShiftTech', 'w' => 1280, 'h' => 703],
+        ['client' => 'Peekaboo Daycare', 'title' => 'The admissions dashboard that keeps enrolments on track.',     'tags' => 'Web · Admin platform · Enrolments', 'img' => 'assets/images/thumbs/work/peekaboo',        'alt' => 'Peekaboo Daycare admissions dashboard built by ShiftTech', 'w' => 1280, 'h' => 703],
+    ];
 
-                    <div class="d-flex align-items-center tw-gap-3">
-                        <i class="ph-bold ph-users-three tw-text-2xl" style="color: #74b812; line-height: 1;"></i>
-                        <span class="fw-medium tw-text-base" style="color: #ffffff; line-height: 1; margin: 0;">AI Driven Teams</span>
-                    </div>
+    // --- Client logos for the dark hero bar (white silhouettes) ---
+    $logos = [
+        ['src' => 'assets/images/logo/clients/white/payhse.png',           'alt' => 'Payhouse Finance'],
+        ['src' => 'assets/images/logo/clients/white/vpw.png',              'alt' => 'Vision Plus Wealth'],
+        ['src' => 'assets/images/logo/clients/white/wcbs_header_logo.png', 'alt' => 'Western Cape Blood Service'],
+        ['src' => 'assets/images/logo/clients/white/BSlwebbold.png',       'alt' => 'BSL Services'],
+        ['src' => 'assets/images/logo/clients/white/trax_boats.png',       'alt' => 'Boats and Trailers'],
+    ];
+
+    // --- Services organised by outcome (each links to its real service page) ---
+    $services = [
+        ['title' => 'Automate Your Operations', 'action' => 'Custom Software',    'href' => url('/services/custom-software-development'), 'body' => 'Replace spreadsheets and manual admin with systems that do the work: quoting, invoicing, tracking, reporting.'],
+        ['title' => 'AI Where It Earns Its Place', 'action' => 'AI Integrations', 'href' => url('/services/ai'), 'body' => 'Practical AI built into your systems, cutting busywork and surfacing what matters. Substance over hype.'],
+        ['title' => 'Custom Web Platforms',     'action' => 'Web Applications',   'href' => url('/services/web-application-development'), 'body' => 'Client portals, booking systems and internal tools built around how your business actually works.'],
+        ['title' => 'Mobile Apps',              'action' => 'Mobile Development', 'href' => url('/services/mobile-app-development'),      'body' => 'Apps your customers and field teams will actually use, from emergency response to laundry pickup.'],
+        ['title' => 'Websites That Win Work',   'action' => 'Web Design',         'href' => url('/services/web-design'),                  'body' => 'Fast, credible marketing sites designed to turn visitors into enquiries, not just look pretty.'],
+    ];
+
+    // --- Development process (numbered: real sequence) ---
+    $process = [
+        [
+            'n' => '01', 'title' => 'Discovery', 'body' => 'A 30-minute call about your business, not your tech stack.',
+            'details' => [
+                ['title' => 'Understand the Problem',  'body' => 'Before we think about tech, we need to understand your business. What\'s breaking, what\'s slowing you down, and what a good outcome actually looks like for you.'],
+                ['title' => 'Look at the Context',     'body' => 'If it matters to the project, we look at it: how your users behave, what competitors are doing, where the gaps are. No assumptions.'],
+                ['title' => 'Agree on the Goal',       'body' => 'By the end of discovery we\'ve agreed on what we\'re building, what success looks like, and what\'s out of scope. Everyone aligned before money changes hands.'],
+            ],
+        ],
+        [
+            'n' => '02', 'title' => 'Plan', 'body' => 'Scope, timeline and budget agreed before a line of code is written.',
+            'details' => [
+                ['title' => 'Scope and Milestones', 'body' => 'We turn discovery into a clear project plan: features, phases, and delivery dates you can hold us to. No surprises.'],
+                ['title' => 'Tech Stack Decision',  'body' => 'We recommend the right tools for your specific needs, not the flavour of the month. Stability and long-term maintainability come first.'],
+                ['title' => 'Budget and Contracts', 'body' => 'Fixed-price or time-and-materials contracts, written in plain English. You know exactly what you\'re getting and what it costs before we start.'],
+            ],
+        ],
+        [
+            'n' => '03', 'title' => 'Design', 'body' => 'Screens you can react to before a line of code is written.',
+            'details' => [
+                ['title' => 'Real Screens to Click',  'body' => 'We design how it will look and feel before writing a single line of code. You get working screens to review, not wireframes to squint at.'],
+                ['title' => 'A Consistent System',    'body' => 'Components, colours, and typography are built as a system so the product stays consistent as it grows.'],
+                ['title' => 'Prototype and Refine',   'body' => 'You click through a working prototype and tell us what feels off. Better to fix it now than after it\'s coded.'],
+            ],
+        ],
+        [
+            'n' => '04', 'title' => 'Build', 'body' => 'Short cycles, working software every week, direct access.',
+            'details' => [
+                ['title' => 'Working Software Weekly', 'body' => 'We write the code. You get working software every sprint, not a big reveal at the end.'],
+                ['title' => 'Short Build Cycles',      'body' => 'We build in focused cycles. You see progress every week and can steer things if priorities shift.'],
+                ['title' => 'Quality Checks',          'body' => 'Every feature is tested manually and with automated checks. Nothing ships until it works properly under real conditions.'],
+            ],
+        ],
+        [
+            'n' => '05', 'title' => 'Launch & Growth', 'body' => 'Deployment, training and a calm switchover.',
+            'details' => [
+                ['title' => 'A Calm Go-Live',      'body' => 'We plan the rollout so nothing catches your team off guard. Go-live is calm, not chaotic.'],
+                ['title' => 'See What\'s Working', 'body' => 'After launch we look at how the system is actually being used and flag anything worth improving early.'],
+                ['title' => 'Grow With You',        'body' => 'As your business grows, we make sure the system grows with it. No big rewrites, just steady progress.'],
+            ],
+        ],
+        [
+            'n' => '06', 'title' => 'Support & Partnership', 'body' => '30 days included; a retainer if you want us close after.',
+            'details' => [
+                ['title' => '30 Days Post-Launch',        'body' => 'Every project includes 30 days of post-launch support: bug fixes, monitoring, and quick responses so your team can run confidently from day one.'],
+                ['title' => 'Still Here After Launch',    'body' => 'We stay close after go-live. Most clients keep us on retainer because having the person who built the system available makes all the difference.'],
+                ['title' => 'Improvements When They Matter', 'body' => 'We track how your system performs in the real world and bring recommendations when something genuinely needs attention, not on a monthly clock.'],
+            ],
+        ],
+    ];
+
+    // --- Testimonials (real, verbatim) ---
+    $testimonials = [
+        ['logo' => 'assets/images/logo/clients/payhse.png',           'alt' => 'Payhouse Finance',           'name' => 'Allan Chidawarima', 'role' => 'Director, Payhouse Finance', 'highlight' => 'know how to build systems you can trust', 'quote' => 'ShiftTech built our website and helped us fully digitise and automate our loan application process. Security and compliance were critical for us, and the team handled everything with confidence from PCI-DSS requirements to real-time transaction monitoring. They truly understand fintech and know how to build systems you can trust.'],
+        ['logo' => 'assets/images/logo/clients/BSlwebbold.png',       'alt' => 'BSL Services',               'name' => 'Conrad',            'role' => 'Operations Manager, BSL Services', 'highlight' => 'simplified operations and reduced manual work', 'quote' => 'ShiftTech built our auction website and admin platform exactly to our needs. They understood our business and delivered a system that simplified operations and reduced manual work. We\'re very happy with the result.'],
+        ['logo' => 'assets/images/logo/clients/wcbs_header_logo.png', 'alt' => 'Western Cape Blood Service',  'name' => 'Ian',               'role' => 'Manager, Western Cape Blood Service', 'highlight' => 'delivered it 4× faster than our internal estimates', 'quote' => 'Prosper and the team introduced AI into our workflows and designed a monitoring system for all our background services. They delivered it 4× faster than our internal estimates, with a clean, powerful dashboard that finally gave us real-time visibility. Reliable, efficient, and genuinely easy to work with. We would truly recommend them.'],
+        ['logo' => 'assets/images/logo/clients/trax_boats.png',       'alt' => 'Boats and Trailers',         'name' => 'Dirk Nel',          'role' => 'Owner, Boats and Trailers', 'highlight' => 'Sales are up 40% since launch', 'quote' => 'We were struggling with spreadsheets for inventory and sales tracking. ShiftTech built us a custom CRM and inventory system that integrated with our accounting software. Sales are up 40% since launch!'],
+        ['logo' => 'assets/images/logo/clients/vpw.png',              'alt' => 'Vision Plus Wealth',         'name' => 'Tinashe Muchenje',  'role' => 'Director, Vision Plus Wealth', 'highlight' => 'fast, secure, and seamless', 'quote' => 'ShiftTech built our website and automated our previously manual loan application process. What used to take days is now fast, secure, and seamless for both our team and customers. The shift to digital has made a huge difference to how we operate.'],
+        ['logo' => 'assets/images/logo/clients/logo.png',             'alt' => 'Ray and Sons Plumbing',      'name' => 'Ray',               'role' => 'Director, Ray & Sons Plumbers', 'highlight' => 'partners, not just service providers', 'quote' => 'ShiftTech helped us launch a professional website and is now supporting us with Useluminii to streamline our day-to-day operations. The team really understands our business and works with us as partners, not just service providers. Everything feels more organised and easier to manage.'],
+    ];
+
+    // --- Testimonial marquee columns — each column carries a distinct pair of
+    // testimonials (not the full set) so the seamless-loop duplication needed
+    // for the CSS animation doesn't multiply into every testimonial appearing
+    // 5-6x in the raw HTML. All 6 real testimonials still show, split across
+    // the 3 columns instead of repeated in each one. Durations scaled down to
+    // match the shorter per-column track length.
+    $testimonialColumnOrders = [
+        [0, 3],
+        [1, 4],
+        [2, 5],
+    ];
+    $testimonialDurations = [18, 16, 20];
+    $testimonialColumns = array_map(function ($order, $i) use ($testimonials, $testimonialDurations) {
+        $items = array_map(fn ($idx) => $testimonials[$idx], $order);
+        return ['items' => $items, 'duration' => $testimonialDurations[$i]];
+    }, $testimonialColumnOrders, array_keys($testimonialColumnOrders));
+
+    // --- FAQ (real) ---
+    $faqs = [
+        ['q' => 'How quickly can you start on my project?',    'a' => 'We typically begin discovery within 48 hours of signing. For MVPs we can have a working prototype in 1–2 weeks. Larger projects follow a structured timeline we\'ll establish together during our initial call.'],
+        ['q' => 'What\'s included in your pricing?',           'a' => 'Our quotes include design, development, testing, deployment, and 30 days of post-launch support. Transparent pricing, no hidden fees. You\'ll know exactly what you\'re paying for before we start.'],
+        ['q' => 'Do you offer ongoing support and maintenance?','a' => 'We offer flexible maintenance from basic monitoring to full managed services. Most clients move onto a monthly retainer for continuous improvements and priority support after launch.'],
+        ['q' => 'What if I\'m not sure what I need?',          'a' => 'Our discovery calls are free and designed to help you figure that out. Bring the problem — we\'ll ask the right questions, map the solution, and give you an honest recommendation with no obligation.'],
+    ];
+@endphp
+
+@section('content')
+<main id="main">
+    <div class="rails" aria-hidden="true"></div>
 
 
+    {{-- ==================== HERO (dark, centered, type-led, framed — Glucode DNA) ==================== --}}
+    <section class="hero hero--dark hero--framed">
+        {{-- Blurred backdrop of real shipped screenshots — ambient evidence of
+             craft behind the content, not competing with it. --}}
+        <div class="hero-bg" aria-hidden="true">
+            <div class="hero-bg__grid">
+                @foreach (array_slice($caseStudies, 0, 5) as $cs)
+                    <picture>
+                        <source srcset="{{ asset($cs['img'] . '.webp') }}" type="image/webp">
+                        <img src="{{ asset($cs['img'] . '.jpg') }}" alt="" width="{{ $cs['w'] }}" height="{{ $cs['h'] }}" loading="eager">
+                    </picture>
+                @endforeach
             </div>
         </div>
+        <div class="hero-frame">
+            <div class="hero-frame__body">
+                <div class="hero-split">
+                    <div class="hero-copy">
+                        <x-site.eyebrow>Replace Manual Processes &middot; Build Internal Systems &middot; Scale Operations</x-site.eyebrow>
+
+                        <h1 class="display-xl hero-headline"><span class="dim">Software isn't the goal.</span><br><span class="hl">Business value is.</span></h1>
+                        <p class="lede hero-sub">We help founders, businesses, and enterprise teams<br>eliminate manual work, modernize operations, and drive measurable business value.</p>
+
+                        <div class="hero-ctas">
+                            <x-site.btn :href="$contact" variant="lime">Book a Free Discovery Call</x-site.btn>
+                            <x-site.btn href="{{ url('/work') }}" :link="true" :arrow="true">See Proof of Work</x-site.btn>
+                        </div>
+
+                    </div>
+
+                    {{-- Photo grid — one real photo of the founder (the "founder-led" claim
+                         made visible) plus two slots that rotate through real shipped work.
+                         Staggered collage of notched-squircle cards: each card has one stepped
+                         corner bite facing a diagonal neighbour, floating badge chips label
+                         each card (chips are siblings of the cards, not children, because the
+                         cards are clip-pathed and would crop anything overhanging their edge),
+                         and a dashed connector frame sits behind. Replaces the lead-capture form. --}}
+                    <div class="hero-photogrid-wrap">
+                        <div class="hero-photogrid">
+                            <div class="hero-photogrid__frame" aria-hidden="true"></div>
+                            <div class="hero-photogrid__founder">
+                                <img src="{{ asset('assets/images/team/prosper.jpg') }}" alt="Prosper, founder of ShiftTech" width="900" height="900" loading="eager">
+                            </div>
+                            {{-- Two animated process cards — how we diagnose (audit) and how
+                                 we build (delivery). Steps light up in sequence via pure CSS
+                                 so the animation obeys prefers-reduced-motion for free. --}}
+                            <div class="hero-photogrid__product hero-photogrid__product--0 hero-photogrid__panel hero-process hero-process--audit">
+                                <span class="hero-photogrid__panel-tag">01 &middot; Systems Audit</span>
+                                <ul class="hero-process__steps">
+                                    <li><i></i>Map your current systems</li>
+                                    <li><i></i>Find gaps &amp; quick wins</li>
+                                    <li><i></i>Fixed-price roadmap</li>
+                                </ul>
+                            </div>
+                            <div class="hero-photogrid__product hero-photogrid__product--1 hero-photogrid__panel hero-process">
+                                <span class="hero-photogrid__panel-tag">02 &middot; End-to-End Delivery</span>
+                                <div class="hero-pipeline">
+                                    <div class="hero-pipeline__stages" aria-label="Design, build, launch, support: one continuous pipeline">
+                                        <span><i></i>Design</span>
+                                        <span><i></i>Build</span>
+                                        <span><i></i>Launch</span>
+                                        <span><i></i>Support</span>
+                                    </div>
+                                    <p class="hero-pipeline__note">One engineer, strategy to support.</p>
+                                </div>
+                            </div>
+                            <div class="hero-photogrid__chip hero-photogrid__chip--founder">
+                                <span class="hero-photogrid__chip-icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17h18l-2-9-4 3-3-6-3 6-4-3z"/></svg></span>
+                                <span class="hero-photogrid__chip-text"><b>Prosper</b><span>Founder &amp; Lead Engineer</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-bar">
+                <p class="hero-bar__line">Trusted by regional leaders in fintech, healthcare and logistics.</p>
+                <div class="hero-bar__logos-mask">
+                    <ul class="hero-bar__logos" aria-label="Clients">
+                        @for ($rep = 0; $rep < 2; $rep++)
+                            @foreach ($logos as $logo)
+                                <li @if ($rep === 1) aria-hidden="true" @endif><img src="{{ asset($logo['src']) }}" alt="{{ $logo['alt'] }}" loading="lazy"></li>
+                            @endforeach
+                        @endfor
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{-- Mobile-only sticky re-entry CTA — appears once the hero scrolls out of view --}}
+    <div class="mobile-sticky-cta" id="mobileStickyCta">
+        <a href="{{ $contact }}" class="btn btn-lime">Book a Free Discovery Call &rarr;</a>
     </div>
-    <!-- ============================== Bottom Features Section end ============================== -->
 
-
-<!-- ============================== Top Features Section start ============================== -->
-
-<!-- ============================== Top Features Section end ============================== -->
-
-
-
-
-        <!-- ============================= Banner Section Start ============================== -->
-        <section class="banner tw-py-80-px overflow-hidden section-bg-three position-relative" style=" background: linear-gradient(135deg, #123d33 0%, #0a2920 100%);
-            min-height: 85vh;
-            display: flex;
-            align-items: center;">
-            <img src="assets/images/shapes/sqaure_shape.png"
-                 alt="Shape"
-                 class="position-absolute top-0 tw-end-0 tw-me-12-percent"
-                 style="filter: brightness(50%); opacity: 0.2;">
-
-            <div class="container max-w-1400-px flex-wrap-reverse">
-                <div class="row gy-4 align-items-center">
-                    <div class="col-lg-7">
-                        <div class="">
-                            <span class="d-inline-block tw-py-2 tw-px-4 rounded-pill text-white fw-medium tw-text-sm tw-mb-4" style="background: rgba(116, 184, 18, 0.2); border: 1px solid #74b812;">
-                    Custom Software Development Agency
-                </span>
-                            <h1 class="text-white fw-bold tw-mb-4" style="font-size: 3.5rem; line-height: 1.15;">
-                                Ship Faster. Spend Less. <span style="color: #ffffff;">Scale Globally.</span>
-                            </h1>
-                            <p class="text-white tw-text-lg tw-mb-5" style="opacity: 0.85; max-width: 540px; line-height: 1.7;">
-                                We build software that grows with your business, from MVPs to enterprise platforms, powered by African engineering talent at global standards.
-                            </p>
-{{--                            <p class="text-neutral-500 tw-text-lg max-w-500-px fw-medium tw-mt-8 splitTextStyleOne">--}}
-{{--                                We help SMEs, enterprises, and startups design and build secure, scalable software from MVPs to full digital transformation.--}}
-{{--                            </p>--}}
-
-{{--                            <!-- Social Proof / Stats -->--}}
-{{--                            <div class="tw-mt-8 d-flex flex-wrap tw-gap-6">--}}
-
-{{--                                <div class="bg-white-08 tw-px-6 tw-py-3 tw-rounded-lg text-center">--}}
-
-{{--                                    <h5 class="fw-bold tw-text-main-600">150+</h5>--}}
-{{--                                    <p class="tw-mb-0 tw-text-sm text-neutral-600">Projects Delivered</p>--}}
-{{--                                </div>--}}
-
-{{--                                <div class="bg-white-08 tw-px-6 tw-py-3 tw-rounded-lg text-center">--}}
-
-{{--                                    <h5 class="fw-bold tw-text-main-600"> 99.9%</h5>--}}
-{{--                                    <p class="tw-mb-0 tw-text-sm text-neutral-600">Client Satisfaction</p>--}}
-{{--                                </div>--}}
-
-
-
-{{--                                <div class="bg-white-08 tw-px-6 tw-py-3 tw-rounded-lg text-center">--}}
-
-{{--                                    <h5 class="fw-bold tw-text-main-600">70%</h5>--}}
-{{--                                    <p class="tw-mb-0 tw-text-sm text-neutral-600">Cost Savings vs Traditional Agencies</p>--}}
-{{--                                </div>--}}
-
-{{--                            </div>--}}
-
-
-                            <div class="tw-mt-11 d-flex align-items-center tw-gap-42-px flex-wrap">
-
-
-
-                                <div class="d-flex align-items-center tw-gap-6">
-                                    <a href="register.html" class="hover--translate-y-1 active--translate-y-scale-9 btn btn-main-two hover-style-two button--stroke d-sm-inline-flex d-none align-items-center justify-content-center tw-gap-5 group active--translate-y-2 tw-px-9 rounded-pill tw-py-4 fw-semibold" data-block="button">
-                                        <span class="button__flair"></span>
-                                        <i class="ph ph-phone-call tw-text-xl tw-text-white group-hover-text-white"></i>
-                                        <span class="button__label">Book a Free Discovery Call</span>
-                                    </a>
-                                    <button type="button" class="toggle-mobileMenu leading-none d-lg-none text-neutral-800 tw-text-9">
-                                        <i class="ph ph-list"></i>
-                                    </button>
-                                </div>
-
-                                <!-- See Our Works -->
-                                <div data-aos="fade-up" data-aos-anchor-placement="top-bottom" data-aos-duration="800">
-                                    <a href="register.html" class="hover--translate-y-1 active--translate-y-scale-9 btn btn-main hover-style-one button--stroke d-sm-inline-flex align-items-center justify-content-center tw-gap-3 group active--translate-y-2 tw-px-56-px tw-py-5 fw-semibold rounded-pill" data-block="button">
-                                        <span class="button__flair"></span>
-                                        <span class="button__label">See Our Works <i class="ph ph-arrow-right"></i></span>
-                                    </a>
-                                </div>
-
-
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="col-lg-5 mt-5 mt-lg-0">
-                        <div class="position-relative">
-                            <div class="p-4 rounded-4" style="background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);">
-                                <div class="d-flex align-items-center mb-4">
-                                    <div class="me-3" style="width: 12px; height: 12px; background: #ff5f57; border-radius: 50%;"></div>
-                                    <div class="me-3" style="width: 12px; height: 12px; background: #febc2e; border-radius: 50%;"></div>
-                                    <div style="width: 12px; height: 12px; background: #28c840; border-radius: 50%;"></div>
-                                </div>
-                                <pre class="mb-0" style="color: #74b812; font-size: 18px; font-family: 'Courier New', monospace;"><code><span style="color: #888;">// Your vision, our code</span>
-<span style="color: #f8f8f2;">const</span> <span style="color: #74b812;">shifttech</span> = {
-  <span style="color: #f8f8f2;">mission:</span> <span style="color: #e6db74;">"Scale your business"</span>,
-  <span style="color: #f8f8f2;">delivery:</span> <span style="color: #e6db74;">"4x faster"</span>,
-  <span style="color: #f8f8f2;">savings:</span> <span style="color: #e6db74;">"60% less cost"</span>,
-  <span style="color: #f8f8f2;">quality:</span> <span style="color: #e6db74;">"Zero compromise"</span>
-};</code></pre>
-                            </div>
-                        </div>
-                    </div>
-
-
-                </div>
+    {{-- ==================== WHAT WE BUILD (capabilities, stacked scroll) ==================== --}}
+    <section class="section" id="services">
+        <div class="container caps-layout">
+            <div class="caps-head">
+                <x-site.eyebrow>What we build</x-site.eyebrow>
+                <h2 class="display-l">Organised around <strong>your outcome,</strong> not our tech stack.</h2>
+                <p class="caps-note">Not sure which one fits? Book a discovery call, bring the problem, and we'll map the right solution together.</p>
+                <x-site.btn :href="$contact" variant="primary">Book a Free Discovery Call</x-site.btn>
             </div>
-        </section>
-        <!-- ============================= Banner Section End ============================== -->
 
-        <!-- ============================ Brand Slider Start =========================== -->
-        <div class="bg-white tw-py-4 border-top border-neutral-100 overflow-hidden">
-            <div class="container">
-                <div class="brand-slider swiper">
-                    <div class="swiper-wrapper align-items-center">
+            <div class="caps-list">
+                @foreach ($services as $i => $s)
+                    <a href="{{ $s['href'] }}" class="xitem">
+                        <span class="xitem__num">{{ sprintf('%02d', $i + 1) }}</span>
+                        <span class="xitem__body">
+                            <span class="xitem__title-row">
+                                <span class="xitem__title">{{ $s['title'] }}</span>
+                                <span class="xitem__arrow" aria-hidden="true">&rarr;</span>
+                            </span>
+                            <span class="xitem__reveal"><span class="xitem__reveal-inner"><span class="xitem__desc">{{ $s['body'] }}</span></span></span>
+                        </span>
+                    </a>
+                @endforeach
+            </div>
+        </div>
+    </section>
 
-{{--                        <div class="swiper-slide">--}}
-{{--                            <div class="text-center tw-py-4 tw-px-4 brand-item-hover">--}}
-{{--                                <img src="assets/images/logo/clients/trax_boats_dark.png" alt="Vision Plus Wealth" class="brand-logo tw-max-h-12 w-auto mx-auto" style="filter: grayscale(100%); opacity: 0.6;">--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-                        <div class="swiper-slide">
-                            <div class="text-center tw-py-4 tw-px-4 brand-item-hover">
-                                <img src="assets/images/logo/clients/vpw.png" alt="Vision Plus Wealth" class="brand-logo tw-max-h-12 w-auto mx-auto" style="filter: grayscale(100%); opacity: 0.6;">
-                            </div>
-                        </div>
-
-                        <div class="swiper-slide">
-                            <div class="text-center tw-py-4 tw-px-4 brand-item-hover">
-                                <img src="assets/images/logo/clients/payhse.png" alt="Payhouse Finance" class="brand-logo tw-max-h-12 w-auto mx-auto" style="filter: grayscale(100%); opacity: 0.6;">
-                            </div>
-                        </div>
-
-                        <div class="swiper-slide">
-                            <div class="text-center tw-py-4 tw-px-4 brand-item-hover">
-                                <img src="assets/images/logo/clients/BSlwebbold.png" alt="bslServices" class="brand-logo tw-max-h-12 w-auto mx-auto" style="filter: grayscale(100%); opacity: 0.6;">
-                            </div>
-                        </div>
-
-{{--                        <div class="swiper-slide">--}}
-{{--                            <div class="text-center tw-py-4 tw-px-4 brand-item-hover">--}}
-{{--                                <img src="assets/images/logo/clients/wcbs_header_logo.png" alt="WesternCape Blood Service" class="brand-logo tw-max-h-12 w-auto mx-auto" style="filter: grayscale(100%); opacity: 0.6;">--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-
-                        <div class="swiper-slide">
-                            <div class="text-center tw-py-4 tw-px-4 brand-item-hover">
-                                <img src="assets/images/logo/clients/logo.png" alt="Ray&Sons Plumbing" class="brand-logo tw-max-h-12 w-auto mx-auto" style="filter: grayscale(100%); opacity: 0.6;">
-                            </div>
-                        </div>
-
-                        <div class="swiper-slide">
-                            <div class="text-center tw-py-4 tw-px-4 brand-item-hover">
-                                <img src="assets/images/logo/clients/useluminii_logo.png" alt="Client" class="brand-logo tw-max-h-12 w-auto mx-auto" style="filter: grayscale(100%); opacity: 0.6;">
-                            </div>
-                        </div>
-
-                        <!-- Duplicate for smooth loop -->
-                        <div class="swiper-slide">
-                            <div class="text-center tw-py-4 tw-px-4 brand-item-hover">
-                                <img src="assets/images/logo/clients/nhume_logo.png" alt="Vision Plus Wealth" class="brand-logo tw-max-h-12 w-auto mx-auto" style="filter: grayscale(100%); opacity: 0.6;">
-                            </div>
-                        </div>
-
-                        <div class="swiper-slide">
-                            <div class="text-center tw-py-4 tw-px-4 brand-item-hover">
-                                <img src="assets/images/logo/clients/payhse.png" alt="Payhouse Finance" class="brand-logo tw-max-h-12 w-auto mx-auto" style="filter: grayscale(100%); opacity: 0.6;">
-                            </div>
-                        </div>
-
+    {{-- ==================== STATISTICS ==================== --}}
+    <section class="stats-band" id="stats">
+        <div class="container">
+            <div class="stats-grid">
+                @foreach ($stats as $stat)
+                    <div class="stat">
+                        <span class="stat-num" data-count="{{ $stat['num'] }}">{{ $stat['num'] }}</span>
+                        <span class="stat-label">{{ $stat['label'] }}</span>
                     </div>
-                </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
+    {{-- ==================== SELECTED WORK — Stack Scroll Reveal ==================== --}}
+    <section class="section solutions" id="work">
+        <div class="container">
+            <div class="sol-head">
+                <x-site.eyebrow>Selected work</x-site.eyebrow>
+                <h2 class="sol-title"><span class="sol-title__lead">Real systems, running real businesses.</span> <span class="sol-title__sub">From fintech platforms to lead-generating websites. A look at what we built and what it changed.</span></h2>
             </div>
         </div>
 
-        <style>
-            .brand-item-hover:hover .brand-logo {
-                filter: grayscale(0%) !important;
-                opacity: 1 !important;
-                transition: all 0.4s ease;
-            }
-
-            .brand-logo {
-                transition: all 0.4s ease;
-            }
-        </style>
-        <!-- ============================ Brand Slider End =========================== -->
-
-        <!-- ========================== About section start ============================= -->
-        <section class="pt-100 pb-120 drag-rotate-element-section">
-            <div class="container">
-                <div class="tw-rounded-50-px gradient-bg-one tw-px-36-px tw-pt-9">
-                    <div class="row gy-4">
-                        <div class="col-lg-6">
-                            <div class="tw-pe-12 position-relative">
-                                <div class="row g-2">
-                                    <div class="col-sm-6" data-aos="fade-up" data-aos-anchor-placement="top-bottom" data-aos-duration="800" >
-                                        <div class="bg-main-600 tw-rounded-3xl tw-p-8 text-center h-100 d-flex flex-column justify-content-center align-items-center">
-                                            <h3 class="text-white d-inline-flex align-items-center tw-gap-3 tw-mb-9">
-                                        <span class="d-flex">
-                                            <img src="assets/images/icons/arrow-up.svg" alt="">
-                                        </span>
-                                                88%
-                                            </h3>
-                                            <p class="text-white tw-text-sm">Average revenue growth achieved by clients after digital transformation.</p>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6" data-aos="fade-up" data-aos-anchor-placement="top-bottom" data-aos-duration="800" >
-                                        <div class="bg-main-two-600 tw-rounded-3xl tw-h-300-px d-flex flex-column justify-content-center align-items-center position-relative">
-                                            <img src="assets/images/thumbs/model.png" alt="" class="position-absolute tw-start-50 bottom-0 tw-translate-x-50">
-                                        </div>
-
-                                        <div class="bg-white tw-rounded-lg common-shadow-one border-bottom border-3 border-main-600 tw-px-4 tw-py-2 d-flex align-items-center tw-gap-3 z-1 position-absolute top-0 tw-end-0 tw-mt-194-px">
-                                    <span class="bg-neutral-200 tw-w-10 tw-h-10 tw-rounded-xl d-flex justify-content-center align-items-center text-neutral-500">
-                                        <i class="ph-bold ph-smiley"></i>
-                                    </span>
-                                            <div class="">
-                                                <h6 class="">99.8%</h6>
-                                                <p class="fw-medium tw-text-sm text-neutral-500">Client Satisfaction rate<br>
-                                                    across delivered projects.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6" data-aos="fade-up" data-aos-anchor-placement="top-bottom" data-aos-duration="800" >
-                                        <div class="bg-main-two-600 tw-rounded-3xl tw-p-8 text-center d-flex flex-column justify-content-center align-items-center tw-h-300-px">
-                                            <div class="circle-border d-inline-block">
-                                                <svg class="radial-progress" data-percentage="78" viewBox="0 0 80 80">
-                                                    <circle class="incomplete" cx="40" cy="40" r="35"></circle>
-                                                    <circle class="complete" cx="40" cy="40" r="35"></circle>
-                                                    <text class="percentage" x="50%" y="57%" transform="matrix(0, 1, -1, 0, 80, 0)">80%</text>
-                                                </svg>
-                                            </div>
-                                            <p class="text-white tw-text-sm tw-mt-5">Faster time-to-market compared to traditional development teams.</p>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6" data-aos="fade-up" data-aos-anchor-placement="top-bottom" data-aos-duration="800" >
-
-                                        <div class="myContainer position-relative d-flex flex-column justify-content-center align-items-center h-100 tw-gap-705 overflow-hidden">
-
-    <span class="drag-rotate-element cursor-grab min-w-max z-1 tw-px-4 tw-py-1 fw-semibold text-white bg-main-600 rounded-pill">
-        50% Faster Development Cycles
-    </span>
-                                            <span class="drag-rotate-element cursor-grab min-w-max z-1 tw-px-9 tw-py-1 fw-semibold text-white bg-main-two-600 rounded-pill">
-          3× Faster MVP Delivery
-    </span>
-                                            <span class="drag-rotate-element cursor-grab min-w-max z-1 tw-px-9 tw-py-1 fw-semibold text-white bg-main-600 rounded-pill">
-        AI-Powered Code Review
-    </span>
-                                            <span class="drag-rotate-element cursor-grab min-w-max z-1 tw-px-9 tw-py-1 fw-semibold text-white bg-main-two-600 rounded-pill">
-        Predictive Delivery Timelines
-    </span>
-
-
-
-
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="common-shadow-three tw-rounded-40-px bg-white tw-ps-56-px tw-pe-6 tw-py-84-px">
-                                <div class="tw-mb-14">
-{{--                                    <span class="tw-py-1 tw-px-705 bg-main-50 text-main-600 tw-text-sm fw-bold text-capitalize rounded-pill tw-mb-205">Who We Help</span>--}}
-                                    <span class="d-inline-block tw-py-1 tw-px-4 rounded-pill text-black fw-medium tw-text-sm tw-mb-4" style="background: rgba(116, 184, 18, 0.2); border: 1px solid #74b812;">
-                    Who We Help
-                </span>
-                                    <h3 class="splitTextStyleOne fw-light tw-leading-104">
-                                        <span class="d-inline-block fw-semibold"> Helping Businesses Scale with Custom Software.</span>
-                                    </h3>
-                                </div>
-                                <div class="d-flex flex-column tw-gap-10">
-                                    <!-- SMEs Going Digital -->
-                                    <div class="d-flex align-items-start tw-gap-26-px animation-item" data-aos="fade-up" data-aos-anchor-placement="top-bottom" data-aos-duration="600">
-                <span class="tw-w-14 d-flex justify-content-center align-items-center text-main-600">
-                    <i class="ph-building ph-bold tw-text-2xl animate__bounce" style="color: #74b812"></i>
-                </span>
-                                        <div>
-                                            <h6 class="tw-mb-4">SMEs Going Digital</h6>
-                                            <p class="text-neutral-500 max-w-400-px">Build systems that work today and scale tomorrow on time and on budget.</p>
-                                        </div>
-                                    </div>
-
-                                    <!-- Enterprises Modernizing Legacy Systems -->
-                                    <div class="d-flex align-items-start tw-gap-26-px animation-item" data-aos="fade-up" data-aos-anchor-placement="top-bottom" data-aos-duration="600">
-                <span class="tw-w-14 d-flex justify-content-center align-items-center text-main-600">
-                    <i class="ph-gear-six ph-bold tw-text-2xl animate__bounce" style="color: #74b812"></i>
-                </span>
-                                        <div>
-                                            <h6 class="tw-mb-4">Enterprises Modernizing Legacy Systems</h6>
-                                            <p class="text-neutral-500 max-w-400-px">Future-proof your business with modern, secure, integrated platforms.</p>
-                                        </div>
-                                    </div>
-
-                                    <!-- Startups Building MVPs -->
-                                    <div class="d-flex align-items-start tw-gap-26-px animation-item" data-aos="fade-up" data-aos-anchor-placement="top-bottom" data-aos-duration="600">
-                <span class="tw-w-14 d-flex justify-content-center align-items-center text-main-600">
-                    <i class="ph-rocket-launch ph-bold tw-text-2xl animate__bounce" style="color: #74b812"></i>
-                </span>
-                                        <div>
-                                            <h6 class="tw-mb-4">Startups Building MVPs</h6>
-                                            <p class="text-neutral-500 max-w-400-px">Launch production-ready MVPs in weeks, not months, to test markets and secure funding.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
+        {{-- Sticky Card Stack: plain document flow, no JS — each card is
+             position:sticky with an increasing top offset, so it catches
+             near the nav and the next card slides up to stack on top of it. --}}
+        <div class="container">
+            <div class="cs-stack">
+                @foreach ($caseStudies as $cs)
+                <article class="cscard cs-stack__item" style="--i: {{ $loop->index }}">
+                    <div class="cscard__media">
+                        <picture>
+                            <source srcset="{{ asset($cs['img'] . '.webp') }}" type="image/webp">
+                            <img src="{{ asset($cs['img'] . '.jpg') }}" alt="{{ $cs['alt'] }}" width="{{ $cs['w'] }}" height="{{ $cs['h'] }}">
+                        </picture>
                     </div>
-                </div>
-            </div>
-        </section>
-        <!-- ========================== About section End ============================= -->
-
-
-        <!-- =============================== Offer section start ============================== -->
-        <section class="offer pt-100 pb-120 overflow-hidden  ">
-            <div class="container">
-                <div class="tw-mb-13">
-                                      <span class="d-inline-block tw-py-1 tw-px-4 rounded-pill text-black fw-medium tw-text-sm tw-mb-4" style="background: rgba(116, 184, 18, 0.2); border: 1px solid #74b812;">
-                    Our Services
-                </span>
-                    <div class="d-flex flex-lg-nowrap flex-wrap justify-content-between align-items-center">
-                        <div class="max-w-672-px">
-                            <h3 class="d-inline-block fw-semibold">
-                                Engineering Solutions That Deliver Business Outcomes
-                            </h3>
-                        </div>
-                        <p class="splitTextStyleOne text-neutral-500 max-w-500-px">
-                            We build digital products that solve real business problems, drive measurable results, and leverage AI to optimize performance, speed, and insights.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="row gy-4">
-                    <!-- Mobile App Development -->
-                    <div class="col-lg-4">
-                        <div class="row gy-4">
-                            <div class="col-lg-12 col-sm-6" data-aos="fade-up" data-aos-anchor-placement="top-bottom" data-aos-duration="600">
-                                <div class="group-item position-relative tw-rounded-3xl overflow-hidden z-1 h-100 tw-pt-15 bg-pink-dark tw-px-40-px tw-pb-84-px tw-duration-300">
-                            <span class="tw-text-base fw-semibold tw-mb-2 text-pink">
-                                Native Apps Users Actually Want to Use
-                            </span>
-                                    <h4 class="splitTextStyleOne tw-mb-5 max-w-218-px">Mobile App Development</h4>
-                                    <p class="text-neutral-700 tw-mb-5">
-                                        AI-enhanced mobile apps designed for engagement, personalization, and predictive user experiences.
-                                    </p>
-                                    <a href="service-details.html" class="tw-w-15 tw-h-15 d-flex justify-content-center align-items-center rounded-circle bg-white tw-text-2xl hover-bg-main-600 hover-text-white hover--translate-y-1 active--translate-y-scale-9">
-                                        <i class="ph-bold ph-arrow-up-right" style="color: #0A8A22"></i>
-                                    </a>
-                                    <img src="assets/images/thumbs/offer-img2.png" alt="Image" class="tw-duration-300 position-absolute bottom-0 tw-end-0 z-n1">
-                                </div>
-                            </div>
-
-                            <!-- Custom Software Development -->
-                            <div class="col-lg-12 col-sm-6" data-aos="fade-up" data-aos-anchor-placement="top-bottom" data-aos-duration="600">
-                                <div class="group-item position-relative tw-rounded-3xl overflow-hidden z-1 h-100 tw-pt-15 bg-pink-lighter tw-px-40-px tw-pb-136-px tw-duration-300">
-                            <span class="tw-text-base fw-semibold tw-mb-2 text-pink">
-                                Tailored Solutions for Unique Challenges
-                            </span>
-                                    <h4 class="splitTextStyleOne fw-light tw-mb-5 max-w-330-px">
-                                        <span class="d-inline-block fw-semibold">Custom Software Development</span>
-                                    </h4>
-                                    <p class="text-neutral-700 tw-mb-5">
-                                        Intelligent workflows and AI-driven automation that eliminate bottlenecks, reduce costs, and solve your most complex business challenges.
-                                    </p>
-                                    <a href="service-details.html" class="tw-w-15 tw-h-15 d-flex justify-content-center align-items-center rounded-circle bg-pink-light tw-text-2xl text-white hover--translate-y-1 active--translate-y-scale-9">
-                                        <i class="ph-bold ph-arrow-up-right" style="color: #0A8A22"></i>
-                                    </a>
-                                    <img src="assets/images/thumbs/offer-img1.png" alt="Image" class="tw-duration-300 position-absolute bottom-0 tw-end-0 z-n1">
-                                </div>
-                            </div>
+                    <div class="cscard__body">
+                        <span class="cscard__client">{{ $cs['client'] }}</span>
+                        <h3 class="cscard__title">{{ $cs['title'] }}</h3>
+                        <span class="cscard__tags">{{ $cs['tags'] }}</span>
+                        <div class="cscard__foot">
+                            <x-site.btn href="{{ url('/work') }}" variant="lime" class="cscard__cta">See More Work &rarr;</x-site.btn>
+                            <span class="cscard__counter">{{ $loop->iteration }} / {{ $loop->count }}</span>
                         </div>
                     </div>
-
-                    <!-- Web Design & Development -->
-                    <div class="col-lg-4" data-aos="fade-up" data-aos-anchor-placement="top-bottom" data-aos-duration="600">
-                        <div class="group-item position-relative tw-rounded-3xl overflow-hidden z-1 tw-pt-15 bg-main-50 tw-px-40-px tw-pb-84-px tw-duration-300 h-100">
-                    <span class="text-main-600 fw-semibold tw-mb-2">
-                        Revenue-Driven Web Experiences
-                    </span>
-                            <h4 class="splitTextStyleOne tw-mb-5 max-w-218-px">Web Design & Development</h4>
-                            <p class="text-neutral-700 tw-mb-5">
-                                AI-powered web apps and sites optimized for conversions, personalization, and actionable insights.
-                            </p>
-                            <a href="service-details.html" class="tw-w-15 tw-h-15 d-flex justify-content-center align-items-center rounded-circle text-white tw-text-2xl bg-main-600 hover-text-white hover--translate-y-1 active--translate-y-scale-9">
-                                <i class="ph-bold ph-arrow-up-right" style="color: #0A8A22"></i>
-                            </a>
-                            <img src="assets/images/thumbs/offer-img3.png" alt="Image" class="tw-duration-300 position-absolute bottom-0 tw-end-0 z-n1 tw-mx-4 tw-mb-12 d-md-block d-none">
-                        </div>
-                    </div>
-
-                    <!-- Web Application Development -->
-                    <div class="col-lg-4">
-                        <div class="row gy-4">
-                            <div class="col-lg-12 col-sm-6" data-aos="fade-up" data-aos-anchor-placement="top-bottom" data-aos-duration="600">
-                                <div class="group-item position-relative tw-rounded-3xl overflow-hidden z-1 tw-pt-15 h-100 bg-purple-light tw-px-40-px tw-pb-84-px tw-duration-300">
-                            <span class="tw-text-base fw-semibold tw-mb-2 text-purple">
-                                Custom Platforms That Power Operations
-                            </span>
-                                    <h4 class="splitTextStyleOne tw-mb-5 max-w-218-px">Web Application Development</h4>
-                                    <p class="text-neutral-700 tw-mb-5">
-                                        Scalable platforms with AI analytics and automation to streamline operations and decision-making.
-                                    </p>
-                                    <a href="service-details.html" class="tw-w-15 tw-h-15 d-flex justify-content-center align-items-center rounded-circle bg-white tw-text-2xl hover-bg-main-600 hover-text-white hover--translate-y-1 active--translate-y-scale-9">
-                                        <i class="ph-bold ph-arrow-up-right" style="color: #0A8A22"></i>
-                                    </a>
-                                    <img src="assets/images/thumbs/offer-img4.png" alt="Image" class="tw-duration-300 position-absolute bottom-0 tw-end-0 z-n1">
-                                </div>
-                            </div>
-
-                            <!-- DevOps & Cloud Infrastructure -->
-                            <div class="col-lg-12 col-sm-6" data-aos="fade-up" data-aos-anchor-placement="top-bottom" data-aos-duration="600">
-                                <div class="group-item position-relative tw-rounded-3xl overflow-hidden z-1 tw-pt-15 h-100 bg-paste-light tw-px-40-px tw-pb-136-px tw-duration-300">
-                            <span class="tw-text-base fw-semibold tw-mb-2 text-pink">
-                                Built to Scale, Secured by Design
-                            </span>
-                                    <h4 class="splitTextStyleOne fw-light tw-mb-5 max-w-330-px">
-                                        <span class="d-inline-block fw-semibold">DevOps & Cloud Infrastructure</span>
-                                    </h4>
-                                    <p class="text-neutral-700 tw-mb-5">
-                                        AI-driven monitoring, predictive maintenance, and cloud automation for secure, high-performance infrastructure.
-                                    </p>
-                                    <a href="service-details.html" class="tw-w-15 tw-h-15 d-flex justify-content-center align-items-center rounded-circle bg-paste tw-text-2xl text-white hover--translate-y-1 active--translate-y-scale-9">
-                                        <i class="ph-bold ph-arrow-up-right" style="color: #0A8A22"></i>
-                                    </a>
-                                    <img src="assets/images/thumbs/offer-img5.png" alt="Image" class="tw-duration-300 position-absolute bottom-0 tw-end-0 z-n1">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-{{--            <!-- ============================== Bottom Features Section start ============================== -->--}}
-{{--            <div class="py-120 ">--}}
-{{--                <div class="container">--}}
-{{--                    <div class="top-features-slider overflow-hidden left-right-gradient position-relative">--}}
-{{--                        <div class="d-flex align-items-center tw-gap-4">--}}
-
-{{--                            <div class="d-flex align-items-center tw-gap-3">--}}
-{{--                                <i class="ph-bold ph-currency-circle-dollar tw-text-2xl" style="color: #74b812"></i>--}}
-{{--                                <span class="text-heading fw-medium tw-text-base" style="color: #0a3622 !important;">--}}
-{{--                        60% lower costs. Zero quality compromise--}}
-{{--                    </span>--}}
-{{--                            </div>--}}
-
-{{--                            <div class="d-flex align-items-center tw-gap-3">--}}
-{{--                                <i class="ph-bold ph-rocket-launch tw-text-2xl " style="color: #74b812"></i>--}}
-{{--                                <span class="text-heading fw-medium tw-text-base" style="color: #0a3622 !important;">--}}
-{{--                        Ship MVPs in 6–8 weeks, not 6 months--}}
-{{--                    </span>--}}
-{{--                            </div>--}}
-
-{{--                            <div class="d-flex align-items-center tw-gap-3">--}}
-{{--                                <i class="ph-bold ph-globe-africa tw-text-2xl" style="color: #74b812"></i>--}}
-{{--                                <span class="text-heading fw-medium tw-text-base" style="color: #0a3622 !important;">--}}
-{{--                        African engineering. Silicon Valley standards--}}
-{{--                    </span>--}}
-{{--                            </div>--}}
-
-{{--                            <div class="d-flex align-items-center tw-gap-3">--}}
-{{--                                <i class="ph-bold ph-check-circle tw-text-2xl " style="color: #74b812"></i>--}}
-{{--                                <span class="text-heading fw-medium tw-text-base" style="color: #0a3622 !important;">--}}
-{{--                        150+ successful launches. Proven results--}}
-{{--                    </span>--}}
-{{--                            </div>--}}
-
-{{--                            <div class="d-flex align-items-center tw-gap-3">--}}
-{{--                                <i class="ph-bold ph-users-three tw-text-2xl " style="color: #74b812"></i>--}}
-{{--                                <span class="text-heading fw-medium tw-text-base" style="color: #0a3622 !important;">--}}
-{{--                        Dedicated teams. Direct access. Real partnership--}}
-{{--                    </span>--}}
-{{--                            </div>--}}
-{{--                            <div class="d-flex align-items-center tw-gap-3" >--}}
-{{--                                <i class="ph-bold ph-users-three tw-text-2xl " style="color: #74b812"></i>--}}
-{{--                                <span class="text-heading fw-medium tw-text-base" style="color: #0a3622">--}}
-{{--                       AI Driven Teams--}}
-{{--                    </span>--}}
-{{--                            </div>--}}
-
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--            <!-- ============================== Bottom Features Section end ============================== -->--}}
-
-        </section>
-        <!-- =============================== Offer section end ============================== -->
-
-        <section class="show-case py-120 bg-main-two-600 overflow-hidden">
-
-            <div class="max-w-900-px mx-auto text-center tw-mb-15">
-                <span class="tw-py-1 tw-px-705 bg-white-13 text-white tw-text-sm fw-medium text-capitalize rounded-pill tw-mb-205">Recent Work</span>
-
-                <h3 class="fw-light tw-leading-104 tw-mb-9 text-white">
-        <span class="splitTextStyleOne d-inline-block fw-medium">
-            <span class="fw-semibold">Our Most Recent Work</span>
-
-
-        </span>
-                </h3>
+                </article>
+                @endforeach
             </div>
 
-
-            <div class="show-case-slider swiper">
-                <div class="swiper-wrapper">
-
-
-                    <div class="swiper-slide" data-aos="fade-up" data-aos-anchor-placement="top-bottom" data-aos-duration="600" >
-                        <div class="group-item">
-                            <div class="position-relative">
-                                <a href="project-details.html" class="w-100 h-100 tw-max-h-410-px overflow-hidden tw-rounded-28-px">
-                                    <img src="assets/images/thumbs/work/luminii.png" alt="Image" class="w-100 h-100 object-fit-cover group-hover-item-scale-12 tw-duration-300">
-                                </a>
-                                <a href="project-details.html" class="tw-w-15 tw-h-15 d-flex justify-content-center align-items-center rounded-circle bg-white tw-text-2xl hover-bg-main-600 hover-text-white hover--translate-y-1 active--translate-y-scale-9 position-absolute top-0 tw-end-0 tw-me-8 tw-mt-8 hidden opacity-0 group-hover-item-opacity-1 group-hover-item-visible tw-scale-04 group-hover-item-scale-1">
-                                    <i class="ph-bold ph-arrow-up-right"></i>
-                                </a>
-                            </div>
-                            <div class="tw-mt-8">
-                                <span class="tw-text-base fw-medium text-white">useluminii CRM</span>
-                                <h5 class="text-white tw-mt-1">
-                                    <a href="project-details.html" class="hover-text-main-600 text-white line-clamp-1 hover--translate-y-1">Web App Development</a>
-                                </h5>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide" data-aos="fade-up" data-aos-anchor-placement="top-bottom" data-aos-duration="600" >
-                        <div class="group-item">
-                            <div class="position-relative">
-                                <a href="project-details.html" class="w-100 h-100 tw-max-h-410-px overflow-hidden tw-rounded-28-px">
-                                    <img src="assets/images/thumbs/work/zimAlert.png" alt="Image" class="w-100 h-100 object-fit-cover group-hover-item-scale-12 tw-duration-300">
-                                </a>
-                                <a href="project-details.html" class="tw-w-15 tw-h-15 d-flex justify-content-center align-items-center rounded-circle bg-white tw-text-2xl hover-bg-main-600 hover-text-white hover--translate-y-1 active--translate-y-scale-9 position-absolute top-0 tw-end-0 tw-me-8 tw-mt-8 hidden opacity-0 group-hover-item-opacity-1 group-hover-item-visible tw-scale-04 group-hover-item-scale-1">
-                                    <i class="ph-bold ph-arrow-up-right"></i>
-                                </a>
-                            </div>
-                            <div class="tw-mt-8">
-                                <span class="tw-text-base fw-medium text-white">zimAlert Response App</span>
-                                <h5 class="text-white tw-mt-1">
-                                    <a href="project-details.html" class="hover-text-main-600 text-white line-clamp-1 hover--translate-y-1">Mobile App Development</a>
-                                </h5>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="swiper-slide" data-aos="fade-up" data-aos-anchor-placement="top-bottom" data-aos-duration="600" >
-                        <div class="group-item">
-                            <div class="position-relative">
-                                <a href="project-details.html" class="w-100 h-100 tw-max-h-410-px overflow-hidden tw-rounded-28-px">
-                                    <img src="assets/images/thumbs/work/saas.png" alt="Image" class="w-100 h-100 object-fit-cover group-hover-item-scale-12 tw-duration-300">
-                                </a>
-                                <a href="project-details.html" class="tw-w-15 tw-h-15 d-flex justify-content-center align-items-center rounded-circle bg-white tw-text-2xl hover-bg-main-600 hover-text-white hover--translate-y-1 active--translate-y-scale-9 position-absolute top-0 tw-end-0 tw-me-8 tw-mt-8 hidden opacity-0 group-hover-item-opacity-1 group-hover-item-visible tw-scale-04 group-hover-item-scale-1">
-                                    <i class="ph-bold ph-arrow-up-right" style="color: #0A8A22"></i>
-                                </a>
-                            </div>
-                            <div class="tw-mt-8">
-                                <span class="tw-text-base fw-medium text-white">useluminii Saas</span>
-                                <h5 class="text-white tw-mt-1">
-                                    <a href="project-details.html" class="hover-text-main-600 text-white line-clamp-1 hover--translate-y-1">Website Designing</a>
-                                </h5>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="swiper-slide" data-aos="fade-up" data-aos-anchor-placement="top-bottom" data-aos-duration="600" >
-                        <div class="group-item">
-                            <div class="position-relative">
-                                <a href="project-details.html" class="w-100 h-100 tw-max-h-410-px overflow-hidden tw-rounded-28-px">
-                                    <img src="assets/images/thumbs/work/pay.png" alt="Image" class="w-100 h-100 object-fit-cover group-hover-item-scale-12 tw-duration-300">
-                                </a>
-                                <a href="project-details.html" class="tw-w-15 tw-h-15 d-flex justify-content-center align-items-center rounded-circle bg-white tw-text-2xl hover-bg-main-600 hover-text-white hover--translate-y-1 active--translate-y-scale-9 position-absolute top-0 tw-end-0 tw-me-8 tw-mt-8 hidden opacity-0 group-hover-item-opacity-1 group-hover-item-visible tw-scale-04 group-hover-item-scale-1">
-                                    <i class="ph-bold ph-arrow-up-right" style="color: #0A8A22"></i>
-                                </a>
-                            </div>
-                            <div class="tw-mt-8">
-                                <span class="tw-text-base fw-medium text-white">PayHouse Finance</span>
-                                <h5 class="text-white tw-mt-1">
-                                    <a href="project-details.html" class="hover-text-main-600 text-white line-clamp-1 hover--translate-y-1">Website Designing</a>
-                                </h5>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="swiper-slide" data-aos="fade-up" data-aos-anchor-placement="top-bottom" data-aos-duration="600" >
-                        <div class="group-item">
-                            <div class="position-relative">
-                                <a href="project-details.html" class="w-100 h-100 tw-max-h-410-px overflow-hidden tw-rounded-28-px">
-                                    <img src="assets/images/thumbs/work/vwp.png" alt="Image" class="w-100 h-100 object-fit-cover group-hover-item-scale-12 tw-duration-300">
-                                </a>
-                                <a href="project-details.html" class="tw-w-15 tw-h-15 d-flex justify-content-center align-items-center rounded-circle bg-white tw-text-2xl hover-bg-main-600 hover-text-white hover--translate-y-1 active--translate-y-scale-9 position-absolute top-0 tw-end-0 tw-me-8 tw-mt-8 hidden opacity-0 group-hover-item-opacity-1 group-hover-item-visible tw-scale-04 group-hover-item-scale-1">
-                                    <i class="ph-bold ph-arrow-up-right" style="color: #0A8A22"></i>
-                                </a>
-                            </div>
-                            <div class="tw-mt-8">
-                                <span class="tw-text-base fw-medium text-white">Vision Plus Wealth</span>
-                                <h5 class="text-white tw-mt-1">
-                                    <a href="project-details.html" class="hover-text-main-600 text-white line-clamp-1 hover--translate-y-1">Website Designing</a>
-                                </h5>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="swiper-slide" data-aos="fade-up" data-aos-anchor-placement="top-bottom" data-aos-duration="600" >
-                        <div class="group-item">
-                            <div class="position-relative">
-                                <a href="project-details.html" class="w-100 h-100 tw-max-h-410-px overflow-hidden tw-rounded-28-px">
-                                    <img src="assets/images/thumbs/work/lifestyle.png" alt="Image" class="w-100 h-100 object-fit-cover group-hover-item-scale-12 tw-duration-300">
-                                </a>
-                                <a href="project-details.html" class="tw-w-15 tw-h-15 d-flex justify-content-center align-items-center rounded-circle bg-white tw-text-2xl hover-bg-main-600 hover-text-white hover--translate-y-1 active--translate-y-scale-9 position-absolute top-0 tw-end-0 tw-me-8 tw-mt-8 hidden opacity-0 group-hover-item-opacity-1 group-hover-item-visible tw-scale-04 group-hover-item-scale-1">
-                                    <i class="ph-bold ph-arrow-up-right" style="color: #0A8A22"></i>
-                                </a>
-                            </div>
-                            <div class="tw-mt-8">
-                                <span class="tw-text-base fw-medium text-white">Lifestyle Laundry</span>
-                                <h5 class="text-white tw-mt-1">
-                                    <a href="project-details.html" class="hover-text-main-600 text-white line-clamp-1 hover--translate-y-1">Mobile App Development</a>
-                                </h5>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="swiper-slide" data-aos="fade-up" data-aos-anchor-placement="top-bottom" data-aos-duration="600" >
-                        <div class="group-item">
-                            <div class="position-relative">
-                                <a href="project-details.html" class="w-100 h-100 tw-max-h-410-px overflow-hidden tw-rounded-28-px">
-                                    <img src="assets/images/thumbs/work/bsl.png" alt="Image" class="w-100 h-100 object-fit-cover group-hover-item-scale-12 tw-duration-300">
-                                </a>
-                                <a href="project-details.html" class="tw-w-15 tw-h-15 d-flex justify-content-center align-items-center rounded-circle bg-white tw-text-2xl hover-bg-main-600 hover-text-white hover--translate-y-1 active--translate-y-scale-9 position-absolute top-0 tw-end-0 tw-me-8 tw-mt-8 hidden opacity-0 group-hover-item-opacity-1 group-hover-item-visible tw-scale-04 group-hover-item-scale-1">
-                                    <i class="ph-bold ph-arrow-up-right" style="color: #0A8A22"></i>
-                                </a>
-                            </div>
-                            <div class="tw-mt-8">
-                                <span class="tw-text-base fw-medium text-white">Bsl Services</span>
-                                <h5 class="text-white tw-mt-1">
-                                    <a href="project-details.html" class="hover-text-main-600 text-white line-clamp-1 hover--translate-y-1">Website Designing</a>
-                                </h5>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
+            <div class="cases-more">
+                <x-site.btn href="{{ url('/work') }}" :link="true" :arrow="true">See All Work</x-site.btn>
             </div>
-        </section>
-        <!-- ================================== Show-case section End ========================== -->
-
-        <!-- ========================= Website Owner section start =============================== -->
-        <section class="website-owner pt-120 pb-120 position-relative z-1 section-bg-one ">
-
-            <div class="container">
-                <div class="d-flex align-items-center justify-content-between tw-gap-6 tw-mb-12">
-                    <div class="max-w-672-px">
-                         <span class="d-inline-block tw-py-1 tw-px-4 rounded-pill text-black fw-medium tw-text-sm tw-mb-4" style="background: rgba(116, 184, 18, 0.2); border: 1px solid #74b812;">
-                   Defining Software Since 2016
-                </span>
-                        <h4 class="d-inline-block fw-semibold"> Real Impact. Trusted by Startups, SMEs & Enterprise Leaders Across Africa and Beyond
-
-                        </h4>
-                    </div>
-                    <div class="" data-aos="fade-up" data-aos-anchor-placement="top-bottom" data-aos-duration="800" >
-                        <p class="splitTextStyleOne text-neutral-500 tw-mt-8 max-w-500-px fw-medium">In a fast-paced business world, ShiftTech delivers predictable results, scalable systems, and measurable impact.</p>
-                    </div>
-                </div>
-
-                <div class="row gy-4">
-                    <div class="col-lg-4">
-                        <div class="row gy-4">
-                            <!-- Testimonial 1: bslServices -->
-                            <div class="col-lg-12 col-md-6" data-aos="fade-up" data-aos-anchor-placement="top-bottom" data-aos-duration="600" >
-                                <div class="common-shadow-ten tw-rounded-2xl tw-p-10 tw-pe-9 bg-white h-100 animation-item">
-                            <span class="tw-mb-5">
-                                <img style="height: 53px" src="assets/images/logo/clients/BSlwebbold.png" alt="Logo" class="animate__flipInY">
-                            </span>
-                                    <div class="">
-                                        <p class="text-neutral-500 tw-text-xl">ShiftTech built our auction website and admin platform exactly to our needs. They understood our business and delivered a system that simplified operations and reduced manual work. We’re very happy with the result.</p>
-                                        <span class="d-block tw-h-px bg-neutral-100 tw-my-6"></span>
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <div class="">
-                                                <h6 class="tw-text-lg tw-mb-205">Conrad</h6>
-                                                <span class="text-neutral-500"> Operations Manager, <span class="text-main-600">BslServices</span> </span>
-                                            </div>
-                                            <div class="d-inline-flex align-items-center tw-gap-1 bg-main-600 tw-py-05 tw-px-3 rounded-pill">
-                                                <span class="text-white fw-bold tw-text-sm">5.0</span>
-                                                <span class="text-white d-flex">
-                                            <img src="assets/images/icons/star.svg" alt="">
-                                        </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Testimonial 2: Ray&Sons Plumbing -->
-                            <div class="col-lg-12 col-md-6" data-aos="fade-up" data-aos-anchor-placement="top-bottom" data-aos-duration="600" >
-                                <div class="common-shadow-ten tw-rounded-2xl tw-p-10 tw-pe-9 bg-white h-100 animation-item">
-                            <span class="tw-mb-5">
-                                <img style="height: 53px" src="assets/images/logo/clients/logo.png" alt="Logo" class="animate__flipInY">
-                            </span>
-                                    <div class="">
-                                        <p class="text-neutral-500 tw-text-xl">ShiftTech helped us launch a professional website and is now supporting us with Useluminii to streamline our day-to-day operations. The team really understands our business and works with us as partners, not just service providers. Everything feels more organised and easier to manage.</p>
-                                        <span class="d-block tw-h-px bg-neutral-100 tw-my-6"></span>
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <div class="">
-                                                <h6 class="tw-text-lg tw-mb-205">Ray</h6>
-                                                <span class="text-neutral-500"> Director, <span class="text-main-600">Ray&Sons Plumbers</span> </span>
-                                            </div>
-                                            <div class="d-inline-flex align-items-center tw-gap-1 bg-main-600 tw-py-05 tw-px-3 rounded-pill">
-                                                <span class="text-white fw-bold tw-text-sm">4.9</span>
-                                                <span class="text-white d-flex">
-                                            <img src="assets/images/icons/star.svg" alt="">
-                                        </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="row gy-4">
-                            <!-- Testimonial 3: Payhouse Finance -->
-                            <div class="col-lg-12 col-md-6" data-aos="fade-up" data-aos-anchor-placement="top-bottom" data-aos-duration="700" >
-                                <div class="common-shadow-ten tw-rounded-2xl tw-p-10 tw-pe-9 bg-white h-100 animation-item">
-                            <span class="tw-mb-5">
-                                <img style="height: 61px" src="assets/images/logo/clients/payhse.png" alt="Logo" class="animate__flipInY">
-                            </span>
-                                    <div class="">
-                                        <p class="text-neutral-500 tw-text-xl">ShiftTech built our website and helped us fully digitise and automate our loan application process. Security and compliance were critical for us, and the team handled everything with confidence from PCI-DSS requirements to real-time transaction monitoring. They truly understand fintech and know how to build systems you can trust.</p>
-                                        <span class="d-block tw-h-px bg-neutral-100 tw-my-6"></span>
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <div class="">
-                                                <h6 class="tw-text-lg tw-mb-205">Allan Chidawarima</h6>
-                                                <span class="text-neutral-500"> Director, <span class="text-main-600">Payhouse Finance</span> </span>
-                                            </div>
-                                            <div class="d-inline-flex align-items-center tw-gap-1 bg-main-600 tw-py-05 tw-px-3 rounded-pill">
-                                                <span class="text-white fw-bold tw-text-sm">4.9</span>
-                                                <span class="text-white d-flex">
-                                            <img src="assets/images/icons/star.svg" alt="">
-                                        </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Testimonial 4: Vision Plus Wealth -->
-                            <div class="col-lg-12 col-md-6" data-aos="fade-up" data-aos-anchor-placement="top-bottom" data-aos-duration="700" >
-                                <div class="common-shadow-ten tw-rounded-2xl tw-p-10 tw-pe-9 bg-white h-100 animation-item">
-                            <span class="tw-mb-5">
-                                <img style="height: 53px" src="assets/images/logo/clients/vpw.png" alt="Logo" class="animate__flipInY">
-                            </span>
-                                    <div class="">
-                                        <p class="text-neutral-500 tw-text-xl">ShiftTech built our website and automated our previously manual loan application process. What used to take days is now fast, secure, and seamless for both our team and customers. The shift to digital has made a huge difference to how we operate.</p>
-                                        <span class="d-block tw-h-px bg-neutral-100 tw-my-6"></span>
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <div class="">
-                                                <h6 class="tw-text-lg tw-mb-205">Tinashe Muchenje</h6>
-                                                <span class="text-neutral-500"> Director, <span class="text-main-600">Vision Plus Wealth</span> </span>
-                                            </div>
-                                            <div class="d-inline-flex align-items-center tw-gap-1 bg-main-600 tw-py-05 tw-px-3 rounded-pill">
-                                                <span class="text-white fw-bold tw-text-sm">4.8</span>
-                                                <span class="text-white d-flex">
-                                            <img src="assets/images/icons/star.svg" alt="">
-                                        </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="row gy-4">
-                            <!-- Testimonial 5: Boats and Trailers -->
-                            <div class="col-lg-12 col-md-6" data-aos="fade-up" data-aos-anchor-placement="top-bottom" data-aos-duration="800" >
-                                <div class="common-shadow-ten tw-rounded-2xl tw-p-10 tw-pe-9 bg-white h-100 animation-item">
-                            <span class="tw-mb-5">
-                                <img style="height: 73px" src="assets/images/logo/clients/trax_boats.png" alt="Logo" class="animate__flipInY">
-                            </span>
-                                    <div class="">
-                                        <p class="text-neutral-500 tw-text-xl">We were struggling with spreadsheets for inventory and sales tracking. ShiftTech built us a custom CRM and inventory system that integrated with our accounting software. Sales are up 40% since launch!</p>
-                                        <span class="d-block tw-h-px bg-neutral-100 tw-my-6"></span>
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <div class="">
-                                                <h6 class="tw-text-lg tw-mb-205">Dirk Nel</h6>
-                                                <span class="text-neutral-500"> Owner, <span class="text-main-600">Boats and Trailers</span> </span>
-                                            </div>
-                                            <div class="d-inline-flex align-items-center tw-gap-1 bg-main-600 tw-py-05 tw-px-3 rounded-pill">
-                                                <span class="text-white fw-bold tw-text-sm">4.9</span>
-                                                <span class="text-white d-flex">
-                                            <img src="assets/images/icons/star.svg" alt="">
-                                        </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Testimonial 6: WesternCape Blood Service -->
-                            <div class="col-lg-12 col-md-6" data-aos="fade-up" data-aos-anchor-placement="top-bottom" data-aos-duration="800" >
-                                <div class="common-shadow-ten tw-rounded-2xl tw-p-10 tw-pe-9 bg-white h-100 animation-item">
-                            <span class="tw-mb-5">
-                                <img src="assets/images/logo/clients/wcbs_header_logo.png" alt="Logo" class="animate__flipInY">
-                            </span>
-                                    <div class="">
-                                        <p class="text-neutral-500 tw-text-xl">Prosper and the team introduced AI into our workflows and designed a monitoring system for all our background services. They delivered it 4× faster than our internal estimates, with a clean, powerful dashboard that finally gave us real-time visibility. Reliable, efficient, and genuinely easy to work with. We would truly recommend them.</p>
-                                        <span class="d-block tw-h-px bg-neutral-100 tw-my-6"></span>
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <div class="">
-                                                <h6 class="tw-text-lg tw-mb-205">Ian </h6>
-                                                <span class="text-neutral-500">Manager, <span class="text-main-600">WesternCape Blood Service</span> </span>
-                                            </div>
-                                            <div class="d-inline-flex align-items-center tw-gap-1 bg-main-600 tw-py-05 tw-px-3 rounded-pill">
-                                                <span class="text-white fw-bold tw-text-sm">4.9</span>
-                                                <span class="text-white d-flex">
-                                            <img src="assets/images/icons/star.svg" alt="">
-                                        </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Testimonial 7: Lifestyle Laundry -->
-                            </div>
-                    </div>
-                </div>
-
-
-
-            </div>
-        </section>
-        <!-- ========================= Website Owner section End =============================== -->
-
-        <!-- =============================== Choose Us section start ============================ -->
-        <section class="py-120 overflow-hidden ">
-            <div class="container">
-                <div class="row gy-4 gx-5">
-
-                    <!-- Image & Icons -->
-                    <div class="col-lg-5 d-sm-block d-none">
-                        <div class="tw-ps-8 position-relative z-1 overflow-hidden" id="box-wrapper">
-                            <img src="assets/images/thumbs/dev_meeting.jpg" alt="Image" class="w-100 h-100 object-fit-cover tw-rounded-3xl">
-
-                            <!-- Example icons positioning -->
-
-
-
-                        </div>
-                    </div>
-
-                    <!-- Content -->
-                    <div class="col-lg-7">
-                        <div class="ps-lg-5">
-
-                            <span class="d-inline-block tw-py-1 tw-px-4 rounded-pill text-black fw-medium tw-text-sm tw-mb-4" style="background: rgba(116, 184, 18, 0.2); border: 1px solid #74b812;">
-                  Why Choose ShiftTech
-                </span>
-                            <div class="max-w-672-px">
-                                <h3 class="fw-light tw-leading-104 cursor-big tw-mb-9 d-flex gap-2">
-                            <span class="splitTextStyleOne d-inline-block fw-medium">
-                                <span class="fw-semibold">Trusted by African Innovators, </span><span class="fw-semibold">Delivering Global Standards</span>
-                            </span>
-                                </h3>
-                                <p class="splitTextStyleOne text-neutral-600 max-w-500-px tw-mb-4 d-flex gap-2">
-                                    We empower leaders to deliver software predictably, scale intelligently, and accelerate growth—combining African ingenuity with AI-powered workflows and world-class engineering practices.
-                                </p>
-                            </div>
-
-                            <div class="tw-mt-10">
-                                <div class="row gy-4">
-
-                                    <!-- Card 1 -->
-                                    <div class="col-6" data-aos="fade-up" data-aos-anchor-placement="top-bottom" data-aos-duration="600">
-                                        <div class="bg-neutral-50 tw-ps-705 tw-pe-4 tw-py-9 border border-neutral-50 hover-border-main-600 tw-rounded-lg tw-duration-300">
-                                            <i class="ph ph-shield-check tw-text-main-600 tw-text-3xl animate__bounce" style="color: #74b812"></i>
-                                            <h6 class="tw-mb-2 d-flex align-items-center tw-gap-3">
-
-                                                De-Risk Software Delivery Without Slowing Innovation
-                                            </h6>
-                                            <p class="text-neutral-500 tw-mb-3">AI orchestration and real-time SDLC visibility eliminate bottlenecks and ensure consistent delivery.</p>
-                                        </div>
-                                    </div>
-
-                                    <!-- Card 2 -->
-                                    <div class="col-6" data-aos="fade-up" data-aos-anchor-placement="top-bottom" data-aos-duration="600">
-                                        <div class="bg-neutral-50 tw-ps-705 tw-pe-4 tw-py-9 border border-neutral-50 hover-border-main-600 tw-rounded-lg tw-duration-300">
-                                            <i class="ph ph-currency-circle-dollar tw-text-main-600 tw-text-3xl animate__bounce" style="color: #74b812"></i>
-                                            <h6 class="tw-mb-2 d-flex align-items-center tw-gap-3">
-
-                                                Predictable Delivery at Transparent, Scalable Costs
-                                            </h6>
-                                            <p class="text-neutral-500 tw-mb-3">Unified workflows, elite talent, and AI-driven processes give complete visibility and predictable outcomes.</p>
-                                        </div>
-                                    </div>
-
-                                    <!-- Card 3 -->
-                                    <div class="col-6" data-aos="fade-up" data-aos-anchor-placement="top-bottom" data-aos-duration="600">
-                                        <div class="bg-neutral-50 tw-ps-705 tw-pe-4 tw-py-9 border border-neutral-50 hover-border-main-600 tw-rounded-lg tw-duration-300">
-                                            <i class="ph ph-rocket-launch tw-text-main-600 tw-text-3xl animate__bounce" style="color: #74b812"></i>
-                                            <h6 class="tw-mb-2 d-flex align-items-center tw-gap-3">
-
-                                                Ship High-Quality Software Faster, Without the Overhead
-                                            </h6>
-                                            <p class="text-neutral-500 tw-mb-3">Pre-integrated teams and automated workflows reduce costs while preserving knowledge and quality.</p>
-                                        </div>
-                                    </div>
-
-                                    <!-- Card 4 -->
-                                    <div class="col-6" data-aos="fade-up" data-aos-anchor-placement="top-bottom" data-aos-duration="600">
-
-                                        <div class="bg-neutral-50 tw-ps-705 tw-pe-4 tw-py-9 border border-neutral-50 hover-border-main-600 tw-rounded-lg tw-duration-300">
-                                            <i class="ph ph-timer tw-text-main-600 tw-text-3xl animate__bounce" style="color: #74b812"></i>
-                                            <h6 class="tw-mb-2 d-flex align-items-center tw-gap-3">
-
-                                                Launch 3x Faster Without Hiring Full-Time Talent
-                                            </h6>
-                                            <p class="text-neutral-500 tw-mb-3">End-to-end development from idea to production-ready solutions, designed to scale globally.</p>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-
-
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-        <!-- =============================== Choose Us section end ============================== -->
-
-                <div class="position-relative z-1">
-            <img src="assets/images/shapes/shape-image.png" alt="Shape" class="position-absolute w-100 tw-start-0 bottom-0 z-n1">
-            <!-- ===================================== Blog section start ============================== -->
-            <section class="blog">
-                <div class="container">
-                    <div class="bg-white common-shadow-five py-120  tw-px-90-px " style="border-radius: 10px">
-
-
-
-                            <!-- Section Header -->
-                            <div class="tw-mb-14 text-center">
-                                <h3 class="splitTextStyleOne fw-light tw-leading-104 tw-mb-5">
-                                    <span class="d-inline-block fw-semibold me-2">Real Impact.</span>
-                                    <span class="d-inline-block">Proven Results</span>
-                                </h3>
-
-                                <p class="text-neutral-600 max-w-700-px mx-auto tw-text-lg">
-                                    High-performing software teams are built on disciplined architecture, reliable delivery systems, and experienced engineers.
-                                    That foundation is what allows us to ship faster, scale with confidence, and deliver results that last.
-                                </p>
-                            </div>
-
-                            <!-- Stats Grid -->
-                            <!-- Stats Grid -->
-                            <div class="row g-4 justify-content-center">
-
-                                <!-- Stat 1 -->
-                                <div class="col-lg-4 col-md-6">
-                                    <div class="tw-min-h-184-px bg-main-600 tw-py-6 tw-px-6 rounded-pill text-center h-100"
-                                         data-aos="fade-up" data-aos-duration="600">
-                                        <h3 class="h1 counter text-white tw-mb-3 fw-medium">150+</h3>
-                                        <p class="text-white mx-auto">Products launched successfully</p>
-                                    </div>
-                                </div>
-
-                                <!-- Stat 2 -->
-                                <div class="col-lg-4 col-md-6">
-                                    <div class="tw-min-h-184-px bg-white tw-py-6 tw-px-6 rounded-pill text-center border border-main-50 h-100"
-                                         data-aos="fade-up" data-aos-duration="600">
-                                        <h3 class="h1 counter text-main-600 tw-mb-3 fw-medium">60%</h3>
-                                        <p class="text-main-two-600 mx-auto">Average cost savings vs. US/EU agencies</p>
-                                    </div>
-                                </div>
-
-                                <!-- Stat 3 -->
-                                <div class="col-lg-4 col-md-6">
-                                    <div class="tw-min-h-184-px bg-main-600 tw-py-6 tw-px-6 rounded-pill text-center h-100"
-                                         data-aos="fade-up" data-aos-duration="600">
-                                        <h3 class="h1 counter text-white fw-medium">3x</h3>
-                                        <p class="text-main-two-600 mx-auto">Faster time to market</p>
-                                    </div>
-                                </div>
-
-                                <!-- Stat 4 -->
-                                <div class="col-lg-4 col-md-6">
-                                    <div class="tw-min-h-184-px bg-white tw-py-6 tw-px-6 rounded-pill text-center border border-main-50 h-100"
-                                         data-aos="fade-up" data-aos-duration="600">
-                                        <h3 class="h1 counter text-main-600 fw-medium">1–2</h3>
-                                        <p class="text-main-two-600 mx-auto">Weeks to ship production-ready MVPs</p>
-                                    </div>
-                                </div>
-
-                                <!-- Stat 5 -->
-                                <div class="col-lg-4 col-md-6">
-                                    <div class="tw-min-h-184-px bg-main-600 tw-py-6 tw-px-6 rounded-pill text-center h-100"
-                                         data-aos="fade-up" data-aos-duration="600">
-                                        <h3 class="h1 counter text-white fw-medium">98%</h3>
-                                        <p class="text-white mx-auto">Client satisfaction rate</p>
-                                    </div>
-                                </div>
-
-                                <!-- Stat 6 -->
-                                <div class="col-lg-4 col-md-6">
-                                    <div class="tw-min-h-184-px bg-white tw-py-6 tw-px-6 rounded-pill text-center border border-main-50 h-100"
-                                         data-aos="fade-up" data-aos-duration="600">
-                                        <h3 class="h1 counter text-main-600 fw-medium">24hr</h3>
-                                        <p class="text-main-two-600 mx-auto">Response time to project inquiries</p>
-                                    </div>
-                                </div>
-
-                            </div>
-
-
-
-
-
-
-                    </div>
-                </div>
-            </section>
-            <!-- ===================================== Blog section End ============================== -->
-            <!-- ============================ Cta section start ========================== -->
-{{--            <section class="cta py-md-0 py-5">--}}
-{{--                <div class="container">--}}
-{{--                    <div class="row gy-4 align-items-center">--}}
-{{--                        <div class="col-md-6 d-md-block d-none">--}}
-{{--                            <div class="pe-lg-2">--}}
-{{--                                <div class="position-relative">--}}
-{{--                                    <img src="assets/images/thumbs/model-img.png" alt="Model">--}}
-{{--                                    <img src="assets/images/shapes/arrow-right-curve.png" alt="Arrow shape" class="position-absolute top-0 tw-end-0 tw-mt-160-px animate__wobble__two">--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-
-{{--                        <div class="col-md-6">--}}
-{{--                            <div class="ps-lg-4 max-w-532-px">--}}
-{{--                    <span class="tw-py-1 tw-px-705 bg-main-50 text-main-600 tw-text-sm fw-bold text-capitalize rounded-pill tw-mb-205">--}}
-{{--                        Ready to Build?--}}
-{{--                    </span>--}}
-
-{{--                                <h3 class="splitTextStyleOne fw-light tw-leading-104 tw-mb-5">--}}
-{{--                        <span class="d-inline-block fw-semibold">--}}
-{{--                           Reliable Software. Predictable Delivery. Real Growth.--}}
-{{--                        </span>--}}
-{{--                                </h3>--}}
-
-{{--                                <p class="text-neutral-600 tw-text-lg splitTextStyleOne">--}}
-{{--                                    Book a free discovery call with ShiftTech and get clarity on scope, cost, and delivery before you commit.--}}
-{{--                                </p>--}}
-
-
-
-{{--                                <div class="d-flex align-items-center  tw-py-5 w-100 tw-mt-5 ">--}}
-{{--                                    <a href="register.html" class="hover--translate-y-1 active--translate-y-scale-9 btn btn-main-two hover-style-two button--stroke d-sm-inline-flex d-none align-items-center justify-content-center tw-gap-5 group active--translate-y-2 tw-px-9 rounded-pill tw-py-4 fw-semibold" data-block="button">--}}
-{{--                                        <span class="button__flair"></span>--}}
-{{--                                        <i class="ph ph-phone-call tw-text-xl tw-text-white group-hover-text-white"></i>--}}
-{{--                                        <span class="button__label">Book a Free Discovery Call</span>--}}
-{{--                                    </a>--}}
-{{--                                    <button type="button" class="toggle-mobileMenu leading-none d-lg-none text-neutral-800 tw-text-9">--}}
-{{--                                        <i class="ph ph-list"></i>--}}
-{{--                                    </button>--}}
-{{--                                </div>--}}
-
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--            </section>--}}
-
-                    <!-- ==================== CTA Section ==================== -->
-                    <section class="py-5" style="background: linear-gradient(135deg, #74b812 0%, #5a9a0a 100%);">
-                        <div class="container">
-                            <div class="row justify-content-center text-center">
-                                <div class="col-lg-8">
-                                    <h2 class="text-white fw-bold tw-mb-3">Ready to transform your business?</h2>
-                                    <p class="text-white tw-mb-4" style="opacity: 0.9;">Book a free 30-minute discovery call. No commitment, just clarity.</p>
-                                    <a href="{{ url('/contact') }}" class="btn btn-lg text-dark fw-bold px-5 py-3 hover--translate-y-1 active--translate-y-scale-9  hover-style-two button--stroke d-sm-inline-flex d-none align-items-center justify-content-center tw-gap-5 group active--translate-y-2 tw-px-9 rounded-pill tw-py-4 fw-semibold" style="background: white; border-radius: 50px;">
-                                        Book Your Free Discovery Call <i class="ph-bold ph-arrow-right ms-2"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-
-
-                    <!-- ============================ Cta section End ========================== -->
         </div>
+    </section>
 
+    {{-- ==================== PROCESS ==================== --}}
+    <section class="section section--flush-top" id="process">
+        <div class="container">
+            <x-site.section-head eyebrow="How a project runs">A calm, predictable path <strong>from idea to running system.</strong></x-site.section-head>
+
+            {{-- Expandable drawers — hover to reveal, focus-within for keyboard --}}
+            <div class="drawers reveal" id="processDrawers">
+                @foreach ($process as $p)
+                    <div class="drawer">
+                        <div class="drawer__head">
+                            <span class="drawer__num">{{ $p['n'] }}</span>
+                            <span class="drawer__title">{{ $p['title'] }}</span>
+                            <span class="drawer__toggle" aria-hidden="true">
+                                <svg width="11" height="11" viewBox="0 0 11 11" fill="none" focusable="false">
+                                    <path d="M5.5 1v9M1 5.5h9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="drawer__body">
+                            <div class="drawer__inner">
+                                @if (!empty($p['details']))
+                                    <div class="drawer__details">
+                                        @foreach ($p['details'] as $d)
+                                            <div class="drawer-detail">
+                                                <h4 class="drawer-detail__title">{{ $d['title'] }}</h4>
+                                                <p class="drawer-detail__body">{{ $d['body'] }}</p>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @else
+                                    <p class="drawer__desc">{{ $p['body'] }}</p>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+
+            <div class="section-cta">
+                <p>Ready to see this in motion for your business?</p>
+                <x-site.btn :href="$contact" variant="lime">Book a Free Discovery Call</x-site.btn>
+            </div>
+        </div>
+    </section>
+
+    {{-- ==================== FOUNDER ==================== --}}
+    <section class="section founder" id="founder">
+        <div class="container founder-grid">
+
+            {{-- Portrait column --}}
+            <div class="founder-portrait-col">
+                <div class="portrait">
+                    <picture>
+                        <source srcset="{{ asset('assets/images/team/prosper.webp') }}" type="image/webp">
+                        <img src="{{ asset('assets/images/team/prosper.jpg') }}" alt="Prosper, founder of ShiftTech" width="900" height="900" loading="lazy">
+                    </picture>
+                </div>
+                <p class="portrait-caption">
+                    <span>Est. 2025</span>
+                    <span class="portrait-caption__sep">·</span>
+                    <span>Cape Town &amp; Harare</span>
+                </p>
+            </div>
+
+            {{-- Content column --}}
+            <div class="founder-body">
+                <x-site.eyebrow>The founder</x-site.eyebrow>
+                <h2 class="display-l">You work with senior engineers. <strong>Not around them.</strong></h2>
+
+                <ul class="founder-tags" aria-label="Credentials">
+                    <li>10+ years full-stack</li>
+                    <li>Fintech · Health · Operations</li>
+                    <li>Senior-led delivery</li>
+                </ul>
+
+                <div class="founder-story">
+                    <p>Most agencies have a trick: senior talent wins the pitch, junior teams do the work. At ShiftTech, whoever scopes your project leads the build and stays on it.</p>
+
+                    <blockquote class="founder-pull">
+                        "I've watched clients go weeks without speaking to anyone who actually touched their codebase. That doesn't happen here. You know who's working on your product, and you can reach them."
+                    </blockquote>
+
+                    <p>We keep the team small on purpose. Fewer clients at a time, more senior attention on each one. The trade-off works in your favour.</p>
+                </div>
+
+                <p class="founder-sign"><b>Prosper</b> · Founder &amp; Lead Engineer, ShiftTech</p>
+                <div class="founder-cta">
+                    <x-site.btn :href="$contact" variant="lime">Book a Free Discovery Call</x-site.btn>
+                    <x-site.btn href="https://www.linkedin.com/company/shifttech-global-solutions/" variant="ghost-pine" target="_blank" rel="noopener noreferrer">LinkedIn</x-site.btn>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    {{-- ==================== TESTIMONIALS ==================== --}}
+    <section class="section" id="testimonials">
+        <div class="container">
+            <div class="testimonials-head">
+                <div class="testimonials-head__text">
+                    <x-site.section-head eyebrow="What clients say">In their <strong>own words.</strong></x-site.section-head>
+                </div>
+                {{-- <button type="button" class="marquee__toggle" data-marquee-toggle aria-pressed="false" aria-label="Pause scrolling testimonials">
+                    <span data-marquee-toggle-icon aria-hidden="true">&#10074;&#10074;</span>
+                    <span data-marquee-toggle-label>Pause</span>
+                </button> --}}
+            </div>
+
+            <div class="marquee" data-marquee>
+                <span class="marquee__fade marquee__fade--top" aria-hidden="true"></span>
+                <span class="marquee__fade marquee__fade--bottom" aria-hidden="true"></span>
+
+                <div class="marquee__cols">
+                    @foreach ($testimonialColumns as $col)
+                        <div class="marquee__col">
+                            <div class="marquee__track" style="--marquee-duration: {{ $col['duration'] }}s;">
+                                @for ($rep = 0; $rep < 2; $rep++)
+                                    @foreach ($col['items'] as $t)
+                                        <x-site.testimonial
+                                            :logo="asset($t['logo'])" :logo-alt="$t['alt']"
+                                            :name="$t['name']" :role="$t['role']"
+                                            :highlight="$t['highlight'] ?? null"
+                                            :reveal="false"
+                                            :aria-hidden="$rep === 1 ? 'true' : null"
+                                        >{{ $t['quote'] }}</x-site.testimonial>
+                                    @endforeach
+                                @endfor
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <div class="section-cta">
+                <p>Want results like these for your business?</p>
+                <x-site.btn :href="$contact" variant="lime">Book a Free Discovery Call</x-site.btn>
+            </div>
+        </div>
+    </section>
+
+    {{-- ==================== FAQ ==================== --}}
+    <section class="section" id="faq">
+        <div class="container">
+            <div class="faq-panel">
+
+                {{-- Left: heading + context + direct contact --}}
+                <div class="faq-head">
+                    <span class="faq-watermark" aria-hidden="true">FAQ</span>
+                    <x-site.eyebrow>Questions</x-site.eyebrow>
+                    <h2 class="display-l">Before you <strong>book.</strong></h2>
+                    <p class="faq-sub">If something's still unclear after reading these, just ask — or reach us directly.</p>
+
+                    <div class="faq-contacts">
+                        <a class="faq-contact" href="tel:+27814303023">
+                            <span class="faq-contact__icon" aria-hidden="true">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                            </span>
+                            <span>+27 81 430 3023</span>
+                        </a>
+                        <a class="faq-contact" href="mailto:sales@shifttechgs.com">
+                            <span class="faq-contact__icon" aria-hidden="true">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>
+                            </span>
+                            <span>sales@shifttechgs.com</span>
+                        </a>
+                    </div>
+                </div>
+
+                {{-- Right: numbered accordion cards --}}
+                <div class="faq-list">
+                    @foreach ($faqs as $i => $faq)
+                        <details class="faq-item" {{ $i === 0 ? 'open' : '' }}>
+                            <summary class="faq-item__head">
+                                <span class="faq-item__num">{{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}</span>
+                                <span class="faq-item__q">{{ $faq['q'] }}</span>
+                                <span class="faq-item__toggle" aria-hidden="true">
+                                    <svg width="12" height="8" viewBox="0 0 12 8" fill="none"><path d="M1 1.5L6 6.5L11 1.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                </span>
+                            </summary>
+                            <div class="faq-item__body">
+                                <div class="faq-item__inner">
+                                    <p>{{ $faq['a'] }}</p>
+                                </div>
+                            </div>
+                        </details>
+                    @endforeach
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    {{-- ==================== FINAL CTA ==================== --}}
+    <section class="section final" id="contact">
+        <div class="container">
+            <x-site.eyebrow>Next step</x-site.eyebrow>
+            <h2><strong>Thirty minutes. No obligation.</strong><br>Just clarity on your next system.</h2>
+            <p class="lede">Tell us what's slowing your business down. We'll tell you honestly whether software can fix it and what it would take.</p>
+
+            {{-- Trust micro-commitments — address the 3 objections before the button --}}
+            <ul class="final-trust">
+                <li><svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13.5 4.5 6.5 11.5 3 8" stroke="#74B812" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Free 30-minute call</li>
+                <li><svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13.5 4.5 6.5 11.5 3 8" stroke="#74B812" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Response within 24 hours</li>
+                <li><svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13.5 4.5 6.5 11.5 3 8" stroke="#74B812" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>No sales pressure</li>
+            </ul>
+
+            <div class="final-actions">
+                <x-site.btn :href="$contact" variant="lime">Book a Free Discovery Call</x-site.btn>
+            </div>
+
+            <div class="final-contact">
+                <a href="mailto:sales@shifttechgs.com">sales@shifttechgs.com</a>
+                <a href="tel:+27814303023">+27 81 430 3023</a>
+                <span>Cape Town · Harare</span>
+            </div>
+        </div>
+    </section>
+
+</main>
 @endsection
+
+@push('schema')
+<script type="application/ld+json">
+{
+    "@@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        @foreach ($faqs as $i => $faq)
+        {
+            "@type": "Question",
+            "name": {!! json_encode($faq['q']) !!},
+            "acceptedAnswer": { "@type": "Answer", "text": {!! json_encode($faq['a']) !!} }
+        }{{ $loop->last ? '' : ',' }}
+        @endforeach
+    ]
+}
+</script>
+@endpush
+
+@push('scripts')
+<script>
+(function () {
+    'use strict';
+    var stickyBar = document.getElementById('mobileStickyCta');
+    var heroEl = document.querySelector('.hero--framed');
+    if (!stickyBar || !heroEl) return;
+
+    var onScroll = function () {
+        var heroBottom = heroEl.getBoundingClientRect().bottom;
+        stickyBar.classList.toggle('is-visible', heroBottom < 0);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+})();
+</script>
+@endpush

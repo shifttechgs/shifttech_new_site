@@ -32,7 +32,7 @@
             <td style="font-weight:500;">{{ $lead->name }}</td>
             <td style="color:var(--color-ink-2);">{{ $lead->email }}</td>
             <td style="color:var(--color-ink-2);">{{ $lead->phone ?? '—' }}</td>
-            <td>{{ $lead->service ?? '—' }}</td>
+            <td>{{ $lead->service_interest ?? '—' }}</td>
             <td><span class="crm-badge {{ $lead->status === 'New' ? 'crm-badge-info' : ($lead->status === 'Converted' ? 'crm-badge-success' : 'crm-badge-neutral') }}">{{ $lead->status }}</span></td>
             <td style="color:var(--color-ink-3);">{{ $lead->created_at->format('d M Y') }}</td>
             <td>
@@ -51,4 +51,5 @@
     @if($leads->hasPages())<div style="padding:1rem 1.25rem;border-top:1px solid var(--color-border);">{{ $leads->links() }}</div>@endif
 </div>
 </x-crm::layout>
+
 

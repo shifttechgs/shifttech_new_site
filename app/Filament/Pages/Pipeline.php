@@ -2,7 +2,7 @@
 
 namespace App\Filament\Pages;
 
-use App\Models\ClientRequest;
+use App\Models\Lead;
 use App\Models\ActivityLog;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
@@ -12,24 +12,27 @@ class Pipeline extends Page
     protected static ?string $navigationIcon  = 'heroicon-o-view-columns';
     protected static ?string $navigationGroup = 'CRM';
     protected static ?string $navigationLabel = 'Pipeline';
-    protected static ?string $title           = 'Request Pipeline';
+    protected static ?string $title           = 'Lead Pipeline';
     protected static ?int    $navigationSort  = 3;
     protected static string  $view            = 'filament.pages.pipeline';
 
     public static function getColumns(): array
     {
         return [
-            'New'      => ['label' => 'New',       'color' => '#94a3b8', 'icon' => '📥'],
-            'InReview' => ['label' => 'In Review',  'color' => '#f59e0b', 'icon' => '🔍'],
-            'Quoted'   => ['label' => 'Quoted',     'color' => '#635bff', 'icon' => '📄'],
-            'Approved' => ['label' => 'Approved',   'color' => '#10b981', 'icon' => '✅'],
-            'Closed'   => ['label' => 'Closed',     'color' => '#64748b', 'icon' => '🔒'],
+            'New'           => ['label' => 'New',           'color' => '#94a3b8', 'icon' => '📥'],
+            'Contacted'     => ['label' => 'Contacted',     'color' => '#2e90fa', 'icon' => '📞'],
+            'Qualified'     => ['label' => 'Qualified',     'color' => '#635bff', 'icon' => '⭐'],
+            'Proposal Sent' => ['label' => 'Proposal Sent', 'color' => '#f79009', 'icon' => '📄'],
+            'Converted'     => ['label' => 'Converted',     'color' => '#12b76a', 'icon' => '✅'],
+            'Closed'        => ['label' => 'Closed',        'color' => '#64748b', 'icon' => '🔒'],
         ];
     }
 
-    public function getRequests(): array
+    public function getLeads(): array
     {
-        return ClientRequest::with(['client', 'assignedTo'])
+        return Lead::with('assignedTo')
+            ->whereNotIn('status', ['Converted', 'Closed'])
+            ->orWhereIn('status', ['Converted', 'Closed'])
             ->orderByRaw("FIELD(priority, 'Urgent', 'High', 'Normal', 'Low')")
             ->orderBy('created_at', 'desc')
             ->get()
@@ -37,16 +40,20 @@ class Pipeline extends Page
             ->toArray();
     }
 
-    public function moveCard(string $requestId, string $newStatus): void
+    public function moveCard(string $leadId, string $newStatus): void
     {
-        $request = ClientRequest::where('request_id', $requestId)->firstOrFail();
-        $old     = $request->status;
-        $request->update(['status' => $newStatus]);
+        $lead = Lead::where('lead_id', $leadId)->firstOrFail();
+        $old  = $lead->status;
 
-        ActivityLog::record(
-            'updated', 'ClientRequest', $requestId,
-            "Request '{$request->title}' moved from {$old} → {$newStatus}"
-        );
+        $updates = ['status' => $newStatus];
+        if ($newStatus === 'Contacted' && ! $lead->contacted_at) {
+            $updates['contacted_at'] = now();
+        }
+
+        $lead->update($updates);
+
+        ActivityLog::record('updated', 'Lead', $leadId,
+            "Lead '{$lead->name}' moved {$old} → {$newStatus}");
 
         Notification::make()
             ->title("Moved to " . self::getColumns()[$newStatus]['label'])
@@ -54,10 +61,9 @@ class Pipeline extends Page
             ->send();
     }
 
-    public function updatePriority(string $requestId, string $priority): void
+    public function updatePriority(string $leadId, string $priority): void
     {
-        ClientRequest::where('request_id', $requestId)->update(['priority' => $priority]);
+        Lead::where('lead_id', $leadId)->update(['priority' => $priority]);
         Notification::make()->title("Priority updated to {$priority}")->success()->send();
     }
 }
-

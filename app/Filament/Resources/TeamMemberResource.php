@@ -41,6 +41,7 @@ class TeamMemberResource extends Resource
                         'Admin'       => 'Admin',
                         'SalesRep'    => 'Sales Rep',
                         'Technician'  => 'Technician',
+                        'Engineer'    => 'Engineer',
                         'Accountant'  => 'Accountant',
                         'Support'     => 'Support',
                     ])
@@ -70,7 +71,8 @@ class TeamMemberResource extends Resource
                         'Admin'      => 'danger',
                         'SalesRep'   => 'warning',
                         'Technician' => 'info',
-                        'Accountant' => 'success',
+                        'Engineer'   => 'success',
+                        'Accountant' => 'gray',
                         default      => 'gray',
                     }),
                 Tables\Columns\TextColumn::make('job_title')->placeholder('—'),
@@ -120,7 +122,8 @@ class TeamMemberResource extends Resource
                         Forms\Components\Select::make('role')
                             ->options([
                                 'Admin' => 'Admin', 'SalesRep' => 'Sales Rep',
-                                'Technician' => 'Technician', 'Accountant' => 'Accountant',
+                                'Technician' => 'Technician', 'Engineer' => 'Engineer',
+                                'Accountant' => 'Accountant', 'Support' => 'Support',
                             ])
                             ->default('Technician')
                             ->required(),
@@ -170,4 +173,7 @@ class TeamMemberResource extends Resource
         ];
     }
 }
+
+
+
 

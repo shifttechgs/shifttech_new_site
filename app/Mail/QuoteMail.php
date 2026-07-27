@@ -40,14 +40,44 @@ class QuoteMail extends Mailable
     {
         return new Content(
             view: 'emails.quote',
+            with: [
+                'quote'    => $this->quote,
+                'business' => $this->business,
+                'logoUrl'  => $this->logoUrl(),
+            ],
         );
+    }
+
+    private function logoUrl(): ?string
+    {
+        if ($this->business->logo_path) {
+            return asset('storage/' . $this->business->logo_path);
+        }
+        return asset('assets/images/logo/shifttech.png');
+    }
+
+    private function logoDataUri(): ?string
+    {
+        if ($this->business->logo_path) {
+            $path = storage_path('app/public/' . $this->business->logo_path);
+            if (file_exists($path)) {
+                return 'data:image/' . pathinfo($path, PATHINFO_EXTENSION) . ';base64,' . base64_encode(file_get_contents($path));
+            }
+        }
+        $fallback = public_path('assets/images/logo/shifttech.png');
+        if (file_exists($fallback)) {
+            return 'data:image/png;base64,' . base64_encode(file_get_contents($fallback));
+        }
+        return null;
     }
 
     public function attachments(): array
     {
+        $logoBase64 = $this->logoDataUri();
         $pdf  = Pdf::loadView('pdf.quote', [
-            'quote'    => $this->quote->load(['client', 'items']),
-            'business' => $this->business,
+            'quote'       => $this->quote->load(['client', 'items']),
+            'business'    => $this->business,
+            'logoBase64'  => $logoBase64,
         ])->setPaper('a4');
 
         return [

@@ -97,10 +97,11 @@ class BusinessSettings extends Page
                         Forms\Components\TextInput::make('invoice_prefix')->label('Invoice Number Prefix')->default('INV'),
                         Forms\Components\TextInput::make('quote_prefix')->label('Quote Number Prefix')->default('QUO'),
                         Forms\Components\TextInput::make('default_tax_rate')
-                            ->label('Default VAT / Tax Rate (%)')
+                            ->label('Default Tax Rate (%) — set to 0 if not VAT registered')
                             ->numeric()
-                            ->default('15')
-                            ->suffix('%'),
+                            ->default('0')
+                            ->suffix('%')
+                            ->helperText('ShiftTech is not yet VAT registered. Keep this at 0 until SARS registration is complete.'),
                         Forms\Components\Select::make('currency')
                             ->label('Currency')
                             ->options(['ZAR' => 'ZAR – South African Rand', 'USD' => 'USD – US Dollar', 'EUR' => 'EUR – Euro', 'GBP' => 'GBP – British Pound'])
@@ -178,4 +179,5 @@ class BusinessSettings extends Page
             ->send();
     }
 }
+
 

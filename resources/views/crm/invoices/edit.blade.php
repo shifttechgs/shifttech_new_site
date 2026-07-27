@@ -40,7 +40,15 @@
                     </select>
                 </div>
                 <div>
-                    <label class="crm-label">Discount (R)</label>
+                    <label class="crm-label">Currency</label>
+                    <select name="currency" class="crm-select">
+                        @foreach(['ZAR' => 'ZAR – South African Rand', 'USD' => 'USD – US Dollar', 'EUR' => 'EUR – Euro', 'GBP' => 'GBP – British Pound'] as $code => $label)
+                        <option value="{{ $code }}" {{ old('currency', $invoice->currency ?? 'ZAR') === $code ? 'selected' : '' }}>{{ $label }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div>
+                    <label class="crm-label">Discount</label>
                     <input type="number" name="discount" value="{{ old('discount', $invoice->discount) }}" class="crm-input" min="0" step="0.01">
                 </div>
                 <div style="grid-column:1/-1;">
@@ -53,7 +61,8 @@
                 </div>
             </div>
         </div>
-        @include('crm.partials.line-items', ['items' => old('items', $invoice->items->toArray())])
+        @php $invoiceCurrencySymbol = \App\Models\BusinessSetup::currencySymbol(old('currency', $invoice->currency ?? 'ZAR')); @endphp
+        @include('crm.partials.line-items', ['items' => old('items', $invoice->items->toArray()), 'currencySymbol' => $invoiceCurrencySymbol])
     </div>
     <div style="display:flex;flex-direction:column;gap:1.25rem;">
         <div class="crm-card">

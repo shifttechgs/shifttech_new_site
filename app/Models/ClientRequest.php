@@ -11,8 +11,13 @@ class ClientRequest extends Model
 
     protected $fillable = [
         'request_id', 'business_id', 'client_id', 'assigned_to',
-        'title', 'description', 'status', 'priority', 'assessment_notes',
+        'title', 'service_id', 'description', 'status', 'priority', 'assessment_notes',
     ];
+
+    public function service()
+    {
+        return $this->belongsTo(BusinessService::class, 'service_id', 'service_id');
+    }
 
     protected static function booted(): void
     {

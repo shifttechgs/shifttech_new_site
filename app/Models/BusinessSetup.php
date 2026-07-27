@@ -30,14 +30,14 @@ class BusinessSetup extends Model
         return static::firstOrCreate(
             ['business_id' => 'ST-001'],
             [
-                'business_name'   => 'ShiftTech General Solutions',
+                'business_name'   => 'ShiftTech Global Solutions',
                 'email'           => 'sales@shifttechgs.com',
                 'phone'           => '',
                 'website'         => 'https://shifttechgs.com',
                 'country'         => 'South Africa',
                 'currency'        => 'ZAR',
                 'timezone'        => 'Africa/Johannesburg',
-                'default_tax_rate'=> '15',
+                'default_tax_rate'=> '0',
                 'invoice_prefix'  => 'INV',
                 'quote_prefix'    => 'QUO',
                 'bank_name'       => 'FNB',
@@ -45,6 +45,17 @@ class BusinessSetup extends Model
                 'bank_branch_code'  => '250655',
             ]
         );
+    }
+
+    public static function currencySymbol(?string $currency = null): string
+    {
+        $code = $currency ?? static::current()->currency;
+        return match($code) {
+            'USD' => '$',
+            'EUR' => '€',
+            'GBP' => '£',
+            default => 'R',
+        };
     }
 
     public function getLogoUrlAttribute(): ?string
@@ -61,4 +72,5 @@ class BusinessSetup extends Model
             ->implode(', ');
     }
 }
+
 

@@ -35,4 +35,35 @@ return [
         ],
     ],
 
+    'luminii_api' => [
+        'base_url' => env('LUMINII_API_BASE_URL', 'http://localhost:5000'),
+        'version' => env('LUMINII_API_VERSION', 'v1'),
+        'timeout' => env('LUMINII_API_TIMEOUT', 30),
+        'verify_ssl' => env('LUMINII_API_VERIFY_SSL', true),
+    ],
+
+    'recaptcha' => [
+        'site_key' => env('RECAPTCHA_SITE_KEY'),
+        'secret_key' => env('RECAPTCHA_SECRET_KEY'),
+        'enabled' => env('RECAPTCHA_ENABLED', false),
+    ],
+
+    'callmebot' => [
+        'phone'   => env('CALLMEBOT_PHONE'),
+        'api_key' => env('CALLMEBOT_API_KEY'),
+        'enabled' => env('CALLMEBOT_ENABLED', false),
+    ],
+
+    'stripe' => [
+        'key'            => env('STRIPE_KEY'),
+        'secret'         => env('STRIPE_SECRET'),
+        'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
+    ],
+
+    // IndexNow key is not a secret — it must be publicly readable at
+    // /{key}.txt for the search engine to verify site ownership.
+    'indexnow' => [
+        'key' => env('INDEXNOW_KEY', '1e987f83bdf099daaeee1bb6deeea895'),
+    ],
+
 ];

@@ -1,100 +1,179 @@
 <x-crm::layout title="Dashboard">
 
-{{-- Stats Grid --}}
-<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;margin-bottom:1.5rem;">
+{{-- ── Greeting Header ── --}}
+<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.75rem;flex-wrap:wrap;gap:1rem;">
+    <div>
+        <h1 style="font-size:1.5rem;font-weight:700;color:var(--crm-text-1,#0d1b2e);letter-spacing:-0.03em;margin:0 0 0.25rem;">
+            Good {{ now()->hour < 12 ? 'morning' : (now()->hour < 17 ? 'afternoon' : 'evening') }}, {{ explode(' ', auth()->user()->name)[0] }}
+        </h1>
+        <p style="font-size:0.875rem;color:var(--crm-text-3,#8898aa);margin:0;">
+            {{ now()->format('l, d F Y') }} &middot; Here's what's happening today
+        </p>
+    </div>
+    <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+        <a href="{{ route('crm.quotes.create') }}" class="crm-btn crm-btn-secondary crm-btn-sm">
+            <svg style="width:0.875rem;height:0.875rem;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            New Quote
+        </a>
+        <a href="{{ route('crm.jobs.create') }}" class="crm-btn crm-btn-primary crm-btn-sm">
+            <svg style="width:0.875rem;height:0.875rem;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            New Job
+        </a>
+    </div>
+</div>
 
-    <div class="crm-stat">
-        <div class="crm-stat-icon">
-            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:1.25rem;height:1.25rem;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+{{-- ── Stats Row — 5 unified cards ── --}}
+<div class="dash-stats-row">
+
+    {{-- Total Clients --}}
+    <div class="dash-stat">
+        <div class="dash-stat-top">
+            <span class="dash-stat-label">Total Clients</span>
+            <span class="dash-stat-icon" style="background:rgba(99,91,255,0.08);">
+                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.75" stroke="currentColor" style="color:#635bff;"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128H5.228A2 2 0 013 17.16V17a6.002 6.002 0 017.5-5.804A5.98 5.98 0 0112 14.186a5.98 5.98 0 011.5-3.004M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            </span>
         </div>
-        <span class="crm-stat-label">Total Clients</span>
-        <span class="crm-stat-value">{{ number_format($stats['total_clients']) }}</span>
-        <span class="crm-stat-meta">{{ $stats['leads'] }} leads</span>
+        <span class="dash-stat-value">{{ number_format($stats['total_clients']) }}</span>
+        <span class="dash-stat-sub">
+            @if($stats['new_clients_month'] > 0)
+                <span class="dash-trend dash-trend-up">+{{ $stats['new_clients_month'] }}</span> this month
+            @else
+                <span style="color:var(--crm-text-3);">{{ $stats['leads'] }} leads</span>
+            @endif
+        </span>
     </div>
 
-    <div class="crm-stat">
-        <div class="crm-stat-icon">
-            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:1.25rem;height:1.25rem;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+    {{-- Active Jobs --}}
+    <div class="dash-stat">
+        <div class="dash-stat-top">
+            <span class="dash-stat-label">Active Jobs</span>
+            <span class="dash-stat-icon" style="background:rgba(46,144,250,0.08);">
+                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.75" stroke="currentColor" style="color:#2e90fa;"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0"/></svg>
+            </span>
         </div>
-        <span class="crm-stat-label">Active Jobs</span>
-        <span class="crm-stat-value">{{ $stats['active_jobs'] }}</span>
-        <span class="crm-stat-meta">{{ $stats['completed_month'] }} completed this month</span>
+        <span class="dash-stat-value">{{ $stats['active_jobs'] }}</span>
+        <span class="dash-stat-sub">
+            <span class="dash-trend dash-trend-up">{{ $stats['completed_month'] }}</span> completed this month
+        </span>
     </div>
 
-    <div class="crm-stat">
-        <div class="crm-stat-icon" style="background:#ecfdf3;color:#12b76a;">
-            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:1.25rem;height:1.25rem;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+    {{-- Revenue --}}
+    <div class="dash-stat">
+        <div class="dash-stat-top">
+            <span class="dash-stat-label">Revenue</span>
+            <span class="dash-stat-icon" style="background:rgba(18,183,106,0.08);">
+                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.75" stroke="currentColor" style="color:#12b76a;"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z"/></svg>
+            </span>
         </div>
-        <span class="crm-stat-label">Revenue This Month</span>
-        <span class="crm-stat-value" style="font-size:1.35rem;">R {{ number_format($stats['revenue_paid'], 2) }}</span>
-        <span class="crm-stat-meta" style="color:var(--color-success-text);">Paid invoices</span>
+        <span class="dash-stat-value" style="font-size:1.375rem;">R {{ number_format($stats['revenue_paid'], 2) }}</span>
+        <span class="dash-stat-sub">
+            @php $revDiff = $stats['revenue_last'] > 0 ? round((($stats['revenue_paid'] - $stats['revenue_last']) / $stats['revenue_last']) * 100) : 0; @endphp
+            @if($revDiff > 0)
+                <span class="dash-trend dash-trend-up">↑ {{ $revDiff }}%</span> vs last month
+            @elseif($revDiff < 0)
+                <span class="dash-trend dash-trend-down">↓ {{ abs($revDiff) }}%</span> vs last month
+            @else
+                <span style="color:var(--crm-text-3);">R {{ number_format($stats['revenue_pending'], 2) }} pending</span>
+            @endif
+        </span>
     </div>
 
-    <div class="crm-stat">
-        <div class="crm-stat-icon" style="background:#fffaeb;color:#f79009;">
-            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:1.25rem;height:1.25rem;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+    {{-- Overdue Invoices --}}
+    <div class="dash-stat {{ $stats['overdue_count'] > 0 ? 'dash-stat-alert' : '' }}">
+        <div class="dash-stat-top">
+            <span class="dash-stat-label" {!! $stats['overdue_count'] > 0 ? 'style="color:#f04438;"' : '' !!}>Overdue</span>
+            <span class="dash-stat-icon" style="background:{{ $stats['overdue_count'] > 0 ? 'rgba(240,68,56,0.08)' : 'rgba(136,152,170,0.08)' }};">
+                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.75" stroke="currentColor" style="color:{{ $stats['overdue_count'] > 0 ? '#f04438' : '#8898aa' }};"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>
+            </span>
         </div>
-        <span class="crm-stat-label">Outstanding</span>
-        <span class="crm-stat-value" style="font-size:1.35rem;">R {{ number_format($stats['revenue_pending'], 2) }}</span>
-        <span class="crm-stat-meta">Pending payment</span>
+        <span class="dash-stat-value" {!! $stats['overdue_count'] > 0 ? 'style="color:#f04438;"' : '' !!}>{{ $stats['overdue_count'] }}</span>
+        <span class="dash-stat-sub">
+            @if($stats['overdue_count'] > 0)
+                <span style="color:#f04438;font-weight:500;">R {{ number_format($stats['overdue_value'], 2) }}</span> outstanding
+            @else
+                <span style="color:#12b76a;font-weight:500;">All clear</span>
+            @endif
+        </span>
     </div>
 
-    @if($stats['overdue_count'] > 0)
-    <div class="crm-stat" style="border-color:#fecdca;">
-        <div class="crm-stat-icon" style="background:#fef3f2;color:#f04438;">
-            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:1.25rem;height:1.25rem;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+    {{-- Open Quotes --}}
+    <div class="dash-stat">
+        <div class="dash-stat-top">
+            <span class="dash-stat-label">Open Quotes</span>
+            <span class="dash-stat-icon" style="background:rgba(247,144,9,0.08);">
+                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.75" stroke="currentColor" style="color:#f79009;"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
+            </span>
         </div>
-        <span class="crm-stat-label" style="color:var(--color-danger-text);">Overdue Invoices</span>
-        <span class="crm-stat-value" style="color:var(--color-danger-text);">{{ $stats['overdue_count'] }}</span>
-        <span class="crm-stat-meta" style="color:var(--color-danger-text);">R {{ number_format($stats['overdue_value'], 2) }}</span>
-    </div>
-    @endif
-
-    <div class="crm-stat">
-        <div class="crm-stat-icon" style="background:#eff8ff;color:#2e90fa;">
-            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:1.25rem;height:1.25rem;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-        </div>
-        <span class="crm-stat-label">Open Quotes</span>
-        <span class="crm-stat-value">{{ $stats['open_quotes'] }}</span>
-        <span class="crm-stat-meta">R {{ number_format($stats['open_quotes_value'], 2) }} pipeline</span>
+        <span class="dash-stat-value">{{ $stats['open_quotes'] }}</span>
+        <span class="dash-stat-sub">
+            <span style="color:var(--crm-text-2);font-weight:500;">R {{ number_format($stats['open_quotes_value'], 0) }}</span> pipeline
+        </span>
     </div>
 
 </div>
 
-{{-- Revenue Chart + Activity --}}
-<div style="display:grid;grid-template-columns:1fr 360px;gap:1.25rem;margin-bottom:1.5rem;" class="crm-dashboard-grid">
+{{-- ── Quick Pulse Alerts ── --}}
+@if($stats['website_leads'] > 0 || $stats['open_requests'] > 0)
+<div class="dash-alerts">
+    @if($stats['website_leads'] > 0)
+    <a href="{{ route('crm.leads.index') }}" class="dash-alert dash-alert-info">
+        <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:1rem;height:1rem;flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
+        <span><strong>{{ $stats['website_leads'] }} new website lead{{ $stats['website_leads'] > 1 ? 's' : '' }}</strong> awaiting response</span>
+        <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:0.875rem;height:0.875rem;margin-left:auto;flex-shrink:0;opacity:0.5;"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
+    </a>
+    @endif
+    @if($stats['open_requests'] > 0)
+    <a href="{{ route('crm.requests.index') }}" class="dash-alert dash-alert-warning">
+        <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:1rem;height:1rem;flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15a2.25 2.25 0 012.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25z"/></svg>
+        <span><strong>{{ $stats['open_requests'] }} open request{{ $stats['open_requests'] > 1 ? 's' : '' }}</strong> need attention</span>
+        <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:0.875rem;height:0.875rem;margin-left:auto;flex-shrink:0;opacity:0.5;"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
+    </a>
+    @endif
+</div>
+@endif
+
+{{-- ── Revenue Chart + Activity Feed ── --}}
+<div class="dash-grid-2" style="margin-bottom:1.25rem;">
 
     {{-- Revenue Chart --}}
-    <div class="crm-card">
-        <div class="crm-card-header">
-            <span class="crm-card-title">Revenue vs Expenses</span>
-            <span style="font-size:0.8125rem;color:var(--color-ink-3);">Last 6 months</span>
+    <div class="dash-card" style="flex:1.6;">
+        <div class="dash-card-header">
+            <div>
+                <h3 class="dash-card-title">Revenue Overview</h3>
+                <p class="dash-card-subtitle">Last 6 months &middot; Revenue vs Expenses</p>
+            </div>
+            <div style="display:flex;align-items:center;gap:1rem;">
+                <span class="dash-legend"><span class="dash-legend-dot" style="background:#12b76a;"></span> Revenue</span>
+                <span class="dash-legend"><span class="dash-legend-dot" style="background:#fecdca;"></span> Expenses</span>
+            </div>
         </div>
-        <div class="crm-card-body" style="padding:1.5rem;">
-            <canvas id="revenueChart" height="200"></canvas>
+        <div style="padding:0.5rem 1.5rem 1.25rem;height:240px;">
+            <canvas id="revenueChart"></canvas>
         </div>
     </div>
 
-    {{-- Recent Activity --}}
-    <div class="crm-card">
-        <div class="crm-card-header">
-            <span class="crm-card-title">Recent Activity</span>
-            <a href="{{ route('crm.notifications.index') }}" style="font-size:0.8125rem;color:var(--color-ink-3);">View all</a>
+    {{-- Activity Feed --}}
+    <div class="dash-card" style="flex:1;max-width:380px;">
+        <div class="dash-card-header">
+            <h3 class="dash-card-title">Recent Activity</h3>
         </div>
-        <div style="padding:0.5rem 0;">
-            @forelse($recentActivity as $log)
-            <div style="display:flex;align-items:flex-start;gap:0.75rem;padding:0.625rem 1.25rem;border-bottom:1px solid var(--color-border);">
-                <div style="width:2rem;height:2rem;border-radius:50%;background:var(--color-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.75rem;font-weight:600;color:var(--color-ink-2);">
-                    {{ strtoupper(substr($log->user->name ?? 'S', 0, 2)) }}
+        <div class="dash-activity-feed">
+            @forelse($recentActivity as $activity)
+            <div class="dash-activity-item">
+                <div class="dash-activity-avatar">
+                    {{ $activity->user ? strtoupper(substr($activity->user->name, 0, 1)) : '?' }}
                 </div>
                 <div style="flex:1;min-width:0;">
-                    <p style="font-size:0.8125rem;color:var(--color-ink-1);line-height:1.4;" class="crm-truncate">{{ $log->description }}</p>
-                    <p style="font-size:0.75rem;color:var(--color-ink-3);margin-top:2px;">{{ $log->created_at->diffForHumans() }}</p>
+                    <p class="dash-activity-text">
+                        <strong>{{ $activity->user->name ?? 'System' }}</strong>
+                        {{ $activity->description }}
+                    </p>
+                    <p class="dash-activity-time">{{ $activity->created_at->diffForHumans() }}</p>
                 </div>
             </div>
             @empty
-            <div class="crm-empty" style="padding:2rem;">
-                <p class="crm-empty-text">No activity yet</p>
+            <div style="padding:2rem 1.5rem;text-align:center;">
+                <p style="font-size:0.8125rem;color:var(--crm-text-3);">No recent activity</p>
             </div>
             @endforelse
         </div>
@@ -102,35 +181,31 @@
 
 </div>
 
-{{-- Upcoming Jobs + Overdue Invoices --}}
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;" class="crm-dashboard-grid">
+{{-- ── Upcoming Jobs + Overdue Invoices + Recent Quotes ── --}}
+<div class="dash-grid-3">
 
     {{-- Upcoming Jobs --}}
-    <div class="crm-card">
-        <div class="crm-card-header">
-            <span class="crm-card-title">Upcoming Jobs</span>
-            <a href="{{ route('crm.jobs.index') }}" class="crm-btn crm-btn-secondary crm-btn-sm">View all</a>
+    <div class="dash-card">
+        <div class="dash-card-header">
+            <h3 class="dash-card-title">Upcoming Jobs</h3>
+            <a href="{{ route('crm.jobs.index') }}" class="dash-link">View all →</a>
         </div>
-        <div class="crm-table-wrap" style="border:none;border-radius:0;box-shadow:none;">
-            <table class="crm-table">
-                <thead><tr>
-                    <th>Job</th><th>Client</th><th>Status</th><th>Date</th>
-                </tr></thead>
+        <div class="dash-card-table">
+            <table>
+                <thead><tr><th>Job</th><th>Client</th><th>Status</th><th>Date</th></tr></thead>
                 <tbody>
                 @forelse($upcomingJobs as $job)
-                <tr onclick="window.location='{{ route('crm.jobs.show', $job) }}'">
+                <tr onclick="window.location='{{ route('crm.jobs.show', $job) }}'" style="cursor:pointer;">
                     <td>
-                        <p style="font-weight:500;font-size:0.875rem;" class="crm-truncate" style="max-width:200px;">{{ $job->job_title }}</p>
-                        <p style="font-size:0.75rem;color:var(--color-ink-3);">{{ $job->job_id }}</p>
+                        <span class="dash-cell-primary">{{ Str::limit($job->job_title, 24) }}</span>
+                        <span class="dash-cell-secondary">{{ $job->job_id }}</span>
                     </td>
-                    <td style="font-size:0.875rem;">{{ $job->client->full_name ?? '—' }}</td>
-                    <td>
-                        @include('crm.partials.job-badge', ['status' => $job->job_status])
-                    </td>
-                    <td style="font-size:0.8125rem;color:var(--color-ink-3);">{{ $job->job_date_time ? $job->job_date_time->format('d M') : '—' }}</td>
+                    <td class="dash-cell-text">{{ $job->client->full_name ?? '—' }}</td>
+                    <td>@include('crm.partials.job-badge', ['status' => $job->job_status])</td>
+                    <td class="dash-cell-muted">{{ $job->job_date_time ? $job->job_date_time->format('d M') : '—' }}</td>
                 </tr>
                 @empty
-                <tr><td colspan="4"><div class="crm-empty" style="padding:1.5rem;"><p class="crm-empty-text">No upcoming jobs</p></div></td></tr>
+                <tr><td colspan="4" class="dash-empty-cell">No upcoming jobs</td></tr>
                 @endforelse
                 </tbody>
             </table>
@@ -138,29 +213,62 @@
     </div>
 
     {{-- Overdue Invoices --}}
-    <div class="crm-card">
-        <div class="crm-card-header">
-            <span class="crm-card-title" style="color:var(--color-danger-text);">Overdue Invoices</span>
-            <a href="{{ route('crm.invoices.index', ['status' => 'Overdue']) }}" class="crm-btn crm-btn-secondary crm-btn-sm">View all</a>
+    <div class="dash-card">
+        <div class="dash-card-header">
+            <h3 class="dash-card-title" {!! $overdueInvoices->count() > 0 ? 'style="color:#f04438;"' : '' !!}>Overdue Invoices</h3>
+            <a href="{{ route('crm.invoices.index', ['status' => 'Overdue']) }}" class="dash-link">View all →</a>
         </div>
-        <div class="crm-table-wrap" style="border:none;border-radius:0;box-shadow:none;">
-            <table class="crm-table">
-                <thead><tr>
-                    <th>Invoice</th><th>Client</th><th>Amount</th><th>Due</th>
-                </tr></thead>
+        <div class="dash-card-table">
+            <table>
+                <thead><tr><th>Invoice</th><th>Client</th><th>Amount</th><th>Due</th></tr></thead>
                 <tbody>
                 @forelse($overdueInvoices as $inv)
-                <tr onclick="window.location='{{ route('crm.invoices.show', $inv) }}'">
-                    <td style="font-size:0.875rem;font-weight:500;">{{ $inv->invoice_id }}</td>
-                    <td style="font-size:0.875rem;">{{ $inv->client->full_name ?? '—' }}</td>
-                    <td style="font-size:0.875rem;font-weight:600;color:var(--color-danger-text);">R {{ number_format($inv->balance, 2) }}</td>
-                    <td style="font-size:0.8125rem;color:var(--color-danger-text);">{{ $inv->due_date ? $inv->due_date->format('d M') : '—' }}</td>
+                <tr onclick="window.location='{{ route('crm.invoices.show', $inv) }}'" style="cursor:pointer;">
+                    <td class="dash-cell-mono">{{ $inv->invoice_id }}</td>
+                    <td class="dash-cell-text">{{ $inv->client->full_name ?? '—' }}</td>
+                    <td style="font-weight:600;color:#f04438;font-size:0.8125rem;">R {{ number_format($inv->balance, 2) }}</td>
+                    <td class="dash-cell-muted" style="color:#f04438;">{{ $inv->due_date ? $inv->due_date->format('d M') : '—' }}</td>
                 </tr>
                 @empty
-                <tr><td colspan="4"><div class="crm-empty" style="padding:1.5rem;">
-                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:1.5rem;height:1.5rem;color:var(--color-success);margin:0 auto 0.5rem;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                    <p class="crm-empty-text">No overdue invoices</p>
-                </div></td></tr>
+                <tr><td colspan="4" class="dash-empty-cell" style="color:#12b76a;">
+                    ✓ No overdue invoices
+                </td></tr>
+                @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {{-- Recent Quotes --}}
+    <div class="dash-card">
+        <div class="dash-card-header">
+            <h3 class="dash-card-title">Open Quotes</h3>
+            <a href="{{ route('crm.quotes.index') }}" class="dash-link">View all →</a>
+        </div>
+        <div class="dash-card-table">
+            <table>
+                <thead><tr><th>Quote</th><th>Client</th><th>Amount</th><th>Status</th></tr></thead>
+                <tbody>
+                @forelse($recentQuotes as $q)
+                <tr onclick="window.location='{{ route('crm.quotes.show', $q) }}'" style="cursor:pointer;">
+                    <td class="dash-cell-mono">{{ $q->quote_id }}</td>
+                    <td class="dash-cell-text">{{ $q->client->full_name ?? '—' }}</td>
+                    <td style="font-weight:600;font-size:0.8125rem;color:var(--crm-text-1);">R {{ number_format($q->grand_total, 2) }}</td>
+                    <td>
+                        @php
+                            $qCls = match($q->status) {
+                                'Draft' => 'crm-badge-neutral',
+                                'Sent' => 'crm-badge-info',
+                                'Accepted' => 'crm-badge-success',
+                                'Declined' => 'crm-badge-danger',
+                                default => 'crm-badge-neutral',
+                            };
+                        @endphp
+                        <span class="crm-badge {{ $qCls }}"><span class="crm-badge-dot"></span>{{ $q->status }}</span>
+                    </td>
+                </tr>
+                @empty
+                <tr><td colspan="4" class="dash-empty-cell">No open quotes</td></tr>
                 @endforelse
                 </tbody>
             </table>
@@ -178,54 +286,218 @@ const revenues = @json(collect($revenueChart)->pluck('revenue'));
 const expenses = @json(collect($revenueChart)->pluck('expenses'));
 
 new Chart(ctx, {
-    type: 'line',
+    type: 'bar',
     data: {
         labels,
         datasets: [
             {
                 label: 'Revenue',
                 data: revenues,
-                borderColor: '#12b76a',
-                backgroundColor: 'rgba(18,183,106,0.08)',
-                tension: 0.4,
-                fill: true,
-                pointRadius: 4,
-                pointBackgroundColor: '#12b76a',
-                borderWidth: 2,
+                backgroundColor: '#12b76a',
+                borderRadius: 4,
+                borderSkipped: false,
+                barPercentage: 0.6,
+                categoryPercentage: 0.7,
             },
             {
                 label: 'Expenses',
                 data: expenses,
-                borderColor: '#f04438',
-                backgroundColor: 'rgba(240,68,56,0.06)',
-                tension: 0.4,
-                fill: true,
-                pointRadius: 4,
-                pointBackgroundColor: '#f04438',
-                borderWidth: 2,
+                backgroundColor: '#fecdca',
+                borderRadius: 4,
+                borderSkipped: false,
+                barPercentage: 0.6,
+                categoryPercentage: 0.7,
             }
         ]
     },
     options: {
         responsive: true,
-        maintainAspectRatio: true,
+        maintainAspectRatio: false,
         interaction: { mode: 'index', intersect: false },
         plugins: {
-            legend: { labels: { font: { family: 'Inter', size: 12 }, color: '#5a6a7e', boxWidth: 12 } },
-            tooltip: { callbacks: { label: ctx => 'R ' + ctx.raw.toFixed(2) } }
+            legend: { display: false },
+            tooltip: {
+                backgroundColor: '#0d1b2e',
+                titleFont: { family: 'Inter', size: 12, weight: '600' },
+                bodyFont: { family: 'Inter', size: 12 },
+                padding: 10,
+                cornerRadius: 8,
+                callbacks: { label: ctx => ctx.dataset.label + ': R ' + ctx.raw.toLocaleString('en-ZA', { minimumFractionDigits: 2 }) }
+            }
         },
         scales: {
-            x: { grid: { display: false }, ticks: { font: { family: 'Inter', size: 11 }, color: '#8898aa' } },
-            y: { grid: { color: '#e4e9f0' }, ticks: { font: { family: 'Inter', size: 11 }, color: '#8898aa', callback: v => 'R' + v } }
+            x: {
+                grid: { display: false },
+                ticks: { font: { family: 'Inter', size: 11, weight: '500' }, color: '#8898aa' },
+                border: { display: false }
+            },
+            y: {
+                grid: { color: '#f0f2f5', drawBorder: false },
+                ticks: {
+                    font: { family: 'Inter', size: 11 },
+                    color: '#8898aa',
+                    callback: v => 'R' + (v >= 1000 ? (v/1000).toFixed(0) + 'k' : v),
+                    maxTicksLimit: 5
+                },
+                border: { display: false }
+            }
         }
     }
 });
 </script>
 @endpush
 
+@push('head')
 <style>
-@media(max-width:900px){.crm-dashboard-grid{grid-template-columns:1fr!important;}}
+/* ── Dashboard Stats Row ── */
+.dash-stats-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    margin-bottom: 1.5rem;
+    background: #fff;
+    border: 1px solid var(--crm-border, #e4e9f0);
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(13,27,46,0.04);
+    overflow: hidden;
+}
+.dash-stat {
+    padding: 1.25rem 1.375rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    border-right: 1px solid var(--crm-border, #e4e9f0);
+    transition: background 0.15s ease;
+}
+.dash-stat:last-child { border-right: none; }
+.dash-stat:hover { background: #fafbfc; }
+.dash-stat-alert { background: #fffbfa; }
+.dash-stat-alert:hover { background: #fef3f2; }
+.dash-stat-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.dash-stat-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--crm-text-3, #8898aa);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+.dash-stat-icon {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.dash-stat-icon svg { width: 1.125rem; height: 1.125rem; }
+.dash-stat-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--crm-text-1, #0d1b2e);
+    letter-spacing: -0.04em;
+    line-height: 1;
+}
+.dash-stat-sub {
+    font-size: 0.8125rem;
+    color: var(--crm-text-3, #8898aa);
+}
+.dash-trend { font-weight: 600; font-size: 0.8125rem; }
+.dash-trend-up { color: #12b76a; }
+.dash-trend-down { color: #f04438; }
+
+/* ── Alerts ── */
+.dash-alerts { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.5rem; }
+.dash-alert {
+    display: flex; align-items: center; gap: 0.625rem;
+    padding: 0.75rem 1rem; border-radius: 10px;
+    font-size: 0.8125rem; text-decoration: none; transition: all 0.15s ease;
+}
+.dash-alert:hover { filter: brightness(0.97); }
+.dash-alert-info { background: #eff8ff; border: 1px solid #b2ddff; color: #175cd3; }
+.dash-alert-warning { background: #fffaeb; border: 1px solid #fedf89; color: #b54708; }
+
+/* ── Cards ── */
+.dash-card {
+    background: #fff; border: 1px solid var(--crm-border, #e4e9f0);
+    border-radius: 12px; box-shadow: 0 1px 3px rgba(13,27,46,0.04); overflow: hidden;
+}
+.dash-card-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1rem 1.5rem; border-bottom: 1px solid var(--crm-border, #e4e9f0);
+}
+.dash-card-title { font-size: 0.875rem; font-weight: 600; color: var(--crm-text-1, #0d1b2e); margin: 0; }
+.dash-card-subtitle { font-size: 0.75rem; color: var(--crm-text-3, #8898aa); margin: 0.125rem 0 0; }
+.dash-link { font-size: 0.75rem; font-weight: 500; color: var(--crm-accent, #635bff); text-decoration: none; white-space: nowrap; }
+.dash-link:hover { text-decoration: underline; }
+
+/* ── Legend ── */
+.dash-legend { display: flex; align-items: center; gap: 0.375rem; font-size: 0.6875rem; font-weight: 500; color: var(--crm-text-3, #8898aa); }
+.dash-legend-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+
+/* ── Tables in cards ── */
+.dash-card-table { overflow-x: auto; }
+.dash-card-table table { width: 100%; border-collapse: collapse; font-size: 0.8125rem; }
+.dash-card-table thead th {
+    padding: 0.625rem 1rem; font-size: 0.6875rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.04em; color: var(--crm-text-3, #8898aa);
+    background: #fafbfc; border-bottom: 1px solid var(--crm-border, #e4e9f0); text-align: left; white-space: nowrap;
+}
+.dash-card-table tbody tr { border-bottom: 1px solid #f0f2f5; transition: background 0.1s ease; }
+.dash-card-table tbody tr:hover { background: #fafbfc; }
+.dash-card-table tbody tr:last-child { border-bottom: none; }
+.dash-card-table tbody td { padding: 0.625rem 1rem; vertical-align: middle; }
+.dash-cell-primary { display: block; font-weight: 500; color: var(--crm-text-1); font-size: 0.8125rem; }
+.dash-cell-secondary { display: block; font-size: 0.6875rem; color: var(--crm-text-3); font-family: 'SF Mono','Fira Code',monospace; }
+.dash-cell-text { font-size: 0.8125rem; color: var(--crm-text-2, #5a6a7e); }
+.dash-cell-muted { font-size: 0.75rem; color: var(--crm-text-3, #8898aa); }
+.dash-cell-mono { font-size: 0.8125rem; font-weight: 500; font-family: 'SF Mono','Fira Code',monospace; color: var(--crm-text-2); }
+.dash-empty-cell { text-align: center; padding: 2rem 1rem !important; color: var(--crm-text-3); font-size: 0.8125rem; }
+
+/* ── Activity Feed ── */
+.dash-activity-feed { max-height: 340px; overflow-y: auto; }
+.dash-activity-item {
+    display: flex; gap: 0.75rem; padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid #f0f2f5; transition: background 0.1s ease;
+}
+.dash-activity-item:hover { background: #fafbfc; }
+.dash-activity-item:last-child { border-bottom: none; }
+.dash-activity-avatar {
+    width: 2rem; height: 2rem; border-radius: 50%;
+    background: var(--crm-bg, #f4f6f9); color: var(--crm-text-2);
+    font-size: 0.6875rem; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.dash-activity-text { font-size: 0.8125rem; color: var(--crm-text-2); line-height: 1.4; margin: 0; }
+.dash-activity-text strong { color: var(--crm-text-1); font-weight: 600; }
+.dash-activity-time { font-size: 0.6875rem; color: var(--crm-text-3); margin: 0.125rem 0 0; }
+
+/* ── Grid Layouts ── */
+.dash-grid-2 { display: flex; gap: 1.25rem; }
+.dash-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+
+@media (max-width: 1200px) {
+    .dash-stats-row { grid-template-columns: repeat(3, 1fr); }
+    .dash-stat:nth-child(3) { border-right: none; }
+    .dash-grid-3 { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 900px) {
+    .dash-stats-row { grid-template-columns: repeat(2, 1fr); }
+    .dash-grid-2 { flex-direction: column; }
+    .dash-grid-2 .dash-card { max-width: 100% !important; }
+    .dash-grid-3 { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+    .dash-stats-row { grid-template-columns: 1fr; }
+    .dash-stat { border-right: none !important; border-bottom: 1px solid var(--crm-border); }
+    .dash-stat:last-child { border-bottom: none; }
+}
 </style>
+@endpush
 
 </x-crm::layout>
 

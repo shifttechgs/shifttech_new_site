@@ -21,6 +21,13 @@ class InvoiceMail extends Mailable
     public function __construct(public Invoice $invoice)
     {
         $this->business = BusinessSetup::current();
+
+        // Heal stale totals — items may have been added after the invoice was created
+        $this->invoice->loadMissing('items');
+        if ($this->invoice->items->isNotEmpty() && (float) $this->invoice->total_amount === 0.0) {
+            $this->invoice->recalculateTotals();
+            $this->invoice->refresh()->load(['client', 'items']);
+        }
     }
 
     public function envelope(): Envelope
@@ -40,14 +47,20 @@ class InvoiceMail extends Mailable
     {
         return new Content(
             view: 'emails.invoice',
+            with: [
+                'invoice'  => $this->invoice,
+                'business' => $this->business,
+                'logoUrl'  => $this->logoUrl(),
+            ],
         );
     }
 
     public function attachments(): array
     {
         $pdf = Pdf::loadView('pdf.invoice', [
-            'invoice'  => $this->invoice->load(['client', 'items']),
-            'business' => $this->business,
+            'invoice'    => $this->invoice->load(['client', 'items']),
+            'business'   => $this->business,
+            'logoBase64' => $this->logoDataUri(),
         ])->setPaper('a4');
 
         return [
@@ -57,5 +70,27 @@ class InvoiceMail extends Mailable
             )->withMime('application/pdf'),
         ];
     }
-}
 
+    private function logoUrl(): ?string
+    {
+        if ($this->business->logo_path) {
+            return asset('storage/' . $this->business->logo_path);
+        }
+        return asset('assets/images/logo/shifttech.png');
+    }
+
+    private function logoDataUri(): ?string
+    {
+        if ($this->business->logo_path) {
+            $path = storage_path('app/public/' . $this->business->logo_path);
+            if (file_exists($path)) {
+                return 'data:image/' . pathinfo($path, PATHINFO_EXTENSION) . ';base64,' . base64_encode(file_get_contents($path));
+            }
+        }
+        $fallback = public_path('assets/images/logo/shifttech.png');
+        if (file_exists($fallback)) {
+            return 'data:image/png;base64,' . base64_encode(file_get_contents($fallback));
+        }
+        return null;
+    }
+}

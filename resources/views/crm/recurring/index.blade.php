@@ -38,12 +38,27 @@
                 <span class="crm-badge {{ $rcMap[$r->status] ?? 'crm-badge-neutral' }}"><span class="crm-badge-dot"></span>{{ $r->status }}</span>
             </td>
             <td style="color:var(--color-ink-3);">{{ $r->next_invoice_date ? \Carbon\Carbon::parse($r->next_invoice_date)->format('d M Y') : '—' }}</td>
-            <td>
+            <td x-data="{ open: false }">
                 <a href="{{ route('crm.recurring.edit', $r) }}" class="crm-btn crm-btn-ghost crm-btn-sm" onclick="event.stopPropagation()">Edit</a>
-                <form method="POST" action="{{ route('crm.recurring.destroy', $r) }}" style="display:inline;" onsubmit="return confirm('Delete?');event.stopPropagation()">
-                    @csrf @method('DELETE')
-                    <button type="submit" class="crm-btn crm-btn-ghost crm-btn-sm" style="color:var(--color-danger-text);" onclick="event.stopPropagation()">Delete</button>
-                </form>
+                <button type="button" @click.stop="open = true" class="crm-btn crm-btn-ghost crm-btn-sm" style="color:var(--color-danger-text);">Delete</button>
+                <div x-show="open" class="crm-modal-overlay" @click.self="open=false">
+                    <div class="crm-modal" @click.stop style="max-width:380px;">
+                        <div class="crm-modal-header">
+                            <h3 class="crm-modal-title">Delete Recurring Invoice</h3>
+                            <button type="button" @click="open=false" class="crm-icon-btn"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+                        </div>
+                        <div class="crm-modal-body">
+                            <p style="font-size:0.9375rem;color:var(--color-ink-2);">Are you sure you want to delete <strong>{{ $r->recurring_invoice_id }}</strong>? This action cannot be undone.</p>
+                        </div>
+                        <div class="crm-modal-footer">
+                            <button type="button" @click="open=false" class="crm-btn crm-btn-secondary">Cancel</button>
+                            <form method="POST" action="{{ route('crm.recurring.destroy', $r) }}" style="display:inline;">
+                                @csrf @method('DELETE')
+                                <button type="submit" class="crm-btn crm-btn-danger">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </td>
         </tr>
         @empty

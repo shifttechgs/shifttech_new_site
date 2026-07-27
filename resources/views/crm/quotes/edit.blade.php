@@ -39,11 +39,19 @@
                     <input type="date" name="expiry_date" value="{{ old('expiry_date', $quote->expiry_date?->format('Y-m-d')) }}" class="crm-input">
                 </div>
                 <div>
-                    <label class="crm-label">Required Deposit (R)</label>
+                    <label class="crm-label">Currency</label>
+                    <select name="currency" class="crm-select">
+                        @foreach(['ZAR' => 'ZAR – South African Rand', 'USD' => 'USD – US Dollar', 'EUR' => 'EUR – Euro', 'GBP' => 'GBP – British Pound'] as $code => $label)
+                        <option value="{{ $code }}" {{ old('currency', $quote->currency ?? 'ZAR') === $code ? 'selected' : '' }}>{{ $label }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div>
+                    <label class="crm-label">Required Deposit</label>
                     <input type="number" name="required_deposit" value="{{ old('required_deposit', $quote->required_deposit) }}" class="crm-input" min="0" step="0.01">
                 </div>
                 <div>
-                    <label class="crm-label">Discount (R)</label>
+                    <label class="crm-label">Discount</label>
                     <input type="number" name="discount" value="{{ old('discount', $quote->discount) }}" class="crm-input" min="0" step="0.01">
                 </div>
                 <div style="grid-column:1/-1;">
@@ -56,7 +64,8 @@
                 </div>
             </div>
         </div>
-        @include('crm.partials.line-items', ['items' => old('items', $quote->items->toArray())])
+        @php $quoteCurrencySymbol = \App\Models\BusinessSetup::currencySymbol(old('currency', $quote->currency ?? 'ZAR')); @endphp
+        @include('crm.partials.line-items', ['items' => old('items', $quote->items->toArray()), 'currencySymbol' => $quoteCurrencySymbol])
     </div>
 
     <div style="display:flex;flex-direction:column;gap:1.25rem;">

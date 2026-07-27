@@ -35,11 +35,26 @@
                 <div class="crm-detail-row"><span class="crm-detail-label">Received</span><span class="crm-detail-value">{{ $clientRequest->created_at->format('d M Y') }}</span></div>
             </div>
         </div>
-        <div class="crm-card"><div class="crm-card-body">
-            <form method="POST" action="{{ route('crm.requests.destroy', $clientRequest) }}" onsubmit="return confirm('Delete this request?')">
-                @csrf @method('DELETE')
-                <button type="submit" class="crm-btn crm-btn-danger" style="width:100%;">Delete Request</button>
-            </form>
+        <div class="crm-card" x-data="{ deleteOpen: false }"><div class="crm-card-body">
+            <button type="button" @click="deleteOpen = true" class="crm-btn crm-btn-danger" style="width:100%;">Delete Request</button>
+        </div>
+        <div x-show="deleteOpen" class="crm-modal-overlay" @click.self="deleteOpen = false">
+            <div class="crm-modal" @click.stop style="max-width:420px;">
+                <div class="crm-modal-header">
+                    <h3 class="crm-modal-title">Delete Request</h3>
+                    <button type="button" @click="deleteOpen = false" class="crm-icon-btn"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+                </div>
+                <div class="crm-modal-body">
+                    <p style="font-size:0.9375rem;color:var(--color-ink-2);">Are you sure you want to delete this request? This action cannot be undone.</p>
+                </div>
+                <div class="crm-modal-footer">
+                    <button type="button" @click="deleteOpen = false" class="crm-btn crm-btn-secondary">Cancel</button>
+                    <form method="POST" action="{{ route('crm.requests.destroy', $clientRequest) }}" style="display:inline;">
+                        @csrf @method('DELETE')
+                        <button type="submit" class="crm-btn crm-btn-danger">Delete Request</button>
+                    </form>
+                </div>
+            </div>
         </div></div>
     </div>
 </div>

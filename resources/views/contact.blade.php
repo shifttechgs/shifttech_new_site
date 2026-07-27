@@ -1,534 +1,380 @@
-@extends("layouts.master")
-@section("content")
+@extends('layouts.site')
 
-<!-- ==================== Contact Hero Section ==================== -->
-<section class="contact-hero position-relative overflow-hidden" style="background: linear-gradient(135deg, #123d33 0%, #123d33 100%); padding: 100px 0 60px;">
-    <img src="assets/images/shapes/sqaure_shape.png"
-         alt="Shape"
-         class="position-absolute top-0 tw-end-0 tw-me-12-percent"
-         style="filter: brightness(50%); opacity: 0.2;">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-8 text-center">
-                <span class="d-inline-block tw-py-2 tw-px-4 rounded-pill text-white fw-medium tw-text-sm tw-mb-4" style="background: rgba(116, 184, 18, 0.2); border: 1px solid #74b812;">
-                    Let's Build Something Great Together
-                </span>
-                <h1 class="text-white fw-bold tw-mb-4" style="font-size: 3rem; line-height: 1.2;">
-                    Start Your Project Today
-                </h1>
-                <p class="text-white tw-text-lg" style="opacity: 0.8; max-width: 600px; margin: 0 auto;">
-                    Tell us about your vision. We'll get back to you within 24 hours with a tailored approach and transparent pricing.
-                </p>
+@section('title', 'Contact | ShiftTech')
+@section('meta_description', 'Tell us what you are building. Free 30-minute discovery call, response within 24 hours, no sales pressure.')
+@section('body_class', 'has-dark-hero')
+
+@php
+    $faqs = [
+        ['q' => 'How quickly can you start on my project?', 'a' => 'We typically begin discovery within 48 hours of signing. For MVPs we can have a working prototype in 1 to 2 weeks. Larger projects follow a structured timeline we will establish together during our initial call.'],
+        ['q' => "What's included in your pricing?", 'a' => 'Our quotes include design, development, testing, deployment, and 30 days of post-launch support. Transparent pricing, no hidden fees. You will know exactly what you are paying for before we start.'],
+        ['q' => 'Do you offer ongoing support and maintenance?', 'a' => 'We offer flexible maintenance from basic monitoring to full managed services. Most clients move onto a monthly retainer for continuous improvements and priority support after launch.'],
+        ['q' => "What if I'm not sure what I need?", 'a' => 'Our discovery calls are free and designed to help you figure that out. Bring the problem, we will ask the right questions, map the solution, and give you an honest recommendation with no obligation.'],
+    ];
+@endphp
+
+@section('content')
+<main id="main">
+    <div class="rails" aria-hidden="true"></div>
+
+    {{-- ==================== HERO (dark) ==================== --}}
+    <section class="hero hero--dark" style="padding-bottom: 1rem;">
+        <div class="container">
+            <div style="max-width: 40rem;">
+                <x-site.eyebrow>Contact</x-site.eyebrow>
+                <h1 class="display-xl hero-headline"><span class="dim">Thirty minutes.</span><br><span class="hl">Then you'll know.</span></h1>
+                <p class="lede">Tell us what you're building. We'll tell you honestly whether it's a fit and what it would take, no obligation.</p>
+
+                <ul class="final-trust" style="justify-content: flex-start; margin-top: 2.5rem;">
+                    <li><svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13.5 4.5 6.5 11.5 3 8" stroke="#74B812" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Free 30-minute call</li>
+                    <li><svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13.5 4.5 6.5 11.5 3 8" stroke="#74B812" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Response within 24 hours</li>
+                    <li><svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13.5 4.5 6.5 11.5 3 8" stroke="#74B812" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>No sales pressure</li>
+                </ul>
             </div>
         </div>
-    </div>
-   </section>
+    </section>
 
-<!-- ==================== Main Contact Section ==================== -->
-<section class="py-5" style="background: #f8f9fa;">
-    <div class="container">
-        <div class="row g-5">
-            <!-- Left Column - Form -->
-            <div class="col-lg-7">
-                <div class="bg-white rounded-4 p-4 p-lg-5 shadow-sm">
-                    <form action="#" method="POST" class="contact-form" id="contactForm">
+    {{-- ==================== FORM + SIDEBAR ==================== --}}
+    <section class="section section--flush-top" style="padding-top: 2.5rem;">
+        <div class="container">
+            <div class="contact-grid">
+
+                {{-- Form --}}
+                <div class="form-panel">
+                    <form action="#" method="POST" id="contactForm">
                         @csrf
 
-                        <!-- Step 1: Services -->
-                        <div class="form-section tw-mb-8">
-                            <h5 class="fw-bold tw-mb-2" style="color: #0a1628;">What can we help you with?</h5>
-                            <p class="text-muted tw-text-sm tw-mb-4">Select all that apply</p>
+                        <div class="form-section">
+                            <h3>What can we help you with?</h3>
+                            <p class="form-section__hint">Select all that apply</p>
+                            <div class="service-chips">
+                                @foreach ($services as $service)
+                                    <label class="service-chip">
+                                        <input type="checkbox" name="services[]" value="{{ $service->name }}">
+                                        <span>{{ $service->name }}</span>
+                                    </label>
+                                @endforeach
+                            </div>
+                        </div>
 
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label class="service-checkbox d-flex align-items-center p-3 rounded-3 cursor-pointer" style="border: 2px solid #e9ecef; transition: all 0.3s ease;">
-                                        <input type="checkbox" name="services[]" value="web_development" class="d-none">
-                                        <span class="checkbox-custom me-3"></span>
-                                        <span class="fw-medium">Web Development</span>
-                                    </label>
+                        <div class="form-section">
+                            <h3>Tell us about your project</h3>
+                            <div class="field-grid">
+                                <div class="field">
+                                    <label for="cf-name">Your name *</label>
+                                    <input type="text" id="cf-name" name="name" placeholder="Peter Harris" required>
                                 </div>
-                                <div class="col-md-6">
-                                    <label class="service-checkbox d-flex align-items-center p-3 rounded-3 cursor-pointer" style="border: 2px solid #e9ecef; transition: all 0.3s ease;">
-                                        <input type="checkbox" name="services[]" value="mobile_app" class="d-none">
-                                        <span class="checkbox-custom me-3"></span>
-                                        <span class="fw-medium">Mobile App</span>
-                                    </label>
+                                <div class="field">
+                                    <label for="cf-email">Email address *</label>
+                                    <input type="email" id="cf-email" name="email" placeholder="peter@company.com" required>
                                 </div>
-                                <div class="col-md-6">
-                                    <label class="service-checkbox d-flex align-items-center p-3 rounded-3 cursor-pointer" style="border: 2px solid #e9ecef; transition: all 0.3s ease;">
-                                        <input type="checkbox" name="services[]" value="custom_software" class="d-none">
-                                        <span class="checkbox-custom me-3"></span>
-                                        <span class="fw-medium">Custom Software</span>
-                                    </label>
+                                <div class="field">
+                                    <label for="cf-phone">Phone number</label>
+                                    <input type="tel" id="cf-phone" name="phone" placeholder="+27 81 234 5678">
                                 </div>
-                                <div class="col-md-6">
-                                    <label class="service-checkbox d-flex align-items-center p-3 rounded-3 cursor-pointer" style="border: 2px solid #e9ecef; transition: all 0.3s ease;">
-                                        <input type="checkbox" name="services[]" value="mvp_development" class="d-none">
-                                        <span class="checkbox-custom me-3"></span>
-                                        <span class="fw-medium">MVP Development</span>
-                                    </label>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="service-checkbox d-flex align-items-center p-3 rounded-3 cursor-pointer" style="border: 2px solid #e9ecef; transition: all 0.3s ease;">
-                                        <input type="checkbox" name="services[]" value="ui_ux_design" class="d-none">
-                                        <span class="checkbox-custom me-3"></span>
-                                        <span class="fw-medium">UI/UX Design</span>
-                                    </label>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="service-checkbox d-flex align-items-center p-3 rounded-3 cursor-pointer" style="border: 2px solid #e9ecef; transition: all 0.3s ease;">
-                                        <input type="checkbox" name="services[]" value="ai_automation" class="d-none">
-                                        <span class="checkbox-custom me-3"></span>
-                                        <span class="fw-medium">AI & Automation</span>
-                                    </label>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="service-checkbox d-flex align-items-center p-3 rounded-3 cursor-pointer" style="border: 2px solid #e9ecef; transition: all 0.3s ease;">
-                                        <input type="checkbox" name="services[]" value="cloud_devops" class="d-none">
-                                        <span class="checkbox-custom me-3"></span>
-                                        <span class="fw-medium">Cloud & DevOps</span>
-                                    </label>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="service-checkbox d-flex align-items-center p-3 rounded-3 cursor-pointer" style="border: 2px solid #e9ecef; transition: all 0.3s ease;">
-                                        <input type="checkbox" name="services[]" value="consulting" class="d-none">
-                                        <span class="checkbox-custom me-3"></span>
-                                        <span class="fw-medium">Tech Consulting</span>
-                                    </label>
+                                <div class="field">
+                                    <label for="cf-company">Company name</label>
+                                    <input type="text" id="cf-company" name="company" placeholder="Your company">
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Step 2: Project Details -->
-                        <div class="form-section tw-mb-8">
-                            <h5 class="fw-bold tw-mb-4" style="color: #0a1628;">Tell us about your project</h5>
-
-                            <div class="row g-4">
-                                <div class="col-md-6">
-                                    <label class="form-label fw-medium text-dark">Your Name *</label>
-                                    <input type="text" name="name" class="form-control form-control-lg border-2" placeholder="John Doe" required style="border-color: #e9ecef; border-radius: 12px;">
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label fw-medium text-dark">Email Address *</label>
-                                    <input type="email" name="email" class="form-control form-control-lg border-2" placeholder="john@company.com" required style="border-color: #e9ecef; border-radius: 12px;">
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label fw-medium text-dark">Phone Number</label>
-                                    <input type="tel" name="phone" class="form-control form-control-lg border-2" placeholder="+27 81 234 5678" style="border-color: #e9ecef; border-radius: 12px;">
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label fw-medium text-dark">Company Name</label>
-                                    <input type="text" name="company" class="form-control form-control-lg border-2" placeholder="Your Company" style="border-color: #e9ecef; border-radius: 12px;">
-                                </div>
+                        <div class="form-section budget-field">
+                            <label for="budgetSlider">Estimated budget (ZAR)</label>
+                            <input type="range" name="budget" id="budgetSlider" min="8000" max="550000" step="5000" value="25000">
+                            <div class="budget-field__scale">
+                                <span>R8,000</span>
+                                <span class="budget-field__value" id="budgetValue">R25,000</span>
+                                <span>R550,000+</span>
                             </div>
                         </div>
 
-                        <!-- Step 3: Company Stage & Budget -->
-                        <div class="form-section tw-mb-8">
-                            <div class="row g-4">
-                                <div class="col-md-6">
-                                    <label class="form-label fw-medium text-dark">Company Stage</label>
-                                    <select name="company_stage" class="form-select form-select-lg border-2" style="border-color: #e9ecef; border-radius: 12px;">
-                                        <option value="">Select stage...</option>
-                                        <option value="idea">Just an idea</option>
-                                        <option value="startup">Early-stage Startup</option>
-                                        <option value="growth">Growth Stage</option>
-                                        <option value="sme">Established SME</option>
-                                        <option value="enterprise">Enterprise</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label fw-medium text-dark">How did you hear about us?</label>
-                                    <select name="referral_source" class="form-select form-select-lg border-2" style="border-color: #e9ecef; border-radius: 12px;">
-                                        <option value="">Select source...</option>
-                                        <option value="google">Google Search</option>
-                                        <option value="linkedin">LinkedIn</option>
-                                        <option value="referral">Friend/Colleague</option>
-                                        <option value="social">Social Media</option>
-                                        <option value="portfolio">Saw our work</option>
-                                        <option value="other">Other</option>
-                                    </select>
-                                </div>
+                        <div class="form-section">
+                            <div class="field">
+                                <label for="cf-message">Project description *</label>
+                                <textarea id="cf-message" name="message" rows="5" placeholder="Tell us about your project goals, timeline, and any specific requirements..." required></textarea>
                             </div>
                         </div>
 
-                        <!-- Budget Slider -->
-                        <div class="form-section tw-mb-8">
-                            <label class="form-label fw-medium text-dark">Estimated Budget (USD)</label>
-                            <div class="budget-slider-container p-4 rounded-3" style="background: #f8f9fa;">
-                                <input type="range" name="budget" id="budgetSlider" class="form-range w-100" min="5000" max="150000" step="5000" value="25000">
-                                <div class="d-flex justify-content-between mt-3">
-                                    <span class="text-muted tw-text-sm">$5,000</span>
-                                    <span class="fw-bold tw-text-lg" id="budgetValue" style="color: #74b812;">$25,000</span>
-                                    <span class="text-muted tw-text-sm">$150,000+</span>
-                                </div>
-                            </div>
-                        </div>
+                        {{-- Anti-spam fields --}}
+                        <input type="text" name="honeypot" id="honeypot" style="position:absolute; left:-9999px; width:1px; height:1px;" tabindex="-1" autocomplete="off">
+                        <input type="hidden" name="form_start_time" id="formStartTime" value="">
+                        <input type="hidden" name="recaptcha_token" id="recaptchaToken" value="">
 
-                        <!-- Project Description -->
-                        <div class="form-section tw-mb-8">
-                            <label class="form-label fw-medium text-dark">Project Description *</label>
-                            <textarea name="message" class="form-control border-2" rows="5" placeholder="Tell us about your project goals, timeline, and any specific requirements..." required style="border-color: #e9ecef; border-radius: 12px;"></textarea>
-                        </div>
-
-                        <!-- Submit Button -->
-                        <button type="submit" class="btn btn-lg w-100 text-white fw-bold py-3" style="background: linear-gradient(135deg, #74b812 0%, #5a9a0a 100%); border-radius: 50px; border: none; transition: all 0.3s ease;">
-                            <span class="d-flex align-items-center justify-content-center gap-2">
-                                <span>Start Your Project</span>
-                                <i class="ph-bold ph-arrow-right"></i>
-                            </span>
+                        <button type="submit" id="submitBtn" class="btn btn-lime" style="width: 100%; justify-content: center;">
+                            <span id="submitBtnText">Start Your Project</span>
+                            <span id="submitBtnIcon" aria-hidden="true">&rarr;</span>
                         </button>
 
-
-
-                        <p class="text-center text-muted tw-text-sm mt-3">
-                            We'll respond within 24 hours. No spam, ever.
-                        </p>
+                        <p class="field-hint">We'll respond within 24 hours. No spam, ever.</p>
                     </form>
                 </div>
-            </div>
 
-            <!-- Right Column - Info & Trust Elements -->
-            <div class="col-lg-5">
-                <!-- Quick Contact Card -->
-                <div class="bg-white rounded-4 p-4 shadow-sm tw-mb-4">
-                    <h5 class="fw-bold tw-mb-4" style="color: #0a1628;">Prefer to talk directly?</h5>
+                {{-- Sidebar --}}
+                <div class="contact-side">
+                    <div class="contact-card">
+                        <h3>Prefer to talk directly?</h3>
 
-                    <div class="d-flex align-items-center tw-mb-4 p-3 rounded-3" style="background: #f8f9fa;">
-                        <div class="me-3" style="width: 48px; height: 48px; background: linear-gradient(135deg, #74b812 0%, #5a9a0a 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
-                            <i class="ph-bold ph-phone text-white tw-text-xl"></i>
-                        </div>
-                        <div>
-                            <p class="tw-text-sm text-muted mb-1">Call us directly</p>
-                            <a href="tel:+27814303023" class="fw-bold text-dark text-decoration-none">+27 81 430 3023</a>
-                        </div>
-                    </div>
-
-                    <div class="d-flex align-items-center tw-mb-4 p-3 rounded-3" style="background: #f8f9fa;">
-                        <div class="me-3" style="width: 48px; height: 48px; background: linear-gradient(135deg, #74b812 0%, #5a9a0a 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
-                            <i class="ph-bold ph-envelope text-white tw-text-xl"></i>
-                        </div>
-                        <div>
-                            <p class="tw-text-sm text-muted mb-1">Email us</p>
-                            <a href="mailto:info@shifttechgs.com" class="fw-bold text-dark text-decoration-none">info@shifttechgs.com</a>
-                        </div>
-                    </div>
-
-                    <div class="d-flex align-items-center p-3 rounded-3" style="background: #f8f9fa;">
-                        <div class="me-3" style="width: 48px; height: 48px; background: linear-gradient(135deg, #74b812 0%, #5a9a0a 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
-                            <i class="ph-bold ph-whatsapp-logo text-white tw-text-xl"></i>
-                        </div>
-                        <div>
-                            <p class="tw-text-sm text-muted mb-1">WhatsApp</p>
-                            <a href="https://wa.me/27814303023" class="fw-bold text-dark text-decoration-none" target="_blank">Chat with us</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Trust Stats -->
-                <div class="bg-white rounded-4 p-4 shadow-sm tw-mb-4">
-                    <h5 class="fw-bold tw-mb-4" style="color: #0a1628;">Why clients choose us</h5>
-
-                    <div class="row g-3">
-                        <div class="col-6">
-                            <div class="text-center p-3 rounded-3" style="background: #f8f9fa;">
-                                <h3 class="fw-bold mb-1" style="color: #74b812;">150+</h3>
-                                <p class="tw-text-sm text-muted mb-0">Projects Delivered</p>
+                        <div class="contact-row">
+                            <span class="contact-row__icon" aria-hidden="true">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                            </span>
+                            <div>
+                                <p class="contact-row__label">Call us directly</p>
+                                <a class="contact-row__value" href="tel:+27814303023">+27 81 430 3023</a>
                             </div>
                         </div>
-                        <div class="col-6">
-                            <div class="text-center p-3 rounded-3" style="background: #f8f9fa;">
-                                <h3 class="fw-bold mb-1" style="color: #74b812;">98%</h3>
-                                <p class="tw-text-sm text-muted mb-0">Client Satisfaction</p>
+
+                        <div class="contact-row">
+                            <span class="contact-row__icon" aria-hidden="true">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>
+                            </span>
+                            <div>
+                                <p class="contact-row__label">Email us</p>
+                                <a class="contact-row__value" href="mailto:sales@shifttechgs.com">sales@shifttechgs.com</a>
                             </div>
                         </div>
-                        <div class="col-6">
-                            <div class="text-center p-3 rounded-3" style="background: #f8f9fa;">
-                                <h3 class="fw-bold mb-1" style="color: #74b812;">60%</h3>
-                                <p class="tw-text-sm text-muted mb-0">Cost Savings</p>
+
+                        <x-site.btn href="https://wa.me/27814303023?text=Hi%20ShiftTech!%20I%27m%20interested%20in%20your%20services%20and%20would%20like%20to%20discuss%20a%20project." variant="primary" target="_blank" rel="noopener noreferrer" style="width: 100%; justify-content: center; margin-top: .5rem;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="margin-right: .5rem;"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.9-4.45 9.9-9.91C21.96 6.45 17.5 2 12.04 2zm0 18.15h-.01a8.23 8.23 0 0 1-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.22 8.22 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.25-8.23 2.2 0 4.27.86 5.83 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.55-3.7 8.23-8.24 8.23z"/></svg>
+                            Chat on WhatsApp
+                        </x-site.btn>
+                    </div>
+
+                    <x-site.testimonial
+                        :logo="asset('assets/images/logo/clients/peekaboo_daycare.png')" logo-alt="Peekaboo Daycare"
+                        name="Peekaboo Daycare" role=""
+                        highlight="an admissions dashboard that replaced the paperwork"
+                        :reveal="false"
+                    >For twenty years we ran on paper and phone calls, with almost no way for parents to find us online. ShiftTech built us a website that actually gets found and an admissions dashboard that replaced the paperwork. Our team can finally keep up.</x-site.testimonial>
+
+                    <div class="contact-card">
+                        <h3>Our offices</h3>
+                        <div class="locations-list">
+                            <div class="location-item">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:.15rem; color: var(--lime);" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                                <div>
+                                    <span class="location-item__name">Cape Town, South Africa</span>
+                                    <span class="location-item__meta">HQ, Western Cape</span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="text-center p-3 rounded-3" style="background: #f8f9fa;">
-                                <h3 class="fw-bold mb-1" style="color: #74b812;">24hr</h3>
-                                <p class="tw-text-sm text-muted mb-0">Response Time</p>
+                            <div class="location-item">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:.15rem; color: var(--lime);" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                                <div>
+                                    <span class="location-item__name">Harare, Zimbabwe</span>
+                                    <span class="location-item__meta">Regional office</span>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Testimonial -->
-                <div class="rounded-4 p-4 text-white" style="background: linear-gradient(135deg, #123d33 0%, #123d33 100%);">
-                    <div class="d-flex align-items-center tw-mb-4">
-                        <img src="assets/images/logo/clients/wcbs_header_logo.png" alt="WCBS" style="height: 40px; filter: brightness(0) invert(1);">
-                    </div>
-                    <p class="tw-text-base mb-4" style="line-height: 1.7;">
-                        "Prosper and the team introduced AI into our workflows and designed a monitoring system for all our background services. They delivered it 4x faster than our internal estimates."
-                    </p>
-                    <div class="d-flex align-items-center">
-                        <div class="me-3" style="width: 48px; height: 48px; background: rgba(255,255,255,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                            <i class="ph-bold ph-user text-white tw-text-xl"></i>
-                        </div>
-                        <div>
-                            <p class="fw-bold mb-0">Ian</p>
-                            <p class="tw-text-sm mb-0" style="opacity: 0.7;">Manager, WesternCape Blood Service</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Office Locations -->
-                <div class="bg-white rounded-4 p-4 shadow-sm mt-4">
-                    <h5 class="fw-bold tw-mb-4" style="color: #0a1628;">Our Offices</h5>
-
-                    <div class="d-flex align-items-start tw-mb-3">
-                        <i class="ph-bold ph-map-pin me-3 tw-text-xl" style="color: #74b812;"></i>
-                        <div>
-                            <p class="fw-medium mb-1">Cape Town, South Africa</p>
-                            <p class="tw-text-sm text-muted mb-0">HQ - Western Cape</p>
-                        </div>
-                    </div>
-
-                    <div class="d-flex align-items-start">
-                        <i class="ph-bold ph-map-pin me-3 tw-text-xl" style="color: #74b812;"></i>
-                        <div>
-                            <p class="fw-medium mb-1">Harare, Zimbabwe</p>
-                            <p class="tw-text-sm text-muted mb-0">Regional Office</p>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+    </section>
+
+    {{-- ==================== FAQ ==================== --}}
+    <section class="section section--flush-top" id="faq">
+        <div class="container">
+            <div class="faq-panel">
+                <div class="faq-head">
+                    <span class="faq-watermark" aria-hidden="true">FAQ</span>
+                    <x-site.eyebrow>Questions</x-site.eyebrow>
+                    <h2 class="display-l">Before you <strong>send it.</strong></h2>
+                    <p class="faq-sub">If something's still unclear after reading these, just ask, or reach us directly.</p>
+
+                    <div class="faq-contacts">
+                        <a class="faq-contact" href="tel:+27814303023">
+                            <span class="faq-contact__icon" aria-hidden="true">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                            </span>
+                            <span>+27 81 430 3023</span>
+                        </a>
+                        <a class="faq-contact" href="mailto:sales@shifttechgs.com">
+                            <span class="faq-contact__icon" aria-hidden="true">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>
+                            </span>
+                            <span>sales@shifttechgs.com</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="faq-list">
+                    @foreach ($faqs as $i => $faq)
+                        <details class="faq-item" {{ $i === 0 ? 'open' : '' }}>
+                            <summary class="faq-item__head">
+                                <span class="faq-item__num">{{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}</span>
+                                <span class="faq-item__q">{{ $faq['q'] }}</span>
+                                <span class="faq-item__toggle" aria-hidden="true">
+                                    <svg width="12" height="8" viewBox="0 0 12 8" fill="none"><path d="M1 1.5L6 6.5L11 1.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                </span>
+                            </summary>
+                            <div class="faq-item__body">
+                                <div class="faq-item__inner">
+                                    <p>{{ $faq['a'] }}</p>
+                                </div>
+                            </div>
+                        </details>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{-- ==================== FORM STATE UI ==================== --}}
+    <div id="formLoadingOverlay" class="form-loading-overlay">
+        <div class="form-loading-overlay__box">
+            <div class="form-loading-overlay__spin" aria-hidden="true"></div>
+            <h3>Submitting your request...</h3>
+            <p>Please wait while we process your information</p>
         </div>
     </div>
-</section>
 
-<!-- ==================== FAQ Section ==================== -->
-<section class="py-5 bg-white">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-8 text-center tw-mb-5">
-                <h2 class="fw-bold" style="color: #0a1628;">Frequently Asked Questions</h2>
-                <p class="text-muted">Everything you need to know about working with us</p>
-            </div>
-        </div>
+    <div id="toast-container" aria-live="polite"></div>
 
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <div class="accordion" id="faqAccordion">
-                    <div class="accordion-item border-0 tw-mb-3 rounded-3 overflow-hidden" style="background: #f8f9fa;">
-                        <h2 class="accordion-header">
-                            <button class="accordion-button fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" style="background: #f8f9fa;">
-                                How quickly can you start on my project?
-                            </button>
-                        </h2>
-                        <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
-                            <div class="accordion-body text-muted">
-                                We typically begin discovery within 48 hours of signing. For MVPs, we can have a working prototype in 1-2 weeks. Larger projects follow a structured timeline we'll establish together during our initial consultation.
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="accordion-item border-0 tw-mb-3 rounded-3 overflow-hidden" style="background: #f8f9fa;">
-                        <h2 class="accordion-header">
-                            <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq2" style="background: #f8f9fa;">
-                                What's included in your pricing?
-                            </button>
-                        </h2>
-                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                            <div class="accordion-body text-muted">
-                                Our quotes include design, development, testing, deployment, and 30 days of post-launch support. We provide transparent pricing with no hidden fees. You'll know exactly what you're paying for before we start.
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="accordion-item border-0 tw-mb-3 rounded-3 overflow-hidden" style="background: #f8f9fa;">
-                        <h2 class="accordion-header">
-                            <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq3" style="background: #f8f9fa;">
-                                Do you offer ongoing support and maintenance?
-                            </button>
-                        </h2>
-                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                            <div class="accordion-body text-muted">
-                                Yes! We offer flexible maintenance packages starting from basic monitoring to full managed services. Most clients choose our monthly retainer for continuous improvements and priority support.
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="accordion-item border-0 rounded-3 overflow-hidden" style="background: #f8f9fa;">
-                        <h2 class="accordion-header">
-                            <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq4" style="background: #f8f9fa;">
-                                What if I'm not sure what I need?
-                            </button>
-                        </h2>
-                        <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                            <div class="accordion-body text-muted">
-                                That's completely fine! Our discovery calls are free and designed to help you clarify your needs. We'll ask the right questions, understand your business goals, and recommend the best approach - with no obligation.
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ==================== CTA Section ==================== -->
-<section class="py-5" style="background: linear-gradient(135deg, #74b812 0%, #5a9a0a 100%);">
-    <div class="container">
-        <div class="row justify-content-center text-center">
-            <div class="col-lg-8">
-                <h2 class="text-white fw-bold tw-mb-3">Ready to transform your business?</h2>
-                <p class="text-white tw-mb-4" style="opacity: 0.9;">Book a free 30-minute discovery call. No commitment, just clarity.</p>
-                <a href="#contactForm" class="btn btn-lg text-dark fw-bold px-5 py-3" style="background: white; border-radius: 50px;">
-                    Book Your Free Call <i class="ph-bold ph-arrow-right ms-2"></i>
-                </a>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Custom Styles -->
-<style>
-    /* Service Checkbox Styling */
-    .service-checkbox {
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-
-    .service-checkbox:hover {
-        border-color: #74b812 !important;
-        background: rgba(116, 184, 18, 0.05);
-    }
-
-    .service-checkbox input:checked + .checkbox-custom + span {
-        color: #74b812;
-    }
-
-    .service-checkbox input:checked ~ .checkbox-custom,
-    .service-checkbox:has(input:checked) {
-        border-color: #74b812 !important;
-        background: rgba(116, 184, 18, 0.1);
-    }
-
-    .checkbox-custom {
-        width: 24px;
-        height: 24px;
-        border: 2px solid #e9ecef;
-        border-radius: 6px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.3s ease;
-        flex-shrink: 0;
-    }
-
-    .service-checkbox input:checked + .checkbox-custom {
-        background: #74b812;
-        border-color: #74b812;
-    }
-
-    .service-checkbox input:checked + .checkbox-custom::after {
-        content: '\2713';
-        color: white;
-        font-weight: bold;
-        font-size: 14px;
-    }
-
-    /* Form Input Focus */
-    .form-control:focus,
-    .form-select:focus {
-        border-color: #74b812 !important;
-        box-shadow: 0 0 0 3px rgba(116, 184, 18, 0.15) !important;
-    }
-
-    /* Budget Slider */
-    #budgetSlider {
-        -webkit-appearance: none;
-        height: 8px;
-        border-radius: 4px;
-        background: #e9ecef;
-    }
-
-    #budgetSlider::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        width: 24px;
-        height: 24px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #74b812 0%, #5a9a0a 100%);
-        cursor: pointer;
-        border: 3px solid white;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-    }
-
-    #budgetSlider::-moz-range-thumb {
-        width: 24px;
-        height: 24px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #74b812 0%, #5a9a0a 100%);
-        cursor: pointer;
-        border: 3px solid white;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-    }
-
-    /* Submit Button Hover */
-    .contact-form button[type="submit"]:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(116, 184, 18, 0.4);
-    }
-
-    /* Accordion Styling */
-    .accordion-button:not(.collapsed) {
-        color: #74b812;
-        background: #f8f9fa;
-    }
-
-    .accordion-button:focus {
-        box-shadow: none;
-        border-color: transparent;
-    }
-
-    .accordion-button::after {
-        background-size: 16px;
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-        .contact-hero h1 {
-            font-size: 2rem !important;
-        }
-    }
-</style>
-
-<!-- Budget Slider Script -->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const slider = document.getElementById('budgetSlider');
-        const budgetValue = document.getElementById('budgetValue');
-
-        if (slider && budgetValue) {
-            slider.addEventListener('input', function() {
-                const value = parseInt(this.value);
-                if (value >= 150000) {
-                    budgetValue.textContent = '$150,000+';
-                } else {
-                    budgetValue.textContent = '$' + value.toLocaleString();
-                }
-            });
-        }
-
-        // Service checkbox visual feedback
-        document.querySelectorAll('.service-checkbox').forEach(label => {
-            const checkbox = label.querySelector('input[type="checkbox"]');
-            checkbox.addEventListener('change', function() {
-                if (this.checked) {
-                    label.style.borderColor = '#74b812';
-                    label.style.background = 'rgba(116, 184, 18, 0.1)';
-                } else {
-                    label.style.borderColor = '#e9ecef';
-                    label.style.background = 'transparent';
-                }
-            });
-        });
-    });
-</script>
-
+</main>
 @endsection
+
+@if (config('services.recaptcha.enabled'))
+@push('scripts')
+<script src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.site_key') }}"></script>
+@endpush
+@endif
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    'use strict';
+
+    var slider = document.getElementById('budgetSlider');
+    var budgetValue = document.getElementById('budgetValue');
+    var contactForm = document.getElementById('contactForm');
+    var submitButton = document.getElementById('submitBtn');
+    var submitButtonText = document.getElementById('submitBtnText');
+    var submitButtonIcon = document.getElementById('submitBtnIcon');
+    var loadingOverlay = document.getElementById('formLoadingOverlay');
+
+    document.getElementById('formStartTime').value = Math.floor(Date.now() / 1000);
+
+    if (slider && budgetValue) {
+        slider.addEventListener('input', function () {
+            var value = parseInt(this.value, 10);
+            budgetValue.textContent = value >= 550000 ? 'R550,000+' : 'R' + value.toLocaleString();
+        });
+    }
+
+    contactForm.addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        var selectedServices = Array.from(document.querySelectorAll('input[name="services[]"]:checked')).map(function (cb) { return cb.value; });
+
+        if (selectedServices.length === 0) {
+            showToast('error', 'Please select at least one service');
+            return;
+        }
+
+        loadingOverlay.style.display = 'flex';
+        submitButton.disabled = true;
+        submitButtonText.textContent = 'Verifying...';
+
+        var recaptchaToken = '';
+        @if (config('services.recaptcha.enabled'))
+        try {
+            recaptchaToken = await grecaptcha.execute('{{ config('services.recaptcha.site_key') }}', { action: 'contact_form' });
+            document.getElementById('recaptchaToken').value = recaptchaToken;
+        } catch (error) {
+            console.error('reCAPTCHA error:', error);
+        }
+        @endif
+
+        submitButtonText.textContent = 'Submitting...';
+
+        var formData = {
+            name: contactForm.querySelector('input[name="name"]').value,
+            email: contactForm.querySelector('input[name="email"]').value,
+            phone: contactForm.querySelector('input[name="phone"]').value,
+            company: contactForm.querySelector('input[name="company"]').value,
+            budget: parseFloat(contactForm.querySelector('input[name="budget"]').value),
+            message: contactForm.querySelector('textarea[name="message"]').value,
+            services: selectedServices,
+            honeypot: document.getElementById('honeypot').value,
+            form_start_time: document.getElementById('formStartTime').value,
+            recaptcha_token: recaptchaToken
+        };
+
+        try {
+            var response = await fetch('{{ route('contact.submit') }}', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json' },
+                body: JSON.stringify(formData)
+            });
+
+            var result = await response.json();
+
+            if (response.ok && result.success) {
+                loadingOverlay.style.display = 'none';
+                showSuccessModal();
+                showToast('success', result.message || "Thank you! We'll respond within 24 hours.");
+
+                setTimeout(function () {
+                    contactForm.reset();
+                    if (slider) { slider.value = 25000; budgetValue.textContent = 'R25,000'; }
+                    document.getElementById('formStartTime').value = Math.floor(Date.now() / 1000);
+                }, 1000);
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                loadingOverlay.style.display = 'none';
+                showToast('error', result.message || 'An error occurred. Please try again.');
+                if (result.errors) { console.error('Form errors:', result.errors); }
+            }
+        } catch (error) {
+            console.error('Submission error:', error);
+            loadingOverlay.style.display = 'none';
+            showToast('error', 'Network error. Please check your connection and try again.');
+        } finally {
+            submitButton.disabled = false;
+            submitButtonText.textContent = 'Start Your Project';
+        }
+    });
+
+    function showSuccessModal() {
+        var modal = document.createElement('div');
+        modal.className = 'success-modal';
+        modal.innerHTML =
+            '<div class="success-modal__box">' +
+                '<div class="success-modal__icon" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>' +
+                '<h3>Thank you</h3>' +
+                "<p>We've received your request and will get back to you within 24 hours with a tailored approach.</p>" +
+                '<button type="button" class="btn btn-lime">Got it</button>' +
+            '</div>';
+
+        document.body.appendChild(modal);
+        modal.querySelector('button').addEventListener('click', function () { modal.remove(); });
+        modal.addEventListener('click', function (e) { if (e.target === modal) { modal.remove(); } });
+
+        setTimeout(function () { if (modal.isConnected) { modal.remove(); } }, 8000);
+    }
+
+    function showToast(type, message) {
+        var toastContainer = document.getElementById('toast-container');
+        if (!toastContainer) return;
+
+        var toast = document.createElement('div');
+        toast.className = 'toast-message toast-' + type;
+        var icon = type === 'success'
+            ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>'
+            : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
+
+        toast.innerHTML =
+            '<span class="toast-icon" aria-hidden="true">' + icon + '</span>' +
+            '<span class="toast-content"><span class="toast-title">' + (type === 'success' ? 'Success' : 'Error') + '</span><span class="toast-message-text">' + message + '</span></span>' +
+            '<button type="button" class="toast-close" aria-label="Dismiss">&times;</button>';
+
+        toastContainer.appendChild(toast);
+        toast.querySelector('.toast-close').addEventListener('click', function () { toast.remove(); });
+
+        setTimeout(function () { if (toast.isConnected) { toast.remove(); } }, 5000);
+    }
+});
+</script>
+@endpush
