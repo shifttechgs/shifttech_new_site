@@ -120,7 +120,15 @@
       "PowerShell(& \"C:\\\\wamp64_3.3.4\\\\bin\\\\php\\\\php8.3.14\\\\php.exe\" artisan tinker --execute=\"`$l = App\\\\Models\\\\Lead::where\\('email','e2e-verification@example.com'\\)->latest\\(\\)->first\\(\\); print_r\\(`$l->only\\(['lead_id','name','email','phone','company','services_interested','message','status','priority','source','created_at']\\)\\);\")",
       "PowerShell(& \"C:\\\\wamp64_3.3.4\\\\bin\\\\php\\\\php8.3.14\\\\php.exe\" artisan tinker --execute=\"App\\\\Models\\\\Lead::where\\('email','like','%@example.com'\\)->get\\(['lead_id','name','email','created_at']\\)->each\\(fn\\(`$l\\)=>print_r\\(`$l->only\\(['lead_id','name','email','created_at']\\)\\)\\);\")",
       "Bash(grep -n \"SoftDeletes\\\\|use Illuminate\\\\\\\\\\\\\\\\Database\\\\\\\\\\\\\\\\Eloquent\" app/Models/Lead.php)",
-      "PowerShell(& \"C:\\\\wamp64_3.3.4\\\\bin\\\\php\\\\php8.3.14\\\\php.exe\" artisan tinker --execute=\"`$count = App\\\\Models\\\\Lead::where\\('email','like','%@example.com'\\)->count\\(\\); App\\\\Models\\\\Lead::where\\('email','like','%@example.com'\\)->forceDelete\\(\\); `$remaining = App\\\\Models\\\\Lead::where\\('email','like','%@example.com'\\)->count\\(\\); echo 'Deleted: ' . `$count . ', Remaining: ' . `$remaining;\")"
+      "PowerShell(& \"C:\\\\wamp64_3.3.4\\\\bin\\\\php\\\\php8.3.14\\\\php.exe\" artisan tinker --execute=\"`$count = App\\\\Models\\\\Lead::where\\('email','like','%@example.com'\\)->count\\(\\); App\\\\Models\\\\Lead::where\\('email','like','%@example.com'\\)->forceDelete\\(\\); `$remaining = App\\\\Models\\\\Lead::where\\('email','like','%@example.com'\\)->count\\(\\); echo 'Deleted: ' . `$count . ', Remaining: ' . `$remaining;\")",
+      "Bash(node verify-deploy.tmp.cjs)",
+      "Bash(node poll-deploy.tmp.cjs)",
+      "Bash(node qc.tmp.cjs)",
+      "Bash(rm -f qc.tmp.cjs)",
+      "Bash(git rev-list *)",
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(git add *)"
     ],
     "deny": [],
     "ask": []
