@@ -8,6 +8,19 @@
     $results  = array_filter($project['results'] ?? []);
     $quote    = $project['testimonial'] ?? null;
     $imgBase  = pathinfo($project['featured_image'], PATHINFO_FILENAME);
+
+    // Case studies carried no in-body links to the service pages, so the
+    // strongest pages on the site pushed nothing into the pages that convert.
+    // Keyed off the service_type each case study already declares rather than
+    // a hand-maintained second list that could drift out of sync.
+    $serviceLinks = [
+        'custom-software' => ['route' => 'services.custom-software-development', 'anchor' => 'custom software development'],
+        'mobile-app'      => ['route' => 'services.mobile-app-development',      'anchor' => 'mobile app development'],
+        'web-app'         => ['route' => 'services.web-application-development', 'anchor' => 'web application development'],
+        'website'         => ['route' => 'services.web-design',                  'anchor' => 'web and product design'],
+    ];
+
+    $service = $serviceLinks[$project['service_type']] ?? null;
 @endphp
 
 @section('content')
@@ -54,6 +67,13 @@
                 @if (! empty($project['approach']))
                     <h2>What we built</h2>
                     <p>{{ $project['approach'] }}</p>
+
+                    @if ($service)
+                        {{-- Industry and service label are already in the meta row
+                             under the H1. Repeating them here produced "a Education
+                             web application build", so this keeps only the link. --}}
+                        <p>More on how we approach <a href="{{ route($service['route']) }}">{{ $service['anchor'] }}</a>.</p>
+                    @endif
                 @endif
 
                 @if ($results)
