@@ -66,12 +66,19 @@
             { "@type": "PostalAddress", "addressLocality": "Milnerton", "addressRegion": "Western Cape", "postalCode": "7441", "addressCountry": "ZA" },
             { "@type": "PostalAddress", "addressLocality": "Harare", "addressCountry": "ZW" }
         ],
-        "sameAs": ["https://www.linkedin.com/company/shifttech-global-solutions/"],
+        {{-- The Google Business Profile is listed here so the site and the
+             listing resolve to one entity rather than two. The ?cid= form is
+             the stable identifier; share links change. --}}
+        "sameAs": [
+            "https://www.linkedin.com/company/shifttech-global-solutions/",
+            "https://maps.google.com/?cid=2403486617949292805"
+        ],
         "founder": {
             "@type": "Person",
-            "name": "Prosper",
+            "name": "Prosper Tinarwo",
             "jobTitle": "Founder & Lead Engineer",
-            "url": "{{ url('/agency') }}#founder"
+            "url": "{{ url('/agency') }}#founder",
+            "sameAs": ["https://www.linkedin.com/in/prosper-tinarwo-a540b0b0/"]
         }
     }
     </script>
@@ -85,6 +92,11 @@
         "email": "sales@shifttechgs.com",
         "telephone": "+27814303023",
         "address": { "@type": "PostalAddress", "addressLocality": "Milnerton", "addressRegion": "Western Cape", "postalCode": "7441", "addressCountry": "ZA" },
+        {{-- Coordinates and hasMap tie this location to the Google Business
+             Profile. streetAddress is deliberately omitted, so these carry the
+             location signal in its place. --}}
+        "geo": { "@type": "GeoCoordinates", "latitude": -33.8031458, "longitude": 18.5142094 },
+        "hasMap": "https://maps.google.com/?cid=2403486617949292805",
         "areaServed": "ZA",
         "parentOrganization": { "@type": "Organization", "name": "ShiftTech Global Solutions", "url": "{{ url('/') }}" }
     }

@@ -290,7 +290,7 @@
     "mainEntity": {
         "@type": "Person",
         "@id": "{{ url('/agency') }}#founder",
-        "name": "Prosper",
+        "name": "Prosper Tinarwo",
         "jobTitle": "Founder & Lead Engineer",
         "url": "{{ url('/agency') }}#founder",
         "image": "{{ asset('assets/images/team/prosper.jpg') }}",
@@ -302,8 +302,12 @@
             "AI integration and automation",
             "DevOps and cloud infrastructure"
         ],
-        "worksFor": { "@type": "Organization", "name": "ShiftTech", "url": "{{ url('/') }}" },
-        "sameAs": ["https://www.linkedin.com/company/shifttech-global-solutions/"]
+        "worksFor": { "@type": "Organization", "name": "ShiftTech Global Solutions", "url": "{{ url('/') }}" },
+        {{-- Was pointing at the company LinkedIn page. sameAs asserts "this URL
+             is another representation of this entity", so a company page on a
+             Person claimed the founder and the company were the same thing.
+             A personal profile is the signal that actually disambiguates. --}}
+        "sameAs": ["https://www.linkedin.com/in/prosper-tinarwo-a540b0b0/"]
     }
 }
 </script>
