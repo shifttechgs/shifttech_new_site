@@ -45,14 +45,25 @@
         "@@context": "https://schema.org",
         "@type": "Organization",
         "name": "ShiftTech",
+        {{-- Every external citation (LinkedIn, Dun & Bradstreet, ZoomInfo,
+             Bark, RocketReach) and the company registration say "ShiftTech
+             Global Solutions", while the site said only "ShiftTech". Entity
+             resolution works by cross-referencing these, so declaring both the
+             registered name and the trading name ties the two together instead
+             of leaving them looking like separate organisations. --}}
+        "legalName": "ShiftTech Global Solutions",
+        "alternateName": "ShiftTech",
         "url": "{{ url('/') }}",
         "logo": "{{ asset('assets/images/logo/shifttech.png') }}",
         "description": "Founder-led software engineering studio building web platforms, mobile apps and operations systems for growing businesses.",
         "email": "sales@shifttechgs.com",
         "telephone": "+27814303023",
         "areaServed": ["ZA", "ZW"],
+        {{-- addressLocality is the postal locality, so Milnerton rather than
+             the Cape Town metro. Cape Town intent is carried by page copy,
+             titles and areaServed, which is where it belongs. --}}
         "address": [
-            { "@type": "PostalAddress", "addressLocality": "Cape Town", "addressCountry": "ZA" },
+            { "@type": "PostalAddress", "addressLocality": "Milnerton", "addressRegion": "Western Cape", "postalCode": "7441", "addressCountry": "ZA" },
             { "@type": "PostalAddress", "addressLocality": "Harare", "addressCountry": "ZW" }
         ],
         "sameAs": ["https://www.linkedin.com/company/shifttech-global-solutions/"],
@@ -73,9 +84,9 @@
         "image": "{{ asset('assets/images/og/shifttech-og.png') }}",
         "email": "sales@shifttechgs.com",
         "telephone": "+27814303023",
-        "address": { "@type": "PostalAddress", "addressLocality": "Cape Town", "addressCountry": "ZA" },
+        "address": { "@type": "PostalAddress", "addressLocality": "Milnerton", "addressRegion": "Western Cape", "postalCode": "7441", "addressCountry": "ZA" },
         "areaServed": "ZA",
-        "parentOrganization": { "@type": "Organization", "name": "ShiftTech", "url": "{{ url('/') }}" }
+        "parentOrganization": { "@type": "Organization", "name": "ShiftTech Global Solutions", "url": "{{ url('/') }}" }
     }
     </script>
     <script type="application/ld+json">
