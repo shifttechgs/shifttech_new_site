@@ -12,9 +12,10 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\RobotsController;
 use App\Http\Controllers\LlmsTxtController;
+use App\Http\Controllers\CrmSessionController;
 
 
-Route::get('/', function () { return view('welcome');});
+Route::view('/', 'welcome')->name('home');
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 Route::get('/robots.txt', [RobotsController::class, 'index'])->name('robots');
 Route::get('/llms.txt', [LlmsTxtController::class, 'index'])->name('llms-txt');
@@ -150,15 +151,8 @@ Route::prefix('luminii')->name('crm.')->middleware(['auth'])->group(function () 
 });
 
 // CRM login redirect
-Route::get('/luminii/login', function () {
-    return auth()->check() ? redirect()->route('crm.dashboard') : redirect('/useluminii/login');
-})->name('crm.login');
+Route::get('/luminii/login', [CrmSessionController::class, 'login'])->name('crm.login');
 
-Route::post('/logout', function () {
-    auth()->logout();
-    request()->session()->invalidate();
-    request()->session()->regenerateToken();
-    return redirect('/useluminii/login');
-})->name('logout');
+Route::post('/logout', [CrmSessionController::class, 'logout'])->name('logout');
 
 
