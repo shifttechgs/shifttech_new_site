@@ -100,6 +100,18 @@
         'eye'    => '<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7z" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="3"/>',
         'check'  => '<circle cx="12" cy="12" r="10"/><path d="M8 12.5l2.5 2.5L16 9" stroke="#0B1410" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
     ];
+
+    // This was the only service page with no FAQ block, and so the only one
+    // emitting no FAQPage schema. Answers are drawn from what the page already
+    // states: the four process stages, the three standards, and the four
+    // places we plug into an existing product.
+    $faqs = [
+        ['q' => 'What does your design process actually involve?', 'a' => "Four stages: discover, wireframe, design, validate. Discovery establishes what the interface has to do and for whom. Wireframes settle structure before anyone argues about colour. Design applies the system. Validation puts it in front of real users before it gets built, so problems surface while they are still cheap."],
+        ['q' => 'Do you validate designs with real users before we build?', 'a' => "Yes. Validation is a stage in its own right, not something we hope happens later. The whole approach is evidence over opinion: a design that tests well with the people who will actually use it beats one that wins an internal debate."],
+        ['q' => 'Do we get a design system, or just page designs?', 'a' => "A documented design system. One system, not a set of one-off pages. It means the tenth screen looks like the first, a new developer knows which component to reach for, and you are not paying to redesign the same button every time you add a feature."],
+        ['q' => 'Who actually does the design work?', 'a' => "A senior designer owns it end to end. This is a founder-led studio, so the person who scopes the work is the person who does it. Nothing gets sold by one person and quietly handed to a junior once the contract is signed."],
+        ['q' => 'Can you come in partway through an existing product?', 'a' => "Yes. There are four points where we typically plug into a product that already exists, so you do not have to start over to get design help. We work with what is already shipped rather than insisting on a rebuild that serves us more than it serves you."],
+    ];
 @endphp
 
 @section('content')
@@ -302,6 +314,56 @@
         </div>
     </section>
 
+    {{-- ==================== FAQ ==================== --}}
+    <section class="section" id="faq">
+        <div class="container">
+            <div class="faq-panel">
+
+                <div class="faq-head">
+                    <span class="faq-watermark" aria-hidden="true">FAQ</span>
+                    <x-site.eyebrow>Questions</x-site.eyebrow>
+                    <h2 class="display-l">Before you <strong>book.</strong></h2>
+                    <p class="faq-sub">If something's still unclear after reading these, just ask, or reach us directly.</p>
+
+                    <div class="faq-contacts">
+                        <a class="faq-contact" href="tel:+27814303023">
+                            <span class="faq-contact__icon" aria-hidden="true">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                            </span>
+                            <span>+27 81 430 3023</span>
+                        </a>
+                        <a class="faq-contact" href="mailto:sales@shifttechgs.com">
+                            <span class="faq-contact__icon" aria-hidden="true">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>
+                            </span>
+                            <span>sales@shifttechgs.com</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="faq-list">
+                    @foreach ($faqs as $i => $faq)
+                        <details class="faq-item" open>
+                            <summary class="faq-item__head">
+                                <span class="faq-item__num">{{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}</span>
+                                <span class="faq-item__q">{{ $faq['q'] }}</span>
+                                <span class="faq-item__toggle" aria-hidden="true">
+                                    <svg width="12" height="8" viewBox="0 0 12 8" fill="none"><path d="M1 1.5L6 6.5L11 1.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                </span>
+                            </summary>
+                            <div class="faq-item__body">
+                                <div class="faq-item__inner">
+                                    <p>{{ $faq['a'] }}</p>
+                                </div>
+                            </div>
+                        </details>
+                    @endforeach
+                </div>
+
+            </div>
+        </div>
+    </section>
+
     {{-- ==================== FINAL CTA ==================== --}}
     <section class="section final" id="contact">
         <div class="container">
@@ -351,6 +413,21 @@
     "provider": { "@type": "Organization", "name": "ShiftTech", "url": "{{ url('/') }}" },
     "areaServed": ["ZA", "ZW"],
     "url": "{{ url('/services/web-design') }}"
+}
+</script>
+<script type="application/ld+json">
+{
+    "@@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        @foreach ($faqs as $i => $faq)
+        {
+            "@type": "Question",
+            "name": {!! json_encode($faq['q']) !!},
+            "acceptedAnswer": { "@type": "Answer", "text": {!! json_encode($faq['a']) !!} }
+        }{{ $loop->last ? '' : ',' }}
+        @endforeach
+    ]
 }
 </script>
 @endpush
