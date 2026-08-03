@@ -31,6 +31,9 @@ Route::post('/contact/quick-audit',[ContactsController::class, 'submitQuickAudit
     ->middleware(\App\Http\Middleware\ThrottleContactForm::class)
     ->name('contact.quick-audit');
 Route::get('/agency',[AgencyController::class, 'index'])->name('agency.page');
+// The previous site had /about, and it is still indexed. 301 rather than 404
+// so whatever equity it holds lands on the page that replaced it.
+Route::redirect('/about', '/agency', 301);
 Route::get('/work',[WorkController::class, 'index'])->name('work.page');
 Route::get('/work/{slug}',[WorkController::class, 'show'])->name('work.show');
 Route::get('/blog',[BlogController::class, 'index'])->name('blog.page');

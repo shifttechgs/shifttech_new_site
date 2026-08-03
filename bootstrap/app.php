@@ -38,6 +38,13 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [
             \App\Http\Middleware\SecurityHeaders::class,
         ]);
+
+        // Prepended so the redirect happens before any work is done: sessions,
+        // route model binding and rendering are all wasted on a host that is
+        // about to 301 anyway.
+        $middleware->web(prepend: [
+            \App\Http\Middleware\CanonicalHost::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
