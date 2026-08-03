@@ -26,7 +26,7 @@ class ContactsController extends Controller
     public function submitForm(ContactFormRequest $request): JsonResponse
     {
         $data      = $request->validated();
-        $adminEmail = env('CONTACT_EMAIL', config('mail.from.address'));
+        $adminEmail = config('mail.contact_to') ?: config('mail.from.address');
 
         // 1. Save to local CRM database
         try {
@@ -44,14 +44,22 @@ class ContactsController extends Controller
                 'priority'            => 'Normal',
                 'ip_address'          => $request->ip(),
             ]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
+            // The lead is the deliverable — if it did not persist, do not tell
+            // the visitor we received it, or the enquiry is lost silently.
             Log::error('Failed to save contact form submission', ['error' => $e->getMessage()]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Sorry, we could not submit your request. Please email us at ' . $adminEmail . '.',
+            ], 500);
         }
 
-        // 2. Send admin email notification
+        // 2. Send admin email notification. Non-fatal: the lead is already in
+        // the CRM, so a mail outage must not fail the visitor's submission.
         try {
             Mail::to($adminEmail)->send(new ContactFormNotification($data, true));
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             Log::error('Contact form email failed', ['error' => $e->getMessage()]);
         }
 
@@ -73,7 +81,7 @@ class ContactsController extends Controller
             'honeypot' => ['nullable', 'max:0'],
         ]);
 
-        $adminEmail = env('CONTACT_EMAIL', config('mail.from.address'));
+        $adminEmail = config('mail.contact_to') ?: config('mail.from.address');
         $formData = [
             'name'    => $data['name'],
             'email'   => $data['email'],
@@ -90,13 +98,18 @@ class ContactsController extends Controller
                 'priority'   => 'Normal',
                 'ip_address' => $request->ip(),
             ]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             Log::error('Failed to save quick-audit submission', ['error' => $e->getMessage()]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Sorry, we could not submit your request. Please email us at ' . $adminEmail . '.',
+            ], 500);
         }
 
         try {
             Mail::to($adminEmail)->send(new ContactFormNotification($formData, true));
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             Log::error('Quick-audit email failed', ['error' => $e->getMessage()]);
         }
 

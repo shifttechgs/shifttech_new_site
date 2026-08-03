@@ -115,4 +115,17 @@ return [
         'name' => env('MAIL_FROM_NAME', 'Example'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Contact Form Recipient
+    |--------------------------------------------------------------------------
+    |
+    | Inbox that receives website lead notifications. Read through config
+    | rather than env() at call time, because env() returns null once
+    | `php artisan config:cache` has run on the server.
+    |
+    */
+
+    'contact_to' => env('CONTACT_EMAIL', env('MAIL_FROM_ADDRESS', 'hello@example.com')),
+
 ];

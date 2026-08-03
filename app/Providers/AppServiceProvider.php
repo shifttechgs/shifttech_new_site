@@ -14,6 +14,7 @@ use App\Observers\ContactFormObserver;
 use App\Observers\PostObserver;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -21,6 +22,14 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        // Backstop for trustProxies: if the proxy does not forward
+        // X-Forwarded-Proto at all, generated URLs would still come out as
+        // http:// on an https:// site. Anchor the scheme to APP_URL so local
+        // http development is untouched.
+        if (str_starts_with((string) config('app.url'), 'https://')) {
+            URL::forceScheme('https');
+        }
+
         // Register the crm:: Blade component namespace
         Blade::componentNamespace('App\\View\\Components\\Crm', 'crm');
         // Anonymous components in resources/views/components/crm/
