@@ -29,7 +29,15 @@ class SitemapController extends Controller
             'lastmod' => $post->updated_at?->toAtomString(),
         ]);
 
-        $urls = collect($staticPages)->concat($posts);
+        // Case studies rank for "<service> <industry>" intent and are the
+        // pages AI engines quote results from, so they sit above blog posts.
+        $caseStudies = collect(WorkController::all())->map(fn (array $project) => [
+            'url' => url('/work/' . $project['slug']),
+            'priority' => '0.7',
+            'changefreq' => 'monthly',
+        ]);
+
+        $urls = collect($staticPages)->concat($caseStudies)->concat($posts);
 
         return response()
             ->view('sitemap', ['urls' => $urls])

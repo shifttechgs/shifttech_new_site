@@ -31,6 +31,7 @@ Route::post('/contact/quick-audit',[ContactsController::class, 'submitQuickAudit
     ->name('contact.quick-audit');
 Route::get('/agency',[AgencyController::class, 'index'])->name('agency.page');
 Route::get('/work',[WorkController::class, 'index'])->name('work.page');
+Route::get('/work/{slug}',[WorkController::class, 'show'])->name('work.show');
 Route::get('/blog',[BlogController::class, 'index'])->name('blog.page');
 Route::get('/blog/{post}',[BlogController::class, 'show'])->name('blog.show');
 

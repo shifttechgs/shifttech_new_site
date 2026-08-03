@@ -5,6 +5,7 @@
 
 @php
     $contact = url('/contact');
+    $faqs    = $post->valid_faqs;
 @endphp
 
 @section('content')
@@ -36,6 +37,25 @@
             <div class="post-body">
                 {!! $post->body !!}
             </div>
+
+            @if ($faqs)
+                {{-- Question-shaped headings with short, self-contained answers.
+                     This is the block AI engines lift when citing the page. --}}
+                <section class="post-faq" aria-labelledby="post-faq-heading">
+                    <h2 id="post-faq-heading">Frequently asked questions</h2>
+                    {{-- Deliberately not the .faq-item accordion used on the
+                         services pages: that collapse is currently broken (an
+                         open item never expands), and an answer a reader cannot
+                         see is no use to them. Always-visible H3 + paragraph is
+                         also the cleanest shape for AI extraction. --}}
+                    @foreach ($faqs as $faq)
+                        <div class="post-faq__item">
+                            <h3 class="post-faq__q">{{ $faq['question'] }}</h3>
+                            <p class="post-faq__a">{{ $faq['answer'] }}</p>
+                        </div>
+                    @endforeach
+                </section>
+            @endif
 
             <div class="post-footer">
                 @if ($related)
@@ -105,9 +125,9 @@
     "mainEntityOfPage": { "@type": "WebPage", "@id": {!! json_encode(url()->current()) !!} },
     "author": {
         "@type": "Person",
+        "@id": {!! json_encode(url('/agency') . '#founder') !!},
         "name": {!! json_encode($post->author_name) !!},
-        "url": {!! json_encode(url('/agency') . '#founder') !!},
-        "sameAs": ["https://www.linkedin.com/company/shifttech-global-solutions/"]
+        "url": {!! json_encode(url('/agency') . '#founder') !!}
     },
     "publisher": {
         "@type": "Organization",
@@ -116,4 +136,21 @@
     }
 }
 </script>
+@if ($faqs)
+<script type="application/ld+json">
+{
+    "@@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        @foreach ($faqs as $faq)
+        {
+            "@type": "Question",
+            "name": {!! json_encode($faq['question']) !!},
+            "acceptedAnswer": { "@type": "Answer", "text": {!! json_encode($faq['answer']) !!} }
+        }@if (! $loop->last),@endif
+        @endforeach
+    ]
+}
+</script>
+@endif
 @endpush

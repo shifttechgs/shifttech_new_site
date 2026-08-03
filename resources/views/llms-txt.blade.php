@@ -17,6 +17,12 @@
 - [About ShiftTech]({{ url('/agency') }}): Why the studio exists and why it's stayed founder-led. One person scopes, builds, and stays on every project.
 - [Contact]({{ url('/contact') }}): Book a free discovery call.
 
+## Case Studies
+
+@foreach ($caseStudies as $project)
+- [{{ $project['title'] }}]({{ url('/work/' . $project['slug']) }}): {{ $project['meta_description'] ?? $project['summary'] }} Built with {{ implode(', ', $project['technologies']) }}.
+@endforeach
+
 ## Blog
 
 @foreach ($posts as $post)

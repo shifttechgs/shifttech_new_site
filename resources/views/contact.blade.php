@@ -378,3 +378,21 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 @endpush
+
+@push('schema')
+<script type="application/ld+json">
+{
+    "@@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        @foreach ($faqs as $faq)
+        {
+            "@type": "Question",
+            "name": {!! json_encode($faq['q']) !!},
+            "acceptedAnswer": { "@type": "Answer", "text": {!! json_encode($faq['a']) !!} }
+        }@if (! $loop->last),@endif
+        @endforeach
+    ]
+}
+</script>
+@endpush

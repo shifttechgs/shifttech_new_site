@@ -10,14 +10,27 @@ class Post extends Model
     public const CATEGORIES = ['Engineering', 'Design', 'AI', 'Process', 'Company'];
 
     protected $fillable = [
-        'title', 'slug', 'category', 'excerpt', 'body', 'cover_image',
+        'title', 'slug', 'category', 'excerpt', 'body', 'faqs', 'cover_image',
         'author_name', 'is_published', 'published_at', 'meta_description',
     ];
 
     protected $casts = [
         'is_published' => 'boolean',
         'published_at' => 'datetime',
+        'faqs'         => 'array',
     ];
+
+    /**
+     * FAQ entries with both a question and an answer. Guards the schema and
+     * the rendered block against half-filled rows.
+     */
+    public function getValidFaqsAttribute(): array
+    {
+        return collect($this->faqs ?? [])
+            ->filter(fn ($faq) => filled($faq['question'] ?? null) && filled($faq['answer'] ?? null))
+            ->values()
+            ->all();
+    }
 
     protected static function booted(): void
     {

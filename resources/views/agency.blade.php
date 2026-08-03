@@ -276,17 +276,35 @@
 @endsection
 
 @push('schema')
+{{-- ProfilePage wrapping the Person, so /agency#founder resolves to a real
+     entity. BlogPosting.author and CaseStudy.author both point at that @id,
+     which is what ties every article to a named, credentialed human rather
+     than an anonymous byline. --}}
 <script type="application/ld+json">
 {
     "@@context": "https://schema.org",
-    "@type": "Person",
-    "name": "Prosper",
-    "jobTitle": "Founder & Lead Engineer",
-    "url": "{{ url('/agency') }}#founder",
-    "image": "{{ asset('assets/images/team/prosper.jpg') }}",
-    "description": "Founder and lead engineer at ShiftTech, a founder-led software studio. 10+ years full-stack, working across fintech, health, and operations.",
-    "worksFor": { "@type": "Organization", "name": "ShiftTech", "url": "{{ url('/') }}" },
-    "sameAs": ["https://www.linkedin.com/company/shifttech-global-solutions/"]
+    "@type": "ProfilePage",
+    "@id": "{{ url('/agency') }}#profilepage",
+    "url": "{{ url('/agency') }}",
+    "name": "Prosper — Founder & Lead Engineer at ShiftTech",
+    "mainEntity": {
+        "@type": "Person",
+        "@id": "{{ url('/agency') }}#founder",
+        "name": "Prosper",
+        "jobTitle": "Founder & Lead Engineer",
+        "url": "{{ url('/agency') }}#founder",
+        "image": "{{ asset('assets/images/team/prosper.jpg') }}",
+        "description": "Founder and lead engineer at ShiftTech, a founder-led software studio. 10+ years full-stack, working across fintech, health, and operations.",
+        "knowsAbout": [
+            "Custom software development",
+            "Web application development",
+            "Mobile app development",
+            "AI integration and automation",
+            "DevOps and cloud infrastructure"
+        ],
+        "worksFor": { "@type": "Organization", "name": "ShiftTech", "url": "{{ url('/') }}" },
+        "sameAs": ["https://www.linkedin.com/company/shifttech-global-solutions/"]
+    }
 }
 </script>
 @endpush

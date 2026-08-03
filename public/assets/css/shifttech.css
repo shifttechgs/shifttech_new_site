@@ -2043,6 +2043,33 @@ a.service-card:hover { border-color: #cfc9b8; box-shadow: var(--sh-2); transform
 .post-footer { max-width: 42rem; margin: 3.5rem auto 0; }
 .post-footer__related { font-size: .9375rem; color: var(--stone); text-align: center; }
 
+/* ---------- Post FAQ (drives FAQPage schema) ----------
+   Reuses the .faq-item accordion from the services pages, so the answer text
+   stays in the DOM when collapsed and remains indexable. */
+.post-faq { max-width: 42rem; margin: 3.5rem auto 0; }
+.post-faq h2 { font-size: 1.5rem; font-weight: 700; letter-spacing: -.015em; margin-bottom: .5rem; }
+.post-faq__item { padding: 1.35rem 0; border-top: 1px solid var(--hairline); }
+.post-faq__item:last-child { border-bottom: 1px solid var(--hairline); }
+.post-faq__q { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.01em; margin-bottom: .5rem; }
+.post-faq__a { color: var(--stone); line-height: 1.75; max-width: 58ch; }
+
+/* ---------- Case study detail ---------- */
+.case-results { margin: 0 0 1.25rem 1.25rem; }
+.case-results li { margin-bottom: .5rem; }
+.case-testimonial { margin: 2rem 0; padding: 1.5rem 1.5rem 1.25rem; background: var(--paper-raised); border: 1px solid var(--hairline); border-left: 2px solid var(--lime); border-radius: var(--r-md); }
+.case-testimonial p { margin-bottom: .75rem; font-size: 1.0625rem; }
+.case-testimonial cite { font-style: normal; font-size: .875rem; color: var(--stone); }
+
+.case-related { list-style: none; margin: 1rem 0 0; padding: 0; display: grid; gap: .25rem; }
+.case-related li { display: flex; justify-content: space-between; gap: 1rem; padding: .85rem 0; border-top: 1px solid var(--hairline); }
+.case-related li:last-child { border-bottom: 1px solid var(--hairline); }
+.case-related a { font-weight: 600; text-decoration: none; }
+.case-related a:hover { text-decoration: underline; text-underline-offset: 2px; }
+.case-related span { font-size: .8125rem; color: var(--stone); flex: none; }
+
+.project-card__title a { color: inherit; text-decoration: none; }
+.project-card__title a:hover { text-decoration: underline; text-underline-offset: 2px; }
+
 @media (max-width: 1024px) {
     .portfolio-grid-wrap { grid-template-columns: repeat(2, 1fr); }
 }

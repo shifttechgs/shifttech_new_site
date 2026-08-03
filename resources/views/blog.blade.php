@@ -112,3 +112,45 @@
 
 </main>
 @endsection
+
+@push('schema')
+<script type="application/ld+json">
+{
+    "@@context": "https://schema.org",
+    "@type": "Blog",
+    "@id": "{{ url('/blog') }}#blog",
+    "url": "{{ url('/blog') }}",
+    "name": "ShiftTech Insights",
+    "description": "Field notes on custom software, AI integration, product design and mobile apps, from a founder-led studio in Cape Town.",
+    "publisher": { "@type": "Organization", "name": "ShiftTech", "url": "{{ url('/') }}" }
+}
+</script>
+<script type="application/ld+json">
+{
+    "@@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "{{ url('/') }}" },
+        { "@type": "ListItem", "position": 2, "name": "Blog", "item": "{{ url('/blog') }}" }
+    ]
+}
+</script>
+@if (count($posts))
+<script type="application/ld+json">
+{
+    "@@context": "https://schema.org",
+    "@type": "ItemList",
+    "itemListElement": [
+        @foreach ($posts as $post)
+        {
+            "@type": "ListItem",
+            "position": {{ $loop->iteration }},
+            "url": {!! json_encode(route('blog.show', $post)) !!},
+            "name": {!! json_encode($post->title) !!}
+        }@if (! $loop->last),@endif
+        @endforeach
+    ]
+}
+</script>
+@endif
+@endpush

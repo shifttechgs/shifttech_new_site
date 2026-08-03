@@ -6,119 +6,6 @@
 
 @php
     $contact = url('/contact');
-
-    $projects = [
-        [
-            'title' => 'Luminii CRM',
-            'client_name' => 'UseLuminii',
-            'service_type' => 'web-app',
-            'service_label' => 'Web Application',
-            'industry' => 'SaaS',
-            'value_proposition' => 'The CRM module inside the Luminii platform: leads, client records, and follow-ups in one place instead of scattered across spreadsheets and someone\'s memory. Built first for ShiftTech\'s own operations, then opened up for other businesses to run their pipeline on.',
-            'featured_image' => 'luminii.png',
-            'image_fit' => 'cover',
-            'technologies' => ['Angular', 'C#', 'SQL'],
-        ],
-        [
-            'title' => 'zimAlert Emergency Response',
-            'client_name' => 'zimAlert',
-            'service_type' => 'mobile-app',
-            'service_label' => 'Mobile Application',
-            'industry' => 'Healthcare',
-            'value_proposition' => 'Emergency contacts previously had no way to see where help actually was. We built a mobile app with live location sharing, so responders and the people waiting on them are looking at the same picture in real time, not guessing over a phone call.',
-            'featured_image' => 'zimAlert.png',
-            'image_fit' => 'cover',
-            'technologies' => ['Flutter', 'C#', 'Firebase', 'SQL'],
-        ],
-        [
-            'title' => 'PayHouse Finance Platform',
-            'client_name' => 'PayHouse',
-            'service_type' => 'web-app',
-            'service_label' => 'Web Application',
-            'industry' => 'Fintech',
-            'value_proposition' => 'Loan applications were being processed by hand, with compliance checks slowing everything further. We digitised the full application flow and built in the security fintech actually requires, PCI-DSS handling and real-time transaction monitoring included, so approvals move faster without cutting corners on trust.',
-            'featured_image' => 'pay.png',
-            'image_fit' => 'cover',
-            'technologies' => ['Laravel', 'PHP', 'MySQL'],
-        ],
-        [
-            'title' => 'Vision Plus Wealth Management',
-            'client_name' => 'Vision Plus Wealth',
-            'service_type' => 'website',
-            'service_label' => 'Website',
-            'industry' => 'Finance',
-            'value_proposition' => 'The old site buried what Vision Plus Wealth actually offered behind generic finance-site boilerplate, and their loan application process ran entirely by hand. We rebuilt the site around a clear service story and automated the application flow, so it\'s fast, secure, and seamless for the team and the client on both ends.',
-            'featured_image' => 'vwp.png',
-            'image_fit' => 'cover',
-            'technologies' => ['Laravel', 'PHP', 'MySQL'],
-        ],
-        [
-            'title' => 'BSL Auction Services',
-            'client_name' => 'BSL',
-            'service_type' => 'web-app',
-            'service_label' => 'Web Application',
-            'industry' => 'E-commerce',
-            'value_proposition' => 'BSL was running auctions on paper trails and manual admin, which meant every sale meant more filing. We built them a public auction website plus an admin platform to manage listings, bids, and records in one place, so operations run on the system instead of around it.',
-            'featured_image' => 'bsl-admin.png',
-            'has_webp' => true,
-            'technologies' => ['Laravel', 'PHP', 'MySQL'],
-        ],
-        [
-            'title' => 'Lifestyle Laundry',
-            'client_name' => 'Lifestyle Laundry',
-            'service_type' => 'mobile-app',
-            'service_label' => 'Mobile Application',
-            'industry' => 'Services',
-            'value_proposition' => 'Booking a laundry pickup meant a phone call and hoping someone remembered. We built a mobile app covering the whole loop, book a pickup, pay in-app, and track the order status, so customers don\'t have to chase updates and the business isn\'t fielding "where\'s my order" calls all day.',
-            'featured_image' => 'lifestyle.png',
-            'image_fit' => 'cover',
-            'technologies' => ['Flutter', 'Firebase', 'Stripe', 'C#', 'SQL'],
-        ],
-        [
-            'title' => 'Luminii SaaS Platform',
-            'client_name' => 'UseLuminii',
-            'service_type' => 'custom-software',
-            'service_label' => 'Custom Software',
-            'industry' => 'SaaS',
-            'value_proposition' => 'The full Luminii platform, built out from the CRM into a multi-tenant SaaS product other businesses can run their own operations on: leads, quotes, invoicing, and job scheduling in one system instead of five disconnected tools stitched together with copy-paste.',
-            'featured_image' => 'luminii-saas-site.png',
-            'has_webp' => true,
-            'technologies' => ['Angular', 'C#', 'SQL'],
-        ],
-        [
-            'title' => 'Peekaboo Daycare',
-            'client_name' => 'Peekaboo Daycare & Preschool',
-            'service_type' => 'web-app',
-            'service_label' => 'Web Application',
-            'industry' => 'Education',
-            'value_proposition' => 'Twenty years in business and almost no presence online, which meant parents searching for a daycare couldn\'t find them, and once a child was enrolled, admissions ran entirely on paper. We built a site that actually shows up in search and an admissions dashboard that replaced the paper trail with something the staff could run day to day.',
-            'featured_image' => 'peekaboo-site.png',
-            'has_webp' => true,
-            'technologies' => ['Laravel', 'PHP', 'MySQL'],
-        ],
-        [
-            'title' => 'SpringKleaners',
-            'client_name' => 'SpringKleaners',
-            'service_type' => 'website',
-            'service_label' => 'Website',
-            'industry' => 'Home Services',
-            'value_proposition' => 'Visitors landing on the old site had no way to know what a clean would cost or whether SpringKleaners even served their suburb, so most left without booking. We built an instant quote tool and a suburb-based booking flow, so a visitor can go from "how much" to "booked" without a phone call in between.',
-            'featured_image' => 'springkleaners-site.png',
-            'has_webp' => true,
-            'technologies' => ['Laravel', 'PHP', 'MySQL'],
-        ],
-        [
-            'title' => 'Ribbon Plumbing',
-            'client_name' => 'Ribbon Plumbing',
-            'service_type' => 'website',
-            'service_label' => 'Website',
-            'industry' => 'Home Services',
-            'value_proposition' => 'A burst pipe at midnight doesn\'t wait for office hours, but the old site gave visitors nothing to do outside them except leave. We built an instant quote request flow that works any hour, so an emergency call becomes a submitted request in minutes instead of a missed enquiry until morning.',
-            'featured_image' => 'ribbon-plumbing-site.png',
-            'has_webp' => true,
-            'technologies' => ['Laravel', 'PHP', 'MySQL'],
-        ],
-    ];
 @endphp
 
 @section('content')
@@ -185,16 +72,18 @@
                                     <span class="tag tag--service">{{ $project['service_label'] }}</span>
                                     <span class="tag tag--industry">{{ $project['industry'] }}</span>
                                 </div>
-                                <h3 class="project-card__title">{{ $project['title'] }}</h3>
+                                <h3 class="project-card__title">
+                                    <a href="{{ route('work.show', $project['slug']) }}">{{ $project['title'] }}</a>
+                                </h3>
                                 <p class="project-card__client">{{ $project['client_name'] }}</p>
-                                <p class="project-card__value">{{ $project['value_proposition'] }}</p>
+                                <p class="project-card__value">{{ $project['summary'] }}</p>
                                 <div class="project-card__tech">
                                     @foreach ($project['technologies'] as $tech)
                                         <span class="tech-badge">{{ $tech }}</span>
                                     @endforeach
                                 </div>
                                 <div class="project-card__cta">
-                                    <x-site.btn :href="$contact" :link="true" :arrow="true">Start a project like this</x-site.btn>
+                                    <x-site.btn :href="route('work.show', $project['slug'])" :link="true" :arrow="true">Read the case study</x-site.btn>
                                 </div>
                             </div>
                         </article>
@@ -234,4 +123,34 @@
 
 @push('scripts')
     <script src="{{ asset('assets/js/work-portfolio.js') }}" defer></script>
+@endpush
+
+@push('schema')
+<script type="application/ld+json">
+{
+    "@@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "{{ url('/') }}" },
+        { "@type": "ListItem", "position": 2, "name": "Work", "item": "{{ url('/work') }}" }
+    ]
+}
+</script>
+<script type="application/ld+json">
+{
+    "@@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "ShiftTech case studies",
+    "itemListElement": [
+        @foreach ($projects as $project)
+        {
+            "@type": "ListItem",
+            "position": {{ $loop->iteration }},
+            "url": {!! json_encode(route('work.show', $project['slug'])) !!},
+            "name": {!! json_encode($project['title']) !!}
+        }@if (! $loop->last),@endif
+        @endforeach
+    ]
+}
+</script>
 @endpush
