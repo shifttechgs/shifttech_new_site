@@ -29,6 +29,24 @@ class PostSeeder extends Seeder
                 'meta_description' => 'Hourly billing puts the incentive in the wrong place. How we scope a fixed number before a line of code gets written, and what happens when scope changes.',
                 'published_at'     => '2026-07-07 10:27:55',
                 'is_published'     => true,
+                'faqs'             => [
+                    [
+                        'question' => 'How long does it take to get a quote from ShiftTech?',
+                        'answer'   => 'Within 48 hours of the discovery call. You get a fixed number and a timeline, not a ballpark or a range with an asterisk. The call itself covers what is broken, what a good outcome looks like, and what is out of scope.',
+                    ],
+                    [
+                        'question' => 'What happens if the scope of my project changes mid-build?',
+                        'answer'   => 'You get a new fixed number for the added scope before any work starts on it. We flag the change as soon as we see it coming rather than at invoicing time, and the original quote does not quietly grow to absorb it.',
+                    ],
+                    [
+                        'question' => 'Who carries the risk if a fixed-price project takes longer than estimated?',
+                        'answer'   => 'We do. If we underestimate the work, that is our problem to absorb, not something we bill you for. It forces us to understand a problem properly before quoting it instead of leaving room to bill our way out of a bad estimate.',
+                    ],
+                    [
+                        'question' => 'Does ShiftTech turn down projects?',
+                        'answer'   => 'Yes. We turn down work we cannot scope with confidence rather than take it on and figure it out on the clock. Losing a project costs less than losing a client\'s trust in every number we give them afterwards.',
+                    ],
+                ],
                 'body'             => <<<'HTML'
 <p>Hourly billing sounds fair until you sit on the other side of it. The agency gets paid more the longer a feature takes, and you have no way to tell whether three days of work was actually three days of work. We don't run engagements that way.</p>
 
@@ -60,6 +78,28 @@ HTML,
                 'meta_description' => 'C# and Angular, with other tools borrowed in when a project needs them. Not because they are trendy, but because we can debug them at 11pm.',
                 'published_at'     => '2026-07-13 10:27:55',
                 'is_published'     => true,
+                'faqs'             => [
+                    [
+                        'question' => 'What technology stack does ShiftTech build on?',
+                        'answer'   => 'C# and Angular by default, for everything from client dashboards to admin platforms. Laravel and MySQL, PHP, Flutter, Docker and AWS get brought in when a project genuinely calls for them. The core stays consistent and the pieces around it change.',
+                    ],
+                    [
+                        'question' => 'Why C# and Angular instead of a newer framework?',
+                        'answer'   => 'Because the weird edge cases are already solved. C# holds up under real business logic instead of falling apart once a project gets complicated, and Angular forces structure on the frontend, which matters once a dashboard has more than a handful of screens.',
+                    ],
+                    [
+                        'question' => 'Will ShiftTech work with a system we already have?',
+                        'answer'   => 'Yes. When a client already runs something built in another stack, the right call is usually to extend what exists rather than force a rewrite. Consistency for its own sake is not the goal. Not creating unnecessary risk for you is.',
+                    ],
+                    [
+                        'question' => 'Do you build apps for both iOS and Android?',
+                        'answer'   => 'Yes, using Flutter when a client needs one app that runs on both. It is one of the tools we borrow in around the default stack rather than a separate practice, so the same team ships the app and the systems behind it.',
+                    ],
+                    [
+                        'question' => 'Do small projects need microservices or Kubernetes?',
+                        'answer'   => 'Usually not. Ten users do not need Kubernetes. We build for the load a system actually has today and architect for the growth that is genuinely coming, rather than paying complexity costs up front for scale that may never arrive.',
+                    ],
+                ],
                 'body'             => <<<'HTML'
 <p>We get asked at least once a quarter why we're not building on whatever framework is trending that month. The honest answer: boring, well-understood tools ship faster and break less than exciting new ones.</p>
 
@@ -92,6 +132,24 @@ HTML,
                 'meta_description' => 'AI writes code faster. We still read every line. The line between AI as a tool and AI as a strategy, and why that distinction matters to what we ship.',
                 'published_at'     => '2026-07-18 10:27:55',
                 'is_published'     => true,
+                'faqs'             => [
+                    [
+                        'question' => 'When is AI worth adding to a business system?',
+                        'answer'   => 'When it removes real, repetitive human effort. Surfacing the one anomaly in a report instead of making someone scan a spreadsheet, drafting a first-pass response a person still reviews, or classifying and routing incoming requests so nothing sits in an inbox unseen.',
+                    ],
+                    [
+                        'question' => 'Where should AI be left out of a business system?',
+                        'answer'   => 'Any decision you could not explain to your own customer if asked. Compliance-sensitive judgment calls, and anything touching money movement without a human check. If "the model said so" is not an acceptable answer, it stays a human decision.',
+                    ],
+                    [
+                        'question' => 'Does ShiftTech use AI to write client code?',
+                        'answer'   => 'Yes, for first drafts. Claude, Gemini and Copilot generate boilerplate, migrations and repetitive scaffolding inside our workflow. A senior engineer reads and reviews every line before it ships, because the model does not know your compliance rules.',
+                    ],
+                    [
+                        'question' => 'Should every business add AI to its software?',
+                        'answer'   => 'No, and often the honest answer is that it is not needed yet. The question worth asking is whether AI solves a real problem in your system or is being added because it is expected. If it does not make the system better for the person using it, it does not go in.',
+                    ],
+                ],
                 'body'             => <<<'HTML'
 <p>Every client conversation eventually gets to "should we add AI to this?" Sometimes the answer is yes. Often it isn't. The question we actually ask first is narrower: does AI solve a real problem here, or are we adding it because it's expected?</p>
 
@@ -124,6 +182,24 @@ HTML,
                 'meta_description' => 'Most businesses do not need a website or software. They need to be findable, and to stop losing hours to manual work once people find them.',
                 'published_at'     => '2026-07-19 10:27:55',
                 'is_published'     => true,
+                'faqs'             => [
+                    [
+                        'question' => 'What problems does ShiftTech actually solve?',
+                        'answer'   => 'Two, and most clients have both. Being findable, so an enquiry is not lost before you ever hear about it. And holding onto the work after the enquiry lands, instead of losing it to a spreadsheet, a WhatsApp thread and whoever remembers to follow up.',
+                    ],
+                    [
+                        'question' => 'What kind of internal systems do you build?',
+                        'answer'   => 'Quoting, job tracking, invoicing, client records, and whatever else a business actually runs on day to day. The test is not whether the software is interesting. It is whether the business can see its own pipeline well enough to grow it.',
+                    ],
+                    [
+                        'question' => 'What results have ShiftTech clients seen?',
+                        'answer'   => 'Trax Boats and Trailers replaced their inventory spreadsheets with a proper CRM and sales went up 40% within months. Western Cape Blood Service needed a monitoring system for their background services, and we delivered it four times faster than their own team had estimated.',
+                    ],
+                    [
+                        'question' => 'Can we hire you for just the website, or just the software?',
+                        'answer'   => 'You can, and plenty of businesses split the two across different suppliers. The cost is coordination. Nobody owns the whole picture, so nobody notices when leads are generated and then quietly wasted. We build both because the return shows up when they work together.',
+                    ],
+                ],
                 'body'             => <<<'HTML'
 <p>When a new client calls us, they usually describe the symptom, not the cause. "We need a website." "We need a system." What they actually have is one of two problems, and most of the time it is both.</p>
 
@@ -157,9 +233,17 @@ HTML,
         foreach ($posts as $post) {
             $created = Post::firstOrCreate(['slug' => $post['slug']], $post);
 
-            $this->command->info(
-                ($created->wasRecentlyCreated ? 'created  ' : 'exists   ') . $post['slug']
-            );
+            $state = $created->wasRecentlyCreated ? 'created  ' : 'exists   ';
+
+            // The four launch posts shipped before the faqs column existed, so
+            // they are already in production without any. Backfill them, but
+            // only when empty, so FAQs edited through the admin still win.
+            if (! $created->wasRecentlyCreated && empty($created->valid_faqs) && ! empty($post['faqs'])) {
+                $created->update(['faqs' => $post['faqs']]);
+                $state = 'faqs +   ';
+            }
+
+            $this->command->info($state . $post['slug']);
         }
     }
 }
