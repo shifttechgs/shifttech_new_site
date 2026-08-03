@@ -17,9 +17,14 @@ use Illuminate\Database\Seeder;
  */
 class PostSeeder extends Seeder
 {
-    public function run(): void
+    /**
+     * Canonical copy for the launch posts. Exposed so `posts:refresh-content`
+     * can push edits made here onto posts that already exist, which
+     * firstOrCreate below will never do.
+     */
+    public static function posts(): array
     {
-        $posts = [
+        return [
             [
                 'title'            => 'Why We Quote Fixed Price, Not Hourly',
                 'slug'             => 'why-we-quote-fixed-price-not-hourly',
@@ -48,12 +53,15 @@ class PostSeeder extends Seeder
                     ],
                 ],
                 'body'             => <<<'HTML'
+<h2>Why does ShiftTech quote fixed price instead of hourly?</h2>
+<p>Because hourly billing pays us more the longer a feature takes, and gives you no way to verify the number. We quote a fixed price and a timeline within 48 hours of the discovery call. If we underestimate the work, that cost is ours to absorb, not something we pass on to you.</p>
+
 <p>Hourly billing sounds fair until you sit on the other side of it. The agency gets paid more the longer a feature takes, and you have no way to tell whether three days of work was actually three days of work. We don't run engagements that way.</p>
 
-<h2>The number comes before the code</h2>
+<h2>What happens before we quote?</h2>
 <p>Every project starts with a discovery call, not a rate card. We ask what's actually broken, what a good outcome looks like, and what's out of scope. Within 48 hours of that call, you get a fixed quote and a timeline. Not a "ballpark." Not a range with an asterisk.</p>
 
-<h2>What happens when scope changes</h2>
+<h2>What happens when scope changes?</h2>
 <p>It happens on nearly every project, and it's not a problem as long as it's handled honestly:</p>
 <ul>
 <li>We flag the change as soon as we see it coming, not at invoicing time</li>
@@ -63,7 +71,7 @@ class PostSeeder extends Seeder
 
 <blockquote>If a client can't predict their bill, they stop trusting every other number you give them.</blockquote>
 
-<h2>Why this is harder for us, not easier</h2>
+<h2>Why is fixed price harder for us, not easier?</h2>
 <p>Fixed pricing means we carry the risk when we underestimate something, not you. That's the point. It forces us to actually understand a problem before quoting it, instead of leaving ourselves room to bill our way out of a bad estimate.</p>
 
 <p>It also means we turn down projects we can't scope with confidence, rather than take the work and figure it out on the clock. We'd rather lose the project than lose the trust.</p>
@@ -101,6 +109,9 @@ HTML,
                     ],
                 ],
                 'body'             => <<<'HTML'
+<h2>What technology stack does ShiftTech build on?</h2>
+<p>C# and Angular by default, for everything from client dashboards to admin platforms. We bring in Laravel, PHP, Flutter, Docker and AWS when a project genuinely calls for them. The default is not about what is trending. It is about tools we can debug at 11pm without reading documentation.</p>
+
 <p>We get asked at least once a quarter why we're not building on whatever framework is trending that month. The honest answer: boring, well-understood tools ship faster and break less than exciting new ones.</p>
 
 <h2>What we actually reach for</h2>
@@ -151,9 +162,12 @@ HTML,
                     ],
                 ],
                 'body'             => <<<'HTML'
+<h2>When is AI worth adding to a business system?</h2>
+<p>When it removes real, repetitive human effort and a person still reviews the output. Surfacing an anomaly, drafting a first-pass response, routing incoming requests. We leave it out of any decision you could not explain to your own customer, including compliance judgment calls and anything touching money movement.</p>
+
 <p>Every client conversation eventually gets to "should we add AI to this?" Sometimes the answer is yes. Often it isn't. The question we actually ask first is narrower: does AI solve a real problem here, or are we adding it because it's expected?</p>
 
-<h2>Where it earns its place</h2>
+<h2>Where does AI earn its place?</h2>
 <p>The systems we build use AI where it removes real, repetitive human effort:</p>
 <ul>
 <li>Surfacing the one anomaly in a report instead of making someone scan a spreadsheet</li>
@@ -162,12 +176,12 @@ HTML,
 </ul>
 <p>In each case, AI is doing the boring first pass so a person can spend their attention on the part that actually needs judgment.</p>
 
-<h2>Where we leave it out</h2>
+<h2>Where should AI be left out?</h2>
 <p>We don't wire AI into a decision a client can't explain to their own customer if asked. Compliance-sensitive judgment calls, anything touching money movement without a human check, anything where "the model said so" isn't an acceptable answer. That stays a human decision, full stop.</p>
 
 <blockquote>AI is only as good as the engineer reviewing it.</blockquote>
 
-<h2>How we actually use it day to day</h2>
+<h2>How does ShiftTech use AI day to day?</h2>
 <p>Claude, Gemini, and Copilot generate first drafts of code inside our own workflow: boilerplate, migrations, repetitive scaffolding. A senior engineer reads and reviews every line before it ships. The model doesn't know your compliance rules or which shortcuts cost you in eighteen months. That judgment stays with the person who's accountable for the result.</p>
 
 <p>AI is a tool we reach for when it earns its place, not a feature we bolt on for the press release. If it doesn't make the system genuinely better for the person using it, it doesn't go in.</p>
@@ -201,6 +215,9 @@ HTML,
                     ],
                 ],
                 'body'             => <<<'HTML'
+<h2>What problems does ShiftTech actually solve?</h2>
+<p>Two, and most businesses have both. Being findable, so an enquiry is not lost before you ever hear about it. And holding onto the work after it lands, instead of losing it to a spreadsheet and whoever remembers to follow up. We build both because the return only shows when they work together.</p>
+
 <p>When a new client calls us, they usually describe the symptom, not the cause. "We need a website." "We need a system." What they actually have is one of two problems, and most of the time it is both.</p>
 
 <h2>Problem one: nobody can find you</h2>
@@ -229,8 +246,11 @@ HTML,
 HTML,
             ],
         ];
+    }
 
-        foreach ($posts as $post) {
+    public function run(): void
+    {
+        foreach (static::posts() as $post) {
             $created = Post::firstOrCreate(['slug' => $post['slug']], $post);
 
             $state = $created->wasRecentlyCreated ? 'created  ' : 'exists   ';
