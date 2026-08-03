@@ -341,4 +341,16 @@
     ]
 }
 </script>
+<script type="application/ld+json">
+{
+    "@@context": "https://schema.org",
+    "@type": "Service",
+    "serviceType": "Web & Product Design",
+    "name": "Web & Product Design",
+    "description": "Interfaces designed to convert, validated with real users, backed by a documented design system.",
+    "provider": { "@type": "Organization", "name": "ShiftTech", "url": "{{ url('/') }}" },
+    "areaServed": ["ZA", "ZW"],
+    "url": "{{ url('/services/web-design') }}"
+}
+</script>
 @endpush

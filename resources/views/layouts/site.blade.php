@@ -22,6 +22,18 @@
 
     <link rel="icon" type="image/png" href="{{ asset('assets/favicon.ico') }}">
 
+    {{-- Google Analytics 4. Production only, so local and staging traffic does
+         not pollute the reports the organic numbers will be read from. --}}
+    @production
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ config('services.google_analytics.id') }}"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '{{ config('services.google_analytics.id') }}');
+        </script>
+    @endproduction
+
     <link rel="stylesheet" href="{{ asset('assets/css/satoshi.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/shifttech.min.css') }}?v={{ filemtime(public_path('assets/css/shifttech.min.css')) }}">
 

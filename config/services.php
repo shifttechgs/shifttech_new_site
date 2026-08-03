@@ -66,4 +66,11 @@ return [
         'key' => env('INDEXNOW_KEY', '1e987f83bdf099daaeee1bb6deeea895'),
     ],
 
+    // GA4 measurement ID. Not a secret either: it ships in the page source of
+    // every site that uses it. Defaulted so the tag works without an .env edit
+    // on the pod, while staying overridable per environment.
+    'google_analytics' => [
+        'id' => env('GOOGLE_ANALYTICS_ID', 'G-JDF5539HF3'),
+    ],
+
 ];

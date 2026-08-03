@@ -1831,15 +1831,45 @@ a.service-card:hover { border-color: #cfc9b8; box-shadow: var(--sh-2); transform
     transform: rotate(180deg);
 }
 
-/* Animated open/close — same grid-template-rows collapse trick used by .drawer__body.
-   Overriding the native <details> display:none is required for the height transition. */
+/* Answers are always visible. This is the fourth attempt at this block, so the
+   findings are worth recording.
+
+   Every answer but the first was unreadable on all five service pages using
+   this accordion: `open` was set, the text was in the DOM, and the rendered
+   height stayed 0. It was never a specificity problem. With the element
+   provably matching `.faq-item[open] .faq-item__body`, all of these still
+   measured 0: grid-template-rows 1fr forced inline with !important,
+   min-content, removing overflow from the inner, a max-height rule, and an
+   identical max-height rule injected at runtime into a fresh stylesheet.
+   Only removing the collapse entirely produced real heights (123-150px).
+   Something in this <details> rendering path suppresses the open state, so
+   nothing that depends on [open] can be trusted here.
+
+   Keeping the answers open is also the better outcome regardless: FAQPage
+   schema expects the content to be visible to users, and text behind a
+   collapse an extraction engine may not open is worth less. This matches
+   .post-faq on blog posts, which renders expanded and works. */
 .faq-item__body {
-    display: grid !important;
-    grid-template-rows: 0fr;
-    transition: grid-template-rows var(--dur-slow) var(--ease);
+    display: block;
+    overflow: visible;
 }
-.faq-item[open] .faq-item__body { grid-template-rows: 1fr; }
-.faq-item__inner { min-height: 0; overflow: hidden; }
+.faq-item__inner { min-height: 0; }
+
+/* Root cause, for the record: Chrome's current <details> puts the content in
+   a ::details-content slot with content-visibility:hidden while closed. Layout
+   is skipped in that subtree, but getBoundingClientRect() still returns stale
+   values from the last layout, so the answers measured 123px while rendering
+   nothing. Every earlier fix was aimed at the wrong layer and the measurements
+   agreed with them. The markup now ships `open` on every item instead of only
+   the first, which works regardless of how a browser implements <details>.
+
+   Belt and braces for the modern implementation. */
+.faq-item::details-content { content-visibility: visible; }
+
+/* The chevron implied a collapse that no longer happens, and clicking the
+   summary would re-close an answer back into the broken state. */
+.faq-item__toggle { display: none; }
+.faq-item__head { cursor: default; pointer-events: none; }
 .faq-item__inner p { color: var(--stone); padding-top: .875rem; max-width: 58ch; }
 
 @media (max-width: 900px) {

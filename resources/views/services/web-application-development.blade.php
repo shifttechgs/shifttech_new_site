@@ -296,7 +296,7 @@
 
                 <div class="faq-list">
                     @foreach ($faqs as $i => $faq)
-                        <details class="faq-item" {{ $i === 0 ? 'open' : '' }}>
+                        <details class="faq-item" open>
                             <summary class="faq-item__head">
                                 <span class="faq-item__num">{{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}</span>
                                 <span class="faq-item__q">{{ $faq['q'] }}</span>
@@ -369,6 +369,21 @@
         }{{ $loop->last ? '' : ',' }}
         @endforeach
     ]
+}
+</script>
+@endpush
+
+@push('schema')
+<script type="application/ld+json">
+{
+    "@@context": "https://schema.org",
+    "@type": "Service",
+    "serviceType": "Web Application Development",
+    "name": "Software Engineering",
+    "description": "Architecture, implementation, testing and delivery for systems that have to hold up in production.",
+    "provider": { "@type": "Organization", "name": "ShiftTech", "url": "{{ url('/') }}" },
+    "areaServed": ["ZA", "ZW"],
+    "url": "{{ url('/services/web-application-development') }}"
 }
 </script>
 @endpush

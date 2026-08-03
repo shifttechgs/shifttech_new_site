@@ -200,7 +200,7 @@
 
                 <div class="faq-list">
                     @foreach ($faqs as $i => $faq)
-                        <details class="faq-item" {{ $i === 0 ? 'open' : '' }}>
+                        <details class="faq-item" open>
                             <summary class="faq-item__head">
                                 <span class="faq-item__num">{{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}</span>
                                 <span class="faq-item__q">{{ $faq['q'] }}</span>
