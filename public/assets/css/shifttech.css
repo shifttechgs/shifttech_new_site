@@ -2129,6 +2129,10 @@ a.service-card:hover { border-color: #cfc9b8; box-shadow: var(--sh-2); transform
 .budget-field__scale { display: flex; justify-content: space-between; margin-top: .6rem; font-family: var(--mono); font-size: .75rem; color: var(--faint); }
 .budget-field__value { font-family: var(--mono); font-weight: 700; color: var(--pine); }
 
+/* The last .form-section drops its bottom margin, so the submit button owns the
+   gap above itself — same 2.5rem rhythm that separates the sections. */
+.form-submit { width: 100%; justify-content: center; margin-top: 2.5rem; }
+
 .field-hint { color: var(--faint); font-size: .8125rem; text-align: center; margin-top: 1.5rem; }
 
 .contact-side { display: flex; flex-direction: column; gap: 1.5rem; }

@@ -101,7 +101,7 @@
                         <input type="hidden" name="form_start_time" id="formStartTime" value="">
                         <input type="hidden" name="recaptcha_token" id="recaptchaToken" value="">
 
-                        <button type="submit" id="submitBtn" class="btn btn-lime" style="width: 100%; justify-content: center;">
+                        <button type="submit" id="submitBtn" class="btn btn-lime form-submit">
                             <span id="submitBtnText">Start Your Project</span>
                             <span id="submitBtnIcon" aria-hidden="true">&rarr;</span>
                         </button>
