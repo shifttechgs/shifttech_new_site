@@ -131,10 +131,12 @@
                     <p>It means we take on fewer clients than a typical agency. It also means the person accountable for your system is the person who actually understands it.</p>
                 </div>
 
-                <p class="founder-sign"><b>Prosper</b> &middot; Founder &amp; Lead Engineer, ShiftTech</p>
+                <p class="founder-sign"><b>Prosper Tinarwo</b> &middot; Founder &amp; Lead Engineer, ShiftTech</p>
                 <div class="founder-cta">
                     <x-site.btn :href="$contact" variant="lime">Book a Free Discovery Call</x-site.btn>
-                    <x-site.btn href="https://www.linkedin.com/company/shifttech-global-solutions/" variant="ghost-pine" target="_blank" rel="noopener noreferrer">LinkedIn</x-site.btn>
+                    {{-- Personal profile, not the company page. This button sits
+                         under the founder's signature, so it reads as his. --}}
+                    <x-site.btn href="https://www.linkedin.com/in/prosper-tinarwo-a540b0b0/" variant="ghost-pine" target="_blank" rel="noopener noreferrer">LinkedIn</x-site.btn>
                 </div>
             </div>
 

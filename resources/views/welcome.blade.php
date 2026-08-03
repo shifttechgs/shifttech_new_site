@@ -396,10 +396,12 @@
                     <p>We keep the team small on purpose. Fewer clients at a time, more senior attention on each one. The trade-off works in your favour.</p>
                 </div>
 
-                <p class="founder-sign"><b>Prosper</b> · Founder &amp; Lead Engineer, ShiftTech</p>
+                <p class="founder-sign"><b>Prosper Tinarwo</b> · Founder &amp; Lead Engineer, ShiftTech</p>
                 <div class="founder-cta">
                     <x-site.btn :href="$contact" variant="lime">Book a Free Discovery Call</x-site.btn>
-                    <x-site.btn href="https://www.linkedin.com/company/shifttech-global-solutions/" variant="ghost-pine" target="_blank" rel="noopener noreferrer">LinkedIn</x-site.btn>
+                    {{-- Personal profile, not the company page. This button sits
+                         under the founder's signature, so it reads as his. --}}
+                    <x-site.btn href="https://www.linkedin.com/in/prosper-tinarwo-a540b0b0/" variant="ghost-pine" target="_blank" rel="noopener noreferrer">LinkedIn</x-site.btn>
                 </div>
             </div>
 
