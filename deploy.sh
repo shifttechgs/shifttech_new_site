@@ -63,4 +63,31 @@ php artisan migrate --force
 echo "==> Fixing ownership"
 chown -R application:application "$APP_DIR"
 
+# Without this the deploy is a no-op for anything PHP.
+#
+# opcache runs with validate_timestamps=0, so PHP never re-reads a file whose
+# contents changed. Confirmed on 3 Aug 2026: the correct commit was on disk,
+# the new controller was physically present, and Apache still served the old
+# output until a reload. Every PHP change before this needed a reload that
+# nothing in the pipeline performed.
+#
+# opcache_reset() from the CLI cannot fix it: CLI and Apache hold separate
+# opcode caches. Only reloading the web server clears the one that serves
+# visitors.
+#
+# The variants differ by image, so try each. `|| true` keeps set -e from
+# aborting on the ones that do not apply, and the failure is reported rather
+# than passed off as success.
+echo "==> Reloading web server to clear opcache"
+if apachectl -k graceful 2>/dev/null \
+    || systemctl reload apache2 2>/dev/null \
+    || service apache2 reload 2>/dev/null \
+    || kill -USR2 "$(cat /run/php-fpm.pid 2>/dev/null)" 2>/dev/null; then
+    echo "    reloaded"
+else
+    echo "    WARNING: could not reload. New PHP code is on disk but Apache is"
+    echo "    still serving cached bytecode. Reload it by hand or this deploy"
+    echo "    has not taken effect."
+fi
+
 echo "==> Deployed $(git rev-parse --short HEAD) successfully"
