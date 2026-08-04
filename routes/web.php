@@ -9,16 +9,13 @@ use App\Http\Controllers\ClientHubController;
 use App\Http\Controllers\InvoicePdfController;
 use App\Http\Controllers\QuotePdfController;
 use App\Http\Controllers\BlogController;
-use App\Http\Controllers\SitemapController;
-use App\Http\Controllers\RobotsController;
-use App\Http\Controllers\LlmsTxtController;
 use App\Http\Controllers\CrmSessionController;
 
 
 Route::view('/', 'welcome')->name('home');
-Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
-Route::get('/robots.txt', [RobotsController::class, 'index'])->name('robots');
-Route::get('/llms.txt', [LlmsTxtController::class, 'index'])->name('llms-txt');
+// sitemap.xml, robots.txt and llms.txt live in routes/public.php: they are
+// stateless and registered outside the web group so crawlers do not open a
+// session on every fetch.
 Route::get('/contact',[ContactsController::class, 'index'])->name('contact.page');
 
 // Contact form with anti-spam protection (rate limiting: 3 submissions per hour)

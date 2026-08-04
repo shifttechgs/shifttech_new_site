@@ -5,12 +5,23 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
+        // Registered here rather than in web.php so these bypass the web
+        // group entirely. See routes/public.php: crawlers were opening a
+        // database-backed session on every robots.txt and sitemap.xml fetch.
+        // Only the two middlewares that still apply are named explicitly.
+        then: function () {
+            Route::middleware([
+                \App\Http\Middleware\CanonicalHost::class,
+                \App\Http\Middleware\SecurityHeaders::class,
+            ])->group(__DIR__.'/../routes/public.php');
+        },
     )
     ->withSchedule(function (Schedule $schedule) {
         $schedule->command('crm:recurring-invoices')->dailyAt('06:00');
