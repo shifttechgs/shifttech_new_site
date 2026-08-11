@@ -10,7 +10,7 @@
     <link rel="canonical" href="@yield('canonical', url()->current())">
 
     {{-- Open Graph / Twitter --}}
-    <meta property="og:type" content="website">
+    <meta property="og:type" content="@yield('og_type', 'website')">
     <meta property="og:title" content="@yield('og_title', 'ShiftTech — Software that runs your business')">
     <meta property="og:description" content="@yield('meta_description', 'Founder-led software engineering studio. Web platforms, mobile apps and operations systems for growing businesses.')">
     <meta property="og:url" content="{{ url()->current() }}">

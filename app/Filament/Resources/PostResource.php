@@ -53,6 +53,10 @@ class PostResource extends Resource
                     ->image()->disk('public')->directory('blog')
                     ->helperText('Optional — leave blank to use the generated cover art for this category.'),
 
+                Forms\Components\TextInput::make('meta_title')
+                    ->label('Meta title')->maxLength(191)->columnSpanFull()
+                    ->helperText('Optional — the full <title> for search results. Leave blank to use "Post title | ShiftTech Insights".'),
+
                 Forms\Components\TextInput::make('meta_description')->maxLength(191)->columnSpanFull(),
 
                 Forms\Components\Toggle::make('is_published')->label('Published')->default(false),

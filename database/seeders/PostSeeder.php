@@ -245,6 +245,261 @@ HTML,
 <p>You can hire one company for the website and a different one for the software, and plenty of businesses do. The cost is coordination. Nobody owns the whole picture, so nobody notices when leads are being generated and then quietly wasted. We build both because the return only shows up when they work together.</p>
 HTML,
             ],
+            [
+                'title'            => 'Claude Code Builds Ugly Websites Until You Do This',
+                // Headline on the page, title tag in the result. The headline is
+                // built to be clicked on social; the title tag has to say what
+                // the page is about to someone scanning ten blue links.
+                'meta_title'       => 'Why Claude Code Builds Generic Websites | ShiftTech',
+                'slug'             => 'claude-code-builds-ugly-websites',
+                'category'         => 'AI',
+                'author_name'      => 'Prosper Tinarwo',
+                'cover_image'      => 'assets/images/blog/covers/claude-code-builds-ugly-websites.svg',
+                'excerpt'          => 'You can build a website with AI in an afternoon. That does not mean you have built the right one. What to decide before you hand anything to an AI tool, and what to check before you call it finished.',
+                'meta_description' => 'Your AI-built website looks generic because the direction was generic. What to decide before handing a website to Claude Code, and what to check before calling it done.',
+                'published_at'     => '2026-08-11 10:27:55',
+                'is_published'     => true,
+                'faqs'             => [
+                    [
+                        'question' => 'Can I just use AI to build my business website?',
+                        'answer'   => 'Yes, and you probably should use AI somewhere in the process. The question is not whether AI can produce a working website. It is whether it produces the right one: aimed at the right customer, with the right positioning, an obvious next step and a technical foundation you can build on. AI makes the building cheap. It does not decide what should be built.',
+                    ],
+                    [
+                        'question' => 'Why do AI-generated websites look generic?',
+                        'answer'   => 'Because the brief was generic. An instruction like "build me a modern website" contains almost no decisions, so the model fills the gaps with the patterns it has seen most often: a big hero, an enormous headline, a gradient, three identical cards and a Get Started button. Specific direction produces a specific website.',
+                    ],
+                    [
+                        'question' => 'What should I decide before asking AI to build my website?',
+                        'answer'   => 'Who the customer is, what they have to understand in the first ten seconds, why they should trust you, what action they should take, and what the business is actually trying to achieve. That last one might be enquiries, bookings, quote requests, visibility in search or fewer hours lost to manual admin. Those answers are the brief.',
+                    ],
+                    [
+                        'question' => 'Does ShiftTech use AI to build client websites?',
+                        'answer'   => 'Yes, wherever it creates leverage: prototyping, building interfaces, writing and refactoring code, automating repetitive work. Strategy, positioning, user experience, architecture and final quality control stay with the engineer. AI makes good engineers faster. It does not replace the judgement the business outcome depends on.',
+                    ],
+                ],
+                'body'             => <<<'HTML'
+<h2>Can AI build my website?</h2>
+<p>Yes. You can have a working website out of a tool like Claude Code in an afternoon, and it will probably look fine. What AI cannot do on its own is decide who the site is for, why someone should choose you over the business down the road, and what the site has to make happen. Those decisions are the difference between a website that looks finished and one that earns its keep.</p>
+
+<p>That is worth sitting with, because it is genuinely new. Building the thing used to be the expensive part. It is not any more.</p>
+
+<p>More businesses can build a website than ever before. That does not mean more businesses are building good ones. A website can be technically impressive, visually polished and completely wrong for the business it belongs to.</p>
+
+<h2>Why do AI-built websites all look the same?</h2>
+
+<p>You have seen the pattern even if you have never named it. Big hero image. Enormous headline. Gradient background. Three rounded cards in a row. A button that says Get Started.</p>
+
+<p>People call this AI slop and blame the tool. Claude Code, Cursor, Lovable, v0, they all get the same accusation.</p>
+
+<p>The tool is not what produced it. The brief did.</p>
+
+<p>"Build me a modern website" contains almost no decisions, so the model makes them for you, and it makes them the way it has seen them made a million times before. Generic input, statistically average output.</p>
+
+<blockquote>You asked for a modern website. You got the average of every modern website.</blockquote>
+
+<h2>AI can build your website. That does not mean it knows your business.</h2>
+
+<p>Claude Code is genuinely good at turning clear instructions into working software. It reads a real codebase, writes real code and moves quickly. That part is not in dispute.</p>
+
+<p>Here is what it does not know when you open a blank chat:</p>
+
+<ul>
+<li>Who your customers actually are</li>
+<li>Why they pick you instead of the cheaper option</li>
+<li>Which objection stops them from enquiring</li>
+<li>What they need to see in the first ten seconds</li>
+<li>What makes you different in a way a stranger would notice</li>
+<li>What you want them to do next</li>
+<li>What should be cut</li>
+<li>What your brand is supposed to feel like</li>
+</ul>
+
+<p>Handing AI a vague website brief is like telling a builder to put up a nice house and then being surprised when they ask where the rooms go. The builder is not the problem. Nobody has decided anything yet.</p>
+
+<h2>The problem is not AI. It is generic direction.</h2>
+
+<p>Compare the brief most people give:</p>
+
+<blockquote>Build me a modern website for my business.</blockquote>
+
+<p>with one that answers a handful of ordinary business questions:</p>
+
+<ul>
+<li>Who the customer is, specifically</li>
+<li>What the business does, in plain terms</li>
+<li>Why customers choose it over the alternatives</li>
+<li>What problem this website has to solve</li>
+<li>What action a visitor should take</li>
+<li>What the brand should feel like</li>
+<li>What competitors are already doing</li>
+<li>What people type into Google when they need this</li>
+<li>What it has to work alongside in the business</li>
+</ul>
+
+<p>Same model. Same tool. Completely different amount of information to work from.</p>
+
+<p><strong>Context beats clever prompting.</strong> There is no secret sentence that makes AI produce a premium website, and you do not need to become a prompt engineer. You need to know your own business well enough to describe it clearly. Most founders already do. They have just never written it down.</p>
+
+<h2>Start with the business, not with Claude</h2>
+
+<p>Before anything gets built, these are the questions worth answering on paper.</p>
+
+<h3>Who is this for?</h3>
+<p>Not everyone. A site aimed at everyone persuades nobody. A daycare speaking to a parent choosing where to leave their child is a different website from a cleaning company speaking to someone who wants a price and a date.</p>
+
+<h3>What has to land in the first ten seconds?</h3>
+<p>What you do, who you do it for, and why you are worth another thirty seconds. If a visitor has to scroll to work out what the business is, the design has already failed no matter how good it looks.</p>
+
+<h3>Why should they trust you?</h3>
+<p>Real work, real names, real detail. Trust is the thing generic websites are worst at, because trust is specific and generic copy is not.</p>
+
+<h3>What should they do next?</h3>
+<p>One obvious action, not five competing ones.</p>
+
+<h3>What is the business actually trying to achieve?</h3>
+<p>This is the question that gets skipped, and it changes everything downstream:</p>
+<ul>
+<li>More enquiries</li>
+<li>More bookings</li>
+<li>More quote requests</li>
+<li>More phone calls</li>
+<li>Better visibility in search</li>
+<li>Fewer hours lost to manual admin</li>
+</ul>
+<p>A site built for bookings does not look like a site built for search visibility, which does not look like a site built to take work off your desk. Decide first, or the tool decides for you.</p>
+
+<h2>References matter more than another prompt</h2>
+
+<p>Before writing a brief, look at what already works. Awwwards, Land-book, Godly, Mobbin and Dribbble are the obvious places, though strong agency sites and the best sites in your own industry are often more useful.</p>
+
+<p>Not to copy them. To work out what they are doing:</p>
+
+<ul>
+<li>How they explain what the business is worth</li>
+<li>How they build trust before asking for anything</li>
+<li>How they guide someone through the page</li>
+<li>How much they show, and how much they leave out</li>
+<li>How obvious they make the next step</li>
+<li>How they avoid looking like everyone else in their category</li>
+</ul>
+
+<p>"I want mine to look like this" is copying. "Why does this work?" is learning. Only the second one gives you something you can use on your own site.</p>
+
+<p>It also gives AI something specific to learn from instead of forcing it to invent everything from nothing, which is exactly the situation where it reaches for the average.</p>
+
+<h2>Do not accept the first website AI gives you</h2>
+
+<p>The first version looks good, so people ship it. That is the mistake.</p>
+
+<p>Version one is a draft. You critique it and get version two. Critique again, version three. Sometimes four. AI has not removed the design process. It has made each round of it far cheaper, and that only helps if you actually do the rounds.</p>
+
+<p>The questions worth asking on every pass are business questions, not design ones:</p>
+
+<ul>
+<li>Would my customer understand this?</li>
+<li>Is it obvious what we do and what it is worth?</li>
+<li>Is the next step clear?</li>
+<li>Does this build trust, or does it just look expensive?</li>
+<li>Is there anything on this page that earns nothing?</li>
+<li>Does it look like every competitor in my industry?</li>
+<li>Does it feel like our business, or like a template?</li>
+<li>Does it work properly on a phone, where most people will see it?</li>
+<li>Can anyone find it in the first place?</li>
+</ul>
+
+<p><strong>AI makes iteration cheaper. It does not make judgement unnecessary.</strong></p>
+
+<h2>A website is not good because it looks good</h2>
+
+<p>A screenshot hides almost everything that matters.</p>
+
+<ul>
+<li>A beautiful website that generates no enquiries is an expensive brochure.</li>
+<li>A fast website nobody can find is invisible.</li>
+<li>Traffic that convinces nobody is just traffic.</li>
+<li>A site that converts but is painful to use will lose those customers later.</li>
+</ul>
+
+<p>Getting this right means design, user experience, conversion, search visibility, performance, accessibility, mobile, security, whatever it has to integrate with, and whether anyone can still maintain it in two years. Those are not separate projects. They are the same project, and they trade against each other constantly.</p>
+
+<p>That is the part a screenshot cannot tell you, and it is most of the actual work in <a href="/services/web-design">designing and building a website</a> or a piece of <a href="/services/custom-software-development">custom software</a>.</p>
+
+<h2>Real work, real constraints</h2>
+
+<p>Three examples from <a href="/work">work we have shipped</a> where the decision that mattered had nothing to do with the code.</p>
+
+<h3>Peekaboo Day Care</h3>
+<p>The brief was never "build a dashboard". Twenty years in business with almost no presence online meant parents searching for a daycare could not find them, and once a child was enrolled, admissions ran entirely on paper. The real constraint was that the people using the admin every day are not technical. If the workflow did not make immediate sense to the staff, it would be back on paper within a month. That shaped the interface far more than any visual decision did. <a href="/work/peekaboo-daycare">Read the Peekaboo Day Care case study</a>.</p>
+
+<h3>SpringKleaners</h3>
+<p>Also not simply "build a cleaning website". Visitors had no way to tell what a clean would cost or whether the business even served their suburb, so most of them left. The business also needed to be findable across several Cape Town service areas without ending up with a pile of near-identical pages that help nobody. Local search structure, page differentiation and an instant quote flow were one decision, not three. <a href="/work/springkleaners">Read the SpringKleaners case study</a>.</p>
+
+<h3>useLuminii</h3>
+<p>The goal was never "make the hero look premium". A client needed to receive a quote and act on it without friction, so a quote opens straight from a link: no forced account creation, no steps between the visitor and the number they came for. Every unnecessary step is somewhere a lead quietly disappears. <a href="/work/luminii-saas-platform">Read the Luminii platform case study</a>.</p>
+
+<p>None of those came from typing "make it modern". They came from understanding the business first, then using AI to execute faster.</p>
+
+<h2>So what should you actually use AI for?</h2>
+
+<p>Use it, and use it hard. It is very good at:</p>
+
+<ul>
+<li>Prototyping an idea before committing money to it</li>
+<li>Building interfaces and components</li>
+<li>Writing and refactoring code</li>
+<li>Producing variations worth comparing</li>
+<li>Automating repetitive work</li>
+<li>Testing quickly whether something is worth building at all</li>
+</ul>
+
+<p>Keep these human:</p>
+
+<ul>
+<li>Strategy and positioning</li>
+<li>Understanding the customer</li>
+<li>Product decisions</li>
+<li>Brand direction</li>
+<li>User experience judgement</li>
+<li>How the site converts</li>
+<li>Technical architecture</li>
+<li>Final quality control</li>
+</ul>
+
+<p><strong>Let AI do more of the execution. Do not let it make the decisions your business outcome depends on.</strong></p>
+
+<h2>AI did not make developers obsolete. It changed what the good ones do.</h2>
+
+<p>The skill losing value is "can you write this component". The skill gaining value is knowing which component should exist, why it should exist, and how it fits everything around it.</p>
+
+<p>That judgement is still where projects are won or lost: architecture, trade-offs, security, performance, how systems talk to each other, what happens to the data, and whether anyone can still work on it in three years. AI accelerates an engineer who understands those things. It quietly multiplies the mistakes of one who does not. It is the same reason we <a href="/blog/our-default-stack-and-why-we-rarely-deviate-from-it">keep to a boring default stack</a> instead of chasing whatever is trending.</p>
+
+<h2>The ShiftTech approach</h2>
+
+<p>We use AI because it makes good engineers faster. Not because it removes the need for them.</p>
+
+<p>In practice that means giving it the context before asking it to build: what the brand is, who the customer is, what the technical constraints are and what the business is trying to achieve. Every project we run carries that in a project context file (<code>CLAUDE.md</code>, in our case) so nothing has to be rediscovered at the start of every session. It is unglamorous, and it is most of the difference between a good result and a generic one.</p>
+
+<p>The goal is not to produce more code. It is to produce better software, faster. Strategy, design, user experience, engineering, search and performance all get a say, with AI running through the whole of it as a tool rather than sitting at the end of it as the product. We take the same view of <a href="/services/ai">AI inside the systems we build</a> for clients: it <a href="/blog/where-ai-actually-earns-its-place-in-the-systems-we-build">earns its place where it removes real work</a>, and nowhere else.</p>
+
+<p>Software is not the goal. Business value is.</p>
+
+<h2>Do not start with the prompt. Start with the problem.</h2>
+
+<p>Your next AI-built website does not need a better prompt. It needs better decisions.</p>
+
+<p>Understand your customer. Define what the business is trying to achieve. Decide what the website has to accomplish. Find references worth learning from. Give AI that context. Let it build. Critique it. Iterate. Then make sure the engineering, the search visibility, the performance and the conversion path actually hold up.</p>
+
+<p>That is how you get from "AI built this website" to "this is a good website that happened to be built with AI".</p>
+
+<p><strong>AI is not the problem. Using AI without knowing what you are trying to build is.</strong></p>
+
+<div class="section-cta">
+<h2>Building with AI?</h2>
+<p>If you already have a website, an AI-generated prototype or a software idea, and you want an honest read on what needs to improve, we will assess it before you spend more time or money building the wrong thing.</p>
+<a class="btn btn-lime" href="/contact">Get a Free Systems Audit <span aria-hidden="true">&rarr;</span></a>
+</div>
+HTML,
+            ],
         ];
     }
 

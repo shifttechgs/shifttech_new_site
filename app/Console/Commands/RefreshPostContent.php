@@ -24,7 +24,7 @@ class RefreshPostContent extends Command
     protected $description = 'Push edited copy from PostSeeder onto posts that already exist';
 
     /** Fields worth syncing. Deliberately excludes published_at and is_published. */
-    private const FIELDS = ['title', 'author_name', 'excerpt', 'meta_description', 'body', 'faqs'];
+    private const FIELDS = ['title', 'meta_title', 'author_name', 'excerpt', 'meta_description', 'body', 'faqs'];
 
     public function handle(): int
     {

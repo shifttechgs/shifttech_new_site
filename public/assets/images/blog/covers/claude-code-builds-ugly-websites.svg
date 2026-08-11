@@ -1,0 +1,65 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A generic, evenly spaced AI-generated page layout on the left, human direction feeding into an arrow in the middle, and a deliberately composed layout on the right.">
+  <rect width="800" height="500" fill="#0C2B24"/>
+
+  <!-- Same dashed inset frame and lime corner nodes as the category covers. -->
+  <g stroke="rgba(244,242,234,.5)" stroke-width="3" stroke-dasharray="9 7" stroke-linecap="round">
+    <line x1="16" y1="42" x2="784" y2="42"/>
+    <line x1="16" y1="458" x2="784" y2="458"/>
+    <line x1="42" y1="16" x2="42" y2="484"/>
+    <line x1="758" y1="16" x2="758" y2="484"/>
+  </g>
+  <g fill="#74B812">
+    <circle cx="42" cy="42" r="7"/>
+    <circle cx="758" cy="42" r="7"/>
+    <circle cx="42" cy="458" r="7"/>
+    <circle cx="758" cy="458" r="7"/>
+  </g>
+
+  <!-- Left: the generic AI layout. Dashed outline, everything centred, three
+       identical cards, a button with no emphasis. Deliberately symmetrical. -->
+  <rect x="88" y="126" width="204" height="248" rx="4" fill="none"
+        stroke="rgba(244,242,234,.35)" stroke-width="2" stroke-dasharray="9 7"/>
+  <g fill="rgba(244,242,234,.16)">
+    <rect x="106" y="146" width="168" height="40" rx="3"/>
+  </g>
+  <rect x="126" y="200" width="128" height="10" rx="2" fill="rgba(244,242,234,.32)"/>
+  <rect x="146" y="220" width="88" height="8" rx="2" fill="rgba(244,242,234,.22)"/>
+  <g fill="rgba(244,242,234,.12)">
+    <rect x="106" y="252" width="48" height="48" rx="4"/>
+    <rect x="166" y="252" width="48" height="48" rx="4"/>
+    <rect x="226" y="252" width="48" height="48" rx="4"/>
+  </g>
+  <rect x="152" y="322" width="76" height="20" rx="10" fill="rgba(244,242,234,.26)"/>
+
+  <!-- Middle: direction. Three decisions converge on the lime node that sits
+       on the arrow, the same node-graph grammar as the AI category cover. -->
+  <line x1="322" y1="250" x2="462" y2="250" stroke="#74B812" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M452 240 L470 250 L452 260" fill="none" stroke="#74B812" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <g stroke="rgba(244,242,234,.55)" stroke-width="2">
+    <line x1="360" y1="206" x2="392" y2="241"/>
+    <line x1="392" y1="200" x2="392" y2="241"/>
+    <line x1="424" y1="206" x2="392" y2="241"/>
+  </g>
+  <g fill="rgba(244,242,234,.85)">
+    <circle cx="360" cy="204" r="5"/>
+    <circle cx="392" cy="198" r="5"/>
+    <circle cx="424" cy="204" r="5"/>
+  </g>
+  <circle cx="392" cy="250" r="9" fill="#74B812"/>
+
+  <!-- Right: the deliberate layout. Solid outline, lime edge, left-aligned,
+       one emphasised action, unequal blocks instead of three of the same. -->
+  <rect x="508" y="106" width="204" height="288" rx="4" fill="none"
+        stroke="rgba(244,242,234,.85)" stroke-width="2.5"/>
+  <rect x="508" y="106" width="4" height="288" fill="#74B812"/>
+  <g fill="rgba(244,242,234,.85)">
+    <rect x="530" y="140" width="150" height="14" rx="2"/>
+    <rect x="530" y="164" width="104" height="14" rx="2"/>
+  </g>
+  <rect x="530" y="196" width="132" height="8" rx="2" fill="rgba(244,242,234,.4)"/>
+  <rect x="530" y="224" width="84" height="24" rx="4" fill="#74B812"/>
+  <line x1="530" y1="282" x2="690" y2="282" stroke="rgba(244,242,234,.25)" stroke-width="1.5"/>
+  <rect x="530" y="300" width="96" height="64" rx="4" fill="rgba(244,242,234,.14)"/>
+  <rect x="638" y="300" width="52" height="30" rx="4" fill="rgba(244,242,234,.28)"/>
+  <rect x="638" y="338" width="52" height="26" rx="4" fill="rgba(244,242,234,.14)"/>
+</svg>

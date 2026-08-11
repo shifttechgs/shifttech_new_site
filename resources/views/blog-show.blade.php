@@ -1,7 +1,15 @@
 @extends('layouts.site')
 
-@section('title', $post->title . ' | ShiftTech Insights')
+{{-- meta_title, when a post sets one, is the complete title tag: the headline
+     a post wants on the page is not always the title it wants in a result. --}}
+@section('title', $post->meta_title ?: $post->title . ' | ShiftTech Insights')
 @section('meta_description', $post->meta_description ?: $post->excerpt)
+{{-- Without these the layout falls back to its site-wide defaults, so every
+     post was sharing as "ShiftTech, Software that runs your business" with
+     og:type "website". The headline, not meta_title, is the better social
+     card: a share does not need the site name appended to it twice. --}}
+@section('og_title', $post->title)
+@section('og_type', 'article')
 
 @php
     $contact = url('/contact');

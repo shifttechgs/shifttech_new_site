@@ -2069,6 +2069,11 @@ a.service-card:hover { border-color: #cfc9b8; box-shadow: var(--sh-2); transform
 .post-body pre { background: var(--pine-dark); color: var(--on-pine); padding: 1.25rem; border-radius: var(--r-md); overflow-x: auto; font-family: var(--mono); font-size: .8125rem; margin-bottom: 1.25rem; }
 .post-body code { font-family: var(--mono); font-size: .875em; }
 .post-body img { max-width: 100%; border-radius: var(--r-md); margin: 1.75rem 0; }
+/* A post can close on the reusable .section-cta nudge. The rule above
+   underlines every link in the prose, which is right for a sentence and wrong
+   for a button, and the heading already has the panel's own padding above it. */
+.post-body .btn { text-decoration: none; }
+.post-body .section-cta h2 { margin-top: 0; }
 
 .post-footer { max-width: 42rem; margin: 3.5rem auto 0; }
 .post-footer__related { font-size: .9375rem; color: var(--stone); text-align: center; }

@@ -10,7 +10,7 @@ class Post extends Model
     public const CATEGORIES = ['Engineering', 'Design', 'AI', 'Process', 'Company'];
 
     protected $fillable = [
-        'title', 'slug', 'category', 'excerpt', 'body', 'faqs', 'cover_image',
+        'title', 'meta_title', 'slug', 'category', 'excerpt', 'body', 'faqs', 'cover_image',
         'author_name', 'is_published', 'published_at', 'meta_description',
     ];
 
@@ -63,11 +63,18 @@ class Post extends Model
     /**
      * Uploaded cover if the post has one, otherwise the generated
      * per-category cover art (public/assets/images/blog/covers/*.svg).
+     *
+     * A cover_image starting with "assets/" is read as a path under public/
+     * rather than an upload. storage/app/public is gitignored, so cover art
+     * drawn for a specific post has to live in public/assets to survive a
+     * deploy. Admin uploads land in "blog/", so the two cannot collide.
      */
     public function getCoverUrlAttribute(): string
     {
         if ($this->cover_image) {
-            return asset('storage/' . $this->cover_image);
+            return Str::startsWith($this->cover_image, 'assets/')
+                ? asset($this->cover_image)
+                : asset('storage/' . $this->cover_image);
         }
 
         return asset('assets/images/blog/covers/' . Str::slug($this->category) . '.svg');
