@@ -30,7 +30,10 @@
                 <x-site.eyebrow>{{ $post->category }}</x-site.eyebrow>
                 <h1 class="display-l" style="margin-inline: auto; max-width: 100%;">{{ $post->title }}</h1>
                 <div class="post-header__meta">
-                    <a href="{{ url('/agency') }}#founder">{{ $post->author_name }}</a>
+                    <a href="{{ url('/agency') }}#founder" class="post-author">
+                        <img src="{{ asset('assets/images/team/prosper.jpg') }}" alt="" class="post-author__avatar" width="22" height="22">
+                        <span>{{ $post->author_name }}</span>
+                    </a>
                     <span class="dot" aria-hidden="true"></span>
                     <time datetime="{{ $post->published_at->toAtomString() }}">{{ $post->published_at->format('M j, Y') }}</time>
                     <span class="dot" aria-hidden="true"></span>

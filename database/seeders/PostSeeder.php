@@ -500,6 +500,121 @@ HTML,
 </div>
 HTML,
             ],
+            [
+                'title'            => 'Software Projects Fail Before the First Line of Code',
+                'meta_title'       => 'Questions to Ask Before Building Software | ShiftTech',
+                'slug'             => 'questions-to-ask-before-building-software',
+                'category'         => 'Process',
+                'author_name'      => 'Prosper Tinarwo',
+                'cover_image'      => 'assets/images/blog/covers/questions-to-ask-before-building-software.svg',
+                'excerpt'          => 'The engineering is usually fine. The problem was never defined properly. Here are the questions we ask on every discovery call, before a number exists, and why quoting fixed price forces us to ask them.',
+                'meta_description' => 'The questions to ask before building software: what breaks today, who uses it, what the process looks like now, and what has to be true on day one.',
+                'published_at'     => '2026-08-19 23:01:47',
+                'is_published'     => true,
+                'faqs'             => [
+                    [
+                        'question' => 'Why do software projects fail?',
+                        'answer'   => 'Most fail before anyone writes code. The engineering is usually competent. The problem the software was built to solve was never defined properly, so the finished system answers a slightly different question. It surfaces later as bugs, slipped deadlines or a system nobody uses, but the decision that caused it was made in the first week.',
+                    ],
+                    [
+                        'question' => 'What questions should I ask before building software?',
+                        'answer'   => 'Five, in this order. What breaks today and who feels it, in something countable. Who uses this, and on what kind of day. What the process looks like right now, including the odd steps. What the smallest version worth having is. And what has to be true on day one: integrations, data, permissions, regulation, and who maintains it in two years.',
+                    ],
+                    [
+                        'question' => 'How long should discovery take before a software quote?',
+                        'answer'   => 'At ShiftTech, about an hour on a call, then a fixed price and a timeline within 48 hours. Discovery is not a separately billed phase here and it is not weeks of workshops. It is the conversation that has to happen before a number means anything.',
+                    ],
+                    [
+                        'question' => 'How do I tell whether a development agency understands my problem?',
+                        'answer'   => 'Listen to what they ask before they quote. An agency that gives you a number without asking what the problem costs you today, who uses the system, and what it has to fit into is pricing your sentence rather than your problem. The questions are the audition.',
+                    ],
+                ],
+                'body'             => <<<'HTML'
+<h2>Why do software projects fail?</h2>
+<p>Most of them fail before anyone writes a line of code. The engineering is usually fine. The problem the software was built to solve was never defined properly, so the finished system answers a slightly different question, and everybody finds that out after the money is gone. The fix is not better developers. It is a harder conversation at the start.</p>
+
+<p>It rarely announces itself that way. It shows up as bugs, slipped deadlines, a redesign eight weeks after launch, or a system the staff quietly stop using. Those are symptoms of a decision made too early on too little information, and everything built afterwards inherits it.</p>
+
+<h2>Most briefs arrive as a solution</h2>
+
+<p>"We need an app." "We need a booking system." "We need a dashboard." Each of those is an answer, and none of them is a problem. That is not a criticism, it is how people describe what they want. But if nobody separates the two, the agency builds the sentence instead of the outcome behind it, and both sides stay happy until launch.</p>
+
+<p>So the first question is never about features. It is this: if we build nothing, what does that cost you over the next year? A specific answer means the project is real. A vague one means it is not ready to be quoted, and scoping detail will not hide that later.</p>
+
+<h2>The questions we ask before we quote</h2>
+
+<p>These come up on the discovery call, before any number exists. About an hour, and <strong>the cheapest hour in the project</strong>.</p>
+
+<img src="/assets/images/blog/inline/questions-workflow.svg" alt="Five short questions, asked on the discovery call, converging into one outcome: a fixed price and timeline within 48 hours." loading="lazy">
+
+<div class="qa-steps">
+
+<h3>What breaks today, and who feels it?</h3>
+<p>Hours lost, enquiries missed, invoices sent late, one person holding the whole process in their head. Put it in something countable. "It is inefficient" is not a target. <strong>"We lose about ten hours a week capturing the same order twice" is</strong>, and you can measure whether the software moved it.</p>
+
+<h3>Who uses this, and on what kind of day?</h3>
+<p>Software gets used by real people under real pressure, not by a persona on a slide. A parent choosing a daycare on their phone at ten at night. A plumber with wet hands standing in someone's kitchen. An admin clerk with forty of these to get through before lunch. Each of those produces a different product, and only one of them is right.</p>
+
+<h3>What does the process look like right now?</h3>
+<p>Whatever a business does today works well enough to keep it running, and the odd steps usually have good reasons behind them. Walk it end to end before replacing it. <strong>Half of what looks like waste is a control someone added after being burnt once</strong>, and stripping it out is how a better system becomes the one nobody trusts.</p>
+
+<h3>What is the smallest version worth having?</h3>
+<p>Not the cheapest version. <strong>The smallest one that changes something in the business the week it goes live.</strong> Everything else follows once real people have used it. The order in which capability arrives is a decision, not a byproduct of what was easiest to build first.</p>
+
+<h3>What has to be true on day one?</h3>
+<p>The unglamorous constraints. What it has to talk to, what data cannot move, who must not see what, which regulation applies, what happens when the connection drops, who maintains it in two years. Cheap to design around at the start, expensive to retrofit. Most of the painful rebuilds we get called into started right here, which is also why we <a href="/blog/our-default-stack-and-why-we-rarely-deviate-from-it">keep to a boring default stack</a>.</p>
+
+</div>
+
+<blockquote>An hourly agency can afford a vague brief. A fixed-price one cannot.</blockquote>
+
+<h2>Three projects where the answer changed the build</h2>
+
+<div class="mini-cases">
+
+<div class="mini-case">
+<span class="mini-case__tag">Peekaboo Day Care</span>
+<p><strong>The constraint that mattered was that the staff running admissions are not technical</strong>, so anything that did not make immediate sense would be back on paper within a month. That shaped the admin more than any visual decision did.</p>
+<a href="/work/peekaboo-daycare">Read the case study &rarr;</a>
+</div>
+
+<div class="mini-case">
+<span class="mini-case__tag">SpringKleaners</span>
+<p>Visitors were leaving because they could not tell what a clean would cost or whether the business covered their suburb. <strong>Pricing and service areas were the product, not the design.</strong></p>
+<a href="/work/springkleaners">Read the case study &rarr;</a>
+</div>
+
+<div class="mini-case">
+<span class="mini-case__tag">Ribbon Plumbing</span>
+<p>The question worth asking was when their customers have the problem, which is at midnight with water coming through a ceiling. <strong>That answer decided the entire flow.</strong></p>
+<a href="/work/ribbon-plumbing">Read the case study &rarr;</a>
+</div>
+
+</div>
+
+<h2>Why we ask more than most</h2>
+
+<p>Partly because it produces better software. Mostly because <a href="/blog/why-we-quote-fixed-price-not-hourly">we quote a fixed price</a>. If we misunderstand the problem, we absorb the cost of putting it right, not you. The incentive sits where it belongs: understand it now, or pay for it later out of our own margin.</p>
+
+<p>It is also why we turn work down. A project nobody can describe clearly is not a project yet, and it rarely lands on either of the <a href="/blog/the-two-problems-we-actually-solve-for-clients">two problems worth paying to solve</a>.</p>
+
+<h2>What to do with this before you hire anyone</h2>
+
+<p>Write your answers down first, in your own words, on one page. It costs an evening and changes what you get back from every agency you speak to.</p>
+
+<p>Then use the questions as your filter. Anyone who hands you a number without asking what this costs you today, who uses it, and what it has to fit into is pricing your sentence rather than your problem. What an agency asks before quoting tells you more than a portfolio does.</p>
+
+<p>Good <a href="/services/custom-software-development">custom software</a> is not mainly a technical achievement. The technical part is what we can promise. The valuable part is arriving at the right thing to build, and that gets decided long before anyone opens an editor.</p>
+
+<p>This piece started with <a href="https://businesstech.co.za/news/industry-news/865915/building-successful-software-starts-with-asking-the-right-questions/" rel="noopener" target="_blank">an article in BusinessTech</a> making the same argument. That it still needs saying is the point.</p>
+
+<div class="section-cta">
+<h2>Not sure the brief is right yet?</h2>
+<p>Bring us the problem rather than the spec. Within 48 hours of the call you get what we would build, what we would leave out, and what it costs.</p>
+<a class="btn btn-lime" href="/contact">Book a Discovery Call <span aria-hidden="true">&rarr;</span></a>
+</div>
+HTML,
+            ],
         ];
     }
 

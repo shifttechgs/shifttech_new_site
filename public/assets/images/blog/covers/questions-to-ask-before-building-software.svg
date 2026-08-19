@@ -1,0 +1,66 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="On the left, a brief feeding straight into a build that lands offset from what was needed. On the right, five questions converging on a defined problem, and a build that lands exactly on its outline.">
+  <rect width="800" height="500" fill="#0C2B24"/>
+
+  <!-- Same dashed inset frame and lime corner nodes as the category covers. -->
+  <g stroke="rgba(244,242,234,.5)" stroke-width="3" stroke-dasharray="9 7" stroke-linecap="round">
+    <line x1="16" y1="42" x2="784" y2="42"/>
+    <line x1="16" y1="458" x2="784" y2="458"/>
+    <line x1="42" y1="16" x2="42" y2="484"/>
+    <line x1="758" y1="16" x2="758" y2="484"/>
+  </g>
+  <g fill="#74B812">
+    <circle cx="42" cy="42" r="7"/>
+    <circle cx="758" cy="42" r="7"/>
+    <circle cx="42" cy="458" r="7"/>
+    <circle cx="758" cy="458" r="7"/>
+  </g>
+
+  <!-- Left: the brief taken at face value. It goes straight to a build, and
+       the built block sits offset from the dashed outline of what was needed. -->
+  <rect x="112" y="132" width="176" height="52" rx="4" fill="none"
+        stroke="rgba(244,242,234,.35)" stroke-width="2" stroke-dasharray="9 7"/>
+  <rect x="132" y="152" width="112" height="12" rx="2" fill="rgba(244,242,234,.3)"/>
+
+  <line x1="200" y1="196" x2="200" y2="236" stroke="rgba(244,242,234,.45)" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M190 226 L200 244 L210 226" fill="none" stroke="rgba(244,242,234,.45)"
+        stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <rect x="160" y="284" width="132" height="88" rx="4" fill="none"
+        stroke="rgba(244,242,234,.3)" stroke-width="2" stroke-dasharray="9 7"/>
+  <rect x="128" y="262" width="132" height="88" rx="4" fill="rgba(244,242,234,.16)"
+        stroke="rgba(244,242,234,.4)" stroke-width="2"/>
+
+  <!-- Divider. -->
+  <line x1="400" y1="130" x2="400" y2="372" stroke="rgba(244,242,234,.22)"
+        stroke-width="2" stroke-dasharray="6 8" stroke-linecap="round"/>
+
+  <!-- Right: five questions converge on one defined problem, and the build
+       lands exactly inside the outline of what was needed. -->
+  <g stroke="rgba(244,242,234,.55)" stroke-width="2">
+    <line x1="512" y1="142" x2="606" y2="212"/>
+    <line x1="512" y1="177" x2="606" y2="212"/>
+    <line x1="512" y1="212" x2="606" y2="212"/>
+    <line x1="512" y1="247" x2="606" y2="212"/>
+    <line x1="512" y1="282" x2="606" y2="212"/>
+  </g>
+  <g fill="rgba(244,242,234,.85)">
+    <circle cx="510" cy="142" r="5"/>
+    <circle cx="510" cy="177" r="5"/>
+    <circle cx="510" cy="212" r="5"/>
+    <circle cx="510" cy="247" r="5"/>
+    <circle cx="510" cy="282" r="5"/>
+  </g>
+  <circle cx="612" cy="212" r="9" fill="#74B812"/>
+
+  <line x1="612" y1="230" x2="612" y2="264" stroke="#74B812" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M602 254 L612 272 L622 254" fill="none" stroke="#74B812"
+        stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <rect x="546" y="284" width="132" height="88" rx="4" fill="rgba(244,242,234,.14)"
+        stroke="rgba(244,242,234,.85)" stroke-width="2.5"/>
+  <rect x="546" y="284" width="4" height="88" fill="#74B812"/>
+  <g fill="rgba(244,242,234,.6)">
+    <rect x="568" y="308" width="88" height="10" rx="2"/>
+    <rect x="568" y="330" width="60" height="10" rx="2"/>
+  </g>
+</svg>

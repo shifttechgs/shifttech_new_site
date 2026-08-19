@@ -2047,6 +2047,8 @@ a.service-card:hover { border-color: #cfc9b8; box-shadow: var(--sh-2); transform
 .post-header__meta a { color: inherit; text-decoration: underline; text-underline-offset: 2px; text-decoration-color: var(--hairline); }
 .post-header__meta a:hover { color: var(--ink); text-decoration-color: var(--lime); }
 .post-header__meta .dot { width: 3px; height: 3px; border-radius: 50%; background: var(--faint); }
+.post-author { display: inline-flex; align-items: center; gap: .5rem; text-decoration: none !important; }
+.post-author__avatar { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; display: block; }
 .post-cover { max-width: 64rem; margin: 3rem auto 0; border-radius: var(--r-lg); border: 1px solid var(--hairline); box-shadow: var(--sh-2); overflow: hidden; aspect-ratio: 16 / 9; }
 .post-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
@@ -2074,6 +2076,25 @@ a.service-card:hover { border-color: #cfc9b8; box-shadow: var(--sh-2); transform
    for a button, and the heading already has the panel's own padding above it. */
 .post-body .btn { text-decoration: none; }
 .post-body .section-cta h2 { margin-top: 0; }
+
+/* Mini case studies inside a post body — the same left-lime-border treatment
+   as .case-testimonial, stacked instead of run together as plain paragraphs. */
+.mini-cases { display: flex; flex-direction: column; gap: 1rem; margin: 1.75rem 0 2.25rem; }
+.mini-case { padding: 1.25rem 1.375rem; background: var(--paper-raised); border: 1px solid var(--hairline); border-left: 2px solid var(--lime); border-radius: var(--r-md); }
+.mini-case__tag { display: block; font-family: var(--mono); font-size: .75rem; font-weight: 600; letter-spacing: .02em; text-transform: uppercase; color: var(--pine); margin-bottom: .5rem; }
+.mini-case p { margin-bottom: .75rem; color: var(--stone); }
+.mini-case a { font-size: .9375rem; font-weight: 600; text-decoration: none; }
+.mini-case a:hover { text-decoration: underline; text-underline-offset: 2px; }
+
+/* Numbered question steps — a mono index rather than a plain h3, so the list
+   reads as a sequence to skim rather than five unrelated headings. */
+.qa-steps { counter-reset: qa; }
+.qa-steps h3 { counter-increment: qa; display: flex; align-items: baseline; gap: .625rem; }
+.qa-steps h3::before {
+    content: counter(qa, decimal-leading-zero);
+    font-family: var(--mono); font-size: .8125rem; font-weight: 600; color: var(--lime);
+    flex-shrink: 0;
+}
 
 .post-footer { max-width: 42rem; margin: 3.5rem auto 0; }
 .post-footer__related { font-size: .9375rem; color: var(--stone); text-align: center; }

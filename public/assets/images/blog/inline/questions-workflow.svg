@@ -1,0 +1,61 @@
+<svg viewBox="0 0 1040 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Five short questions, asked on the discovery call, converging into one outcome: a fixed price and timeline within forty eight hours.">
+  <rect x="1" y="1" width="1038" height="318" rx="5" fill="#FCFBF8" stroke="#E4DFD3" stroke-width="2"/>
+
+  <!-- Five question chips. -->
+  <g font-family="Instrument Sans, ui-sans-serif, system-ui, sans-serif">
+    <!-- Chip 1 -->
+    <g>
+      <rect x="40" y="40" width="176" height="72" rx="4" fill="#FCFBF8" stroke="#161D19" stroke-width="1.5"/>
+      <text x="58" y="64" font-family="Cascadia Code, Consolas, ui-monospace, monospace" font-size="12" font-weight="600" fill="#74B812">01</text>
+      <text x="58" y="88" font-size="14.5" font-weight="600" fill="#161D19">What breaks</text>
+      <text x="58" y="105" font-size="14.5" font-weight="600" fill="#161D19">today?</text>
+    </g>
+    <!-- Chip 2 -->
+    <g>
+      <rect x="256" y="40" width="176" height="72" rx="4" fill="#FCFBF8" stroke="#161D19" stroke-width="1.5"/>
+      <text x="274" y="64" font-family="Cascadia Code, Consolas, ui-monospace, monospace" font-size="12" font-weight="600" fill="#74B812">02</text>
+      <text x="274" y="88" font-size="14.5" font-weight="600" fill="#161D19">Who uses</text>
+      <text x="274" y="105" font-size="14.5" font-weight="600" fill="#161D19">this?</text>
+    </g>
+    <!-- Chip 3 -->
+    <g>
+      <rect x="472" y="40" width="176" height="72" rx="4" fill="#FCFBF8" stroke="#161D19" stroke-width="1.5"/>
+      <text x="490" y="64" font-family="Cascadia Code, Consolas, ui-monospace, monospace" font-size="12" font-weight="600" fill="#74B812">03</text>
+      <text x="490" y="88" font-size="14.5" font-weight="600" fill="#161D19">What happens</text>
+      <text x="490" y="105" font-size="14.5" font-weight="600" fill="#161D19">today?</text>
+    </g>
+    <!-- Chip 4 -->
+    <g>
+      <rect x="688" y="40" width="176" height="72" rx="4" fill="#FCFBF8" stroke="#161D19" stroke-width="1.5"/>
+      <text x="706" y="64" font-family="Cascadia Code, Consolas, ui-monospace, monospace" font-size="12" font-weight="600" fill="#74B812">04</text>
+      <text x="706" y="88" font-size="14.5" font-weight="600" fill="#161D19">Smallest version</text>
+      <text x="706" y="105" font-size="14.5" font-weight="600" fill="#161D19">worth having?</text>
+    </g>
+    <!-- Chip 5 -->
+    <g>
+      <rect x="824" y="40" width="176" height="72" rx="4" fill="#FCFBF8" stroke="#161D19" stroke-width="1.5"/>
+      <text x="842" y="64" font-family="Cascadia Code, Consolas, ui-monospace, monospace" font-size="12" font-weight="600" fill="#74B812">05</text>
+      <text x="842" y="88" font-size="14.5" font-weight="600" fill="#161D19">True on</text>
+      <text x="842" y="105" font-size="14.5" font-weight="600" fill="#161D19">day one?</text>
+    </g>
+  </g>
+
+  <!-- Converging dashed lines down to a single trunk. -->
+  <g stroke="rgba(22,29,25,.35)" stroke-width="2" stroke-dasharray="7 6" stroke-linecap="round" fill="none">
+    <path d="M128 112 L128 150 Q128 164 142 164 L506 164"/>
+    <path d="M344 112 L344 145 Q344 164 358 164 L506 164"/>
+    <path d="M520 112 L520 164"/>
+    <path d="M776 112 L776 150 Q776 164 762 164 L534 164"/>
+    <path d="M912 112 L912 145 Q912 164 898 164 L534 164"/>
+  </g>
+  <line x1="520" y1="164" x2="520" y2="196" stroke="#74B812" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="520" cy="164" r="5" fill="#74B812"/>
+
+  <!-- Outcome. -->
+  <rect x="220" y="196" width="600" height="76" rx="4" fill="#FCFBF8" stroke="#161D19" stroke-width="2"/>
+  <rect x="220" y="196" width="5" height="76" fill="#74B812"/>
+  <g font-family="Instrument Sans, ui-sans-serif, system-ui, sans-serif">
+    <text x="252" y="230" font-size="17" font-weight="700" fill="#161D19">Fixed price and timeline</text>
+    <text x="252" y="253" font-size="13.5" fill="#5F6660">Within 48 hours of the discovery call</text>
+  </g>
+</svg>
