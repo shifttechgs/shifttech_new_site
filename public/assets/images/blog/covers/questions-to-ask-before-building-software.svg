@@ -1,4 +1,4 @@
-<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The ShiftTech wordmark beside a flat stack of three layered cards, with the tagline Software that runs your business.">
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="On the left, a brief feeding straight into a build that lands offset from what was needed. On the right, five questions converging on a defined problem, and a build that lands exactly on its outline.">
   <rect width="800" height="500" fill="#0C2B24"/>
 
   <!-- Same dashed inset frame and lime corner nodes as the category covers. -->
@@ -15,32 +15,52 @@
     <circle cx="758" cy="458" r="7"/>
   </g>
 
-  <!-- Left: a flat stack of three cards, back to front. No isometric depth or
-       gradients, just offset flat rects, in keeping with the rest of the site. -->
-  <g>
-    <rect x="96" y="146" width="196" height="132" rx="6" fill="none" stroke="rgba(244,242,234,.35)" stroke-width="2" stroke-dasharray="8 6"/>
-    <circle cx="96" cy="146" r="4" fill="#74B812"/>
+  <!-- Left: the brief taken at face value. It goes straight to a build, and
+       the built block sits offset from the dashed outline of what was needed. -->
+  <rect x="112" y="132" width="176" height="52" rx="4" fill="none"
+        stroke="rgba(244,242,234,.35)" stroke-width="2" stroke-dasharray="9 7"/>
+  <rect x="132" y="152" width="112" height="12" rx="2" fill="rgba(244,242,234,.3)"/>
 
-    <rect x="128" y="184" width="196" height="132" rx="6" fill="rgba(244,242,234,.1)" stroke="rgba(244,242,234,.5)" stroke-width="2"/>
-    <circle cx="128" cy="184" r="4" fill="#74B812"/>
+  <line x1="200" y1="196" x2="200" y2="236" stroke="rgba(244,242,234,.45)" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M190 226 L200 244 L210 226" fill="none" stroke="rgba(244,242,234,.45)"
+        stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
 
-    <rect x="160" y="222" width="196" height="132" rx="6" fill="rgba(116,184,18,.14)" stroke="#74B812" stroke-width="2.5"/>
-    <rect x="160" y="222" width="5" height="132" fill="#74B812"/>
-    <circle cx="160" cy="222" r="4" fill="#74B812"/>
-    <g fill="rgba(244,242,234,.6)">
-      <rect x="184" y="252" width="120" height="11" rx="2"/>
-      <rect x="184" y="276" width="82" height="11" rx="2"/>
-    </g>
+  <rect x="160" y="284" width="132" height="88" rx="4" fill="none"
+        stroke="rgba(244,242,234,.3)" stroke-width="2" stroke-dasharray="9 7"/>
+  <rect x="128" y="262" width="132" height="88" rx="4" fill="rgba(244,242,234,.16)"
+        stroke="rgba(244,242,234,.4)" stroke-width="2"/>
+
+  <!-- Divider. -->
+  <line x1="400" y1="130" x2="400" y2="372" stroke="rgba(244,242,234,.22)"
+        stroke-width="2" stroke-dasharray="6 8" stroke-linecap="round"/>
+
+  <!-- Right: five questions converge on one defined problem, and the build
+       lands exactly inside the outline of what was needed. -->
+  <g stroke="rgba(244,242,234,.55)" stroke-width="2">
+    <line x1="512" y1="142" x2="606" y2="212"/>
+    <line x1="512" y1="177" x2="606" y2="212"/>
+    <line x1="512" y1="212" x2="606" y2="212"/>
+    <line x1="512" y1="247" x2="606" y2="212"/>
+    <line x1="512" y1="282" x2="606" y2="212"/>
   </g>
+  <g fill="rgba(244,242,234,.85)">
+    <circle cx="510" cy="142" r="5"/>
+    <circle cx="510" cy="177" r="5"/>
+    <circle cx="510" cy="212" r="5"/>
+    <circle cx="510" cy="247" r="5"/>
+    <circle cx="510" cy="282" r="5"/>
+  </g>
+  <circle cx="612" cy="212" r="9" fill="#74B812"/>
 
-  <!-- Right: wordmark, matching the O-mark / Shift / Tech treatment used
-       sitewide, plus the standing tagline. -->
-  <g font-family="Instrument Sans, ui-sans-serif, system-ui, sans-serif">
-    <text x="446" y="205" font-family="Cascadia Code, Consolas, ui-monospace, monospace" font-size="15" font-weight="600" letter-spacing="2" fill="#74B812">// PROCESS</text>
+  <line x1="612" y1="230" x2="612" y2="264" stroke="#74B812" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M602 254 L612 272 L622 254" fill="none" stroke="#74B812"
+        stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
 
-    <circle cx="464" cy="272" r="27" fill="none" stroke="#74B812" stroke-width="11" stroke-dasharray="142 40" stroke-linecap="round" transform="rotate(-35 464 272)"/>
-    <text x="502" y="288" font-size="60" font-weight="700" letter-spacing="-.5" fill="#F4F2EA">Shift<tspan fill="#74B812">Tech</tspan></text>
-
-    <text x="446" y="340" font-family="Cascadia Code, Consolas, ui-monospace, monospace" font-size="14.5" letter-spacing="1.5" fill="rgba(244,242,234,.55)">SOFTWARE THAT RUNS YOUR BUSINESS</text>
+  <rect x="546" y="284" width="132" height="88" rx="4" fill="rgba(244,242,234,.14)"
+        stroke="rgba(244,242,234,.85)" stroke-width="2.5"/>
+  <rect x="546" y="284" width="4" height="88" fill="#74B812"/>
+  <g fill="rgba(244,242,234,.6)">
+    <rect x="568" y="308" width="88" height="10" rx="2"/>
+    <rect x="568" y="330" width="60" height="10" rx="2"/>
   </g>
 </svg>
