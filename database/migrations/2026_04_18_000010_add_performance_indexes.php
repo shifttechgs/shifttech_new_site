@@ -101,10 +101,16 @@ return new class extends Migration
         Schema::table('contact_form_submissions', fn ($t) => $t->dropIndex(['status']));
     }
 
+    /**
+     * `SHOW INDEX` is MySQL-only and throws a syntax error on SQLite, which is
+     * what production runs. Under `set -euo pipefail` in deploy.sh that aborts
+     * the whole deploy at the migrate step. Schema::getIndexes() asks the
+     * driver, so it answers the same question on either database.
+     */
     private function hasIndex(string $table, string $index): bool
     {
-        return collect(\DB::select("SHOW INDEX FROM `{$table}`"))
-            ->pluck('Key_name')
+        return collect(Schema::getIndexes($table))
+            ->pluck('name')
             ->contains($index);
     }
 };

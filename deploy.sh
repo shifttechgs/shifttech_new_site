@@ -60,6 +60,22 @@ php artisan view:cache
 echo "==> Running migrations"
 php artisan migrate --force
 
+# Seeds the admin user, the service catalogue, and the real CRM records
+# (clients, quotes, invoices, payments) carried in the encrypted payload at
+# database/seeders/data/crm-payload.enc.
+#
+# Safe on every deploy: each row is keyed by its business ID (CLI-, QUO-, INV-,
+# PAY-) and skipped when already present, and nothing is ever updated or
+# deleted. A record edited in the panel is not clobbered by the next deploy.
+#
+# The payload is ciphertext because this repository is public. Decryption needs
+# CRM_SEED_KEY in the pod's .env — without it the CRM records are skipped with a
+# warning and only the defaults are seeded. A key that is present but wrong is a
+# hard failure, which stops the deploy here rather than reporting success over a
+# database that received nothing.
+echo "==> Seeding"
+php artisan db:seed --force
+
 echo "==> Fixing ownership"
 chown -R application:application "$APP_DIR"
 
