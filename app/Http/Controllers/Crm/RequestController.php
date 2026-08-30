@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Crm;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Crm\Concerns\HasPerPageSelector;
 use App\Models\ActivityLog;
 use App\Models\BusinessClient;
 use App\Models\ClientRequest;
@@ -13,6 +14,8 @@ use Illuminate\Support\Str;
 
 class RequestController extends Controller
 {
+    use HasPerPageSelector;
+
     public function index(Request $request)
     {
         $query = ClientRequest::with('client')->orderBy('created_at', 'desc');
@@ -30,7 +33,7 @@ class RequestController extends Controller
             $query->where('priority', $priority);
         }
 
-        $requests = $query->paginate(25)->withQueryString();
+        $requests = $query->paginate($this->perPage($request))->withQueryString();
 
         $stats = [
             'total'     => ClientRequest::count(),

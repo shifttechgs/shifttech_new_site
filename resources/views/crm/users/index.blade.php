@@ -4,6 +4,9 @@
     <a href="{{ route('crm.users.create') }}" class="crm-btn crm-btn-primary">New User</a>
 </div>
 <div class="crm-table-wrap">
+    <div class="crm-table-toolbar" style="justify-content:flex-end;">
+        @include('crm.partials.per-page-selector', ['paginator' => $users])
+    </div>
     <table class="crm-table">
         <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Last Login</th><th></th></tr></thead>
         <tbody>

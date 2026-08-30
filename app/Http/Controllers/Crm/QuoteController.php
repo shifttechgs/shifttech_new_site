@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Crm;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Crm\Concerns\HasPerPageSelector;
 use App\Mail\QuoteMail;
 use App\Models\ActivityLog;
 use App\Models\BusinessClient;
@@ -17,6 +18,8 @@ use Illuminate\Support\Facades\Mail;
 
 class QuoteController extends Controller
 {
+    use HasPerPageSelector;
+
     public function index(Request $request)
     {
         $query = Quote::with('client')->orderBy('created_at', 'desc');
@@ -34,7 +37,7 @@ class QuoteController extends Controller
             $query->where('status', $status);
         }
 
-        $quotes = $query->paginate(25)->withQueryString();
+        $quotes = $query->paginate($this->perPage($request))->withQueryString();
 
         $stats = [
             'total'    => Quote::count(),

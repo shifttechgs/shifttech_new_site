@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Crm;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Crm\Concerns\HasPerPageSelector;
 use App\Mail\InvoiceMail;
 use App\Models\ActivityLog;
 use App\Models\BusinessClient;
@@ -17,6 +18,8 @@ use Illuminate\Support\Facades\Mail;
 
 class InvoiceController extends Controller
 {
+    use HasPerPageSelector;
+
     public function index(Request $request)
     {
         $query = Invoice::with('client')->orderBy('created_at', 'desc');
@@ -36,7 +39,7 @@ class InvoiceController extends Controller
             $query->where('invoice_type', $type);
         }
 
-        $invoices = $query->paginate(25)->withQueryString();
+        $invoices = $query->paginate($this->perPage($request))->withQueryString();
 
         $stats = [
             'total'      => Invoice::count(),

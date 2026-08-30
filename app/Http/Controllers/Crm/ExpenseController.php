@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Crm;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Crm\Concerns\HasPerPageSelector;
 use App\Models\ActivityLog;
 use App\Models\Expense;
 use App\Models\ExpenseCategory;
@@ -11,6 +12,8 @@ use Illuminate\Support\Facades\Storage;
 
 class ExpenseController extends Controller
 {
+    use HasPerPageSelector;
+
     public function index(Request $request)
     {
         $query = Expense::with('category')->orderBy('expense_date', 'desc');
@@ -26,7 +29,7 @@ class ExpenseController extends Controller
             $query->where('category_id', $cat);
         }
 
-        $expenses    = $query->paginate(25)->withQueryString();
+        $expenses    = $query->paginate($this->perPage($request))->withQueryString();
         $categories  = ExpenseCategory::orderBy('name')->get();
 
         $stats = [

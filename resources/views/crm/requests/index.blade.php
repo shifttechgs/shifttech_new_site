@@ -30,6 +30,7 @@
             <button type="submit" class="crm-btn crm-btn-secondary crm-btn-sm">Search</button>
             @if(request('q')||request('status'))<a href="{{ route('crm.requests.index') }}" class="crm-btn crm-btn-ghost crm-btn-sm">Clear</a>@endif
         </form>
+        <div style="margin-left:auto;">@include('crm.partials.per-page-selector', ['paginator' => $requests])</div>
     </div>
     <table class="crm-table">
         <thead><tr><th>Title</th><th>Client</th><th>Priority</th><th>Status</th><th>Date</th><th></th></tr></thead>

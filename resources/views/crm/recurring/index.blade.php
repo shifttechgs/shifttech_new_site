@@ -23,7 +23,7 @@
                 @endforeach
             </select>
         </form>
-        <span style="margin-left:auto;font-size:0.8125rem;color:var(--color-ink-3);">{{ $recurring->total() }} records</span>
+        <div style="margin-left:auto;">@include('crm.partials.per-page-selector', ['paginator' => $recurring])</div>
     </div>
     <table class="crm-table">
         <thead><tr><th>Client</th><th>Frequency</th><th>Amount</th><th>Status</th><th>Next Invoice</th><th></th></tr></thead>

@@ -23,6 +23,7 @@
             </select>
             <button type="submit" class="crm-btn crm-btn-secondary crm-btn-sm">Search</button>
         </form>
+        <div style="margin-left:auto;">@include('crm.partials.per-page-selector', ['paginator' => $leads])</div>
     </div>
     <table class="crm-table">
         <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Service</th><th>Status</th><th>Date</th><th></th></tr></thead>

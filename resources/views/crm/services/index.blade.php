@@ -16,6 +16,9 @@
 @endphp
 
 <div class="crm-table-wrap">
+    <div class="crm-table-toolbar" style="justify-content:flex-end;">
+        @include('crm.partials.per-page-selector', ['paginator' => $services])
+    </div>
     <table class="crm-table">
         <thead>
             <tr>

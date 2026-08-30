@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Crm;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Crm\Concerns\HasPerPageSelector;
 use App\Mail\TeamMemberInvite;
 use App\Models\TeamMember;
 use App\Models\User;
@@ -13,9 +14,11 @@ use Illuminate\Support\Str;
 
 class TeamController extends Controller
 {
-    public function index()
+    use HasPerPageSelector;
+
+    public function index(Request $request)
     {
-        $members = TeamMember::with('user')->orderBy('created_at', 'desc')->paginate(25);
+        $members = TeamMember::with('user')->orderBy('created_at', 'desc')->paginate($this->perPage($request));
         return view('crm.team.index', compact('members'));
     }
 

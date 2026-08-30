@@ -3,14 +3,17 @@
 namespace App\Http\Controllers\Crm;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Crm\Concerns\HasPerPageSelector;
 use App\Models\BusinessService;
 use Illuminate\Http\Request;
 
 class BusinessServiceController extends Controller
 {
-    public function index()
+    use HasPerPageSelector;
+
+    public function index(Request $request)
     {
-        $services = BusinessService::orderBy('category')->orderBy('name')->paginate(25);
+        $services = BusinessService::orderBy('category')->orderBy('name')->paginate($this->perPage($request));
         return view('crm.services.index', compact('services'));
     }
 

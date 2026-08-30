@@ -8,6 +8,9 @@
 </div>
 
 <div class="crm-table-wrap">
+    <div class="crm-table-toolbar" style="justify-content:flex-end;">
+        @include('crm.partials.per-page-selector', ['paginator' => $members])
+    </div>
     <table class="crm-table">
         <thead><tr><th>Member</th><th>Role</th><th>Job Title</th><th>Phone</th><th>Status</th><th>Joined</th><th></th></tr></thead>
         <tbody>

@@ -3,15 +3,18 @@
 namespace App\Http\Controllers\Crm;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Crm\Concerns\HasPerPageSelector;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function index()
+    use HasPerPageSelector;
+
+    public function index(Request $request)
     {
-        $users = User::orderBy('name')->paginate(25);
+        $users = User::orderBy('name')->paginate($this->perPage($request));
         return view('crm.users.index', compact('users'));
     }
 

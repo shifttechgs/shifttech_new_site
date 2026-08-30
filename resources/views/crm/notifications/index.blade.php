@@ -9,6 +9,9 @@
 </div>
 
 <div class="crm-card">
+    <div style="display:flex;justify-content:flex-end;padding:0.875rem 1.25rem;border-bottom:1px solid var(--color-border);">
+        @include('crm.partials.per-page-selector', ['paginator' => $notifications])
+    </div>
     @forelse($notifications as $n)
     @php
     $typeColors = ['success'=>['bg'=>'#ecfdf3','icon'=>'#12b76a'],'warning'=>['bg'=>'#fffaeb','icon'=>'#f79009'],'danger'=>['bg'=>'#fef3f2','icon'=>'#f04438'],'info'=>['bg'=>'#eff8ff','icon'=>'#2e90fa']];

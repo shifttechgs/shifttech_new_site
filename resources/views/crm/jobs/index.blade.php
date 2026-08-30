@@ -31,7 +31,7 @@
             <button type="submit" class="crm-btn crm-btn-secondary crm-btn-sm">Search</button>
             @if(request('q') || request('status'))<a href="{{ route('crm.jobs.index') }}" class="crm-btn crm-btn-ghost crm-btn-sm">Clear</a>@endif
         </form>
-        <span style="margin-left:auto;font-size:0.8125rem;color:var(--color-ink-3);">{{ $jobs->total() }} records</span>
+        <div style="margin-left:auto;">@include('crm.partials.per-page-selector', ['paginator' => $jobs])</div>
     </div>
     <table class="crm-table">
         <thead><tr><th>Job ID</th><th>Title</th><th>Client</th><th>Assigned To</th><th>Status</th><th>Date</th><th></th></tr></thead>

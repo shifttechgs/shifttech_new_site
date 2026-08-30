@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Crm;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Crm\Concerns\HasPerPageSelector;
 use App\Models\ActivityLog;
 use App\Models\BusinessClient;
 use App\Models\BusinessService;
@@ -18,6 +19,8 @@ use Illuminate\Http\Request;
 
 class JobController extends Controller
 {
+    use HasPerPageSelector;
+
     public function index(Request $request)
     {
         $query = Job::with('client')->orderBy('created_at', 'desc');
@@ -35,7 +38,7 @@ class JobController extends Controller
             $query->where('job_status', $status);
         }
 
-        $jobs = $query->paginate(25)->withQueryString();
+        $jobs = $query->paginate($this->perPage($request))->withQueryString();
 
         $stats = [
             'total'      => Job::count(),

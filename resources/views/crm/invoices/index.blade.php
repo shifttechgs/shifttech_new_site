@@ -66,7 +66,7 @@
                 <a href="{{ route('crm.invoices.index') }}" class="crm-btn crm-btn-ghost crm-btn-sm">Clear</a>
             @endif
         </form>
-        <span style="margin-left:auto;font-size:0.8125rem;color:var(--color-ink-3);">{{ $invoices->total() }} records</span>
+        <div style="margin-left:auto;">@include('crm.partials.per-page-selector', ['paginator' => $invoices])</div>
     </div>
 
     {{-- Table --}}

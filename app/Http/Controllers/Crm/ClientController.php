@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Crm;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Crm\Concerns\HasPerPageSelector;
 use App\Models\ActivityLog;
 use App\Models\BusinessClient;
 use App\Models\User;
@@ -10,6 +11,8 @@ use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {
+    use HasPerPageSelector;
+
     public function index(Request $request)
     {
         $query = BusinessClient::with('assignedRep')
@@ -31,7 +34,7 @@ class ClientController extends Controller
             $query->where('lead_source', $source);
         }
 
-        $clients = $query->paginate(25)->withQueryString();
+        $clients = $query->paginate($this->perPage($request))->withQueryString();
 
         $stats = [
             'total'    => BusinessClient::count(),

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Crm;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Crm\Concerns\HasPerPageSelector;
 use App\Models\ActivityLog;
 use App\Models\BusinessClient;
 use App\Models\ContactFormSubmission;
@@ -10,6 +11,8 @@ use Illuminate\Http\Request;
 
 class LeadsController extends Controller
 {
+    use HasPerPageSelector;
+
     public function index(Request $request)
     {
         $query = ContactFormSubmission::orderBy('created_at', 'desc');
@@ -25,7 +28,7 @@ class LeadsController extends Controller
             $query->where('status', $status);
         }
 
-        $leads = $query->paginate(25)->withQueryString();
+        $leads = $query->paginate($this->perPage($request))->withQueryString();
 
         $stats = [
             'total'    => ContactFormSubmission::count(),

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Crm;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Crm\Concerns\HasPerPageSelector;
 use App\Models\ActivityLog;
 use App\Models\BusinessClient;
 use App\Models\RecurringInvoice;
@@ -11,6 +12,8 @@ use Illuminate\Http\Request;
 
 class RecurringInvoiceController extends Controller
 {
+    use HasPerPageSelector;
+
     public function index(Request $request)
     {
         $query = RecurringInvoice::with('client')->orderBy('created_at', 'desc');
@@ -19,7 +22,7 @@ class RecurringInvoiceController extends Controller
             $query->where('status', $status);
         }
 
-        $recurring = $query->paginate(25)->withQueryString();
+        $recurring = $query->paginate($this->perPage($request))->withQueryString();
 
         $stats = [
             'active'   => RecurringInvoice::where('status', 'Active')->count(),

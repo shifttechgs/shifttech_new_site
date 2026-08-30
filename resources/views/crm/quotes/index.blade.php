@@ -32,7 +32,7 @@
             <button type="submit" class="crm-btn crm-btn-secondary crm-btn-sm">Search</button>
             @if(request('q') || request('status'))<a href="{{ route('crm.quotes.index') }}" class="crm-btn crm-btn-ghost crm-btn-sm">Clear</a>@endif
         </form>
-        <span style="margin-left:auto;font-size:0.8125rem;color:var(--color-ink-3);">{{ $quotes->total() }} records</span>
+        <div style="margin-left:auto;">@include('crm.partials.per-page-selector', ['paginator' => $quotes])</div>
     </div>
     <table class="crm-table">
         <thead><tr><th>Quote ID</th><th>Client</th><th>Title</th><th>Amount</th><th>Status</th><th>Date</th><th></th></tr></thead>
