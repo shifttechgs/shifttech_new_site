@@ -40,6 +40,11 @@ class InvoiceMail extends Mailable
                     $this->business->business_name
                 ),
             ],
+            // Bcc the sending mailbox on every invoice email. Laravel submits
+            // over raw SMTP and never files a copy into that mailbox's own
+            // Sent folder the way a mail client would, so without this
+            // there is no record in the account you can check anywhere.
+            bcc: [config('mail.from.address')],
         );
     }
 
