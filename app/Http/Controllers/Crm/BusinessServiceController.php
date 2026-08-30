@@ -10,7 +10,7 @@ class BusinessServiceController extends Controller
 {
     public function index()
     {
-        $services = BusinessService::orderBy('category')->orderBy('name')->get();
+        $services = BusinessService::orderBy('category')->orderBy('name')->paginate(25);
         return view('crm.services.index', compact('services'));
     }
 

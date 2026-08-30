@@ -15,7 +15,7 @@ class TeamController extends Controller
 {
     public function index()
     {
-        $members = TeamMember::with('user')->orderBy('created_at', 'desc')->get();
+        $members = TeamMember::with('user')->orderBy('created_at', 'desc')->paginate(25);
         return view('crm.team.index', compact('members'));
     }
 

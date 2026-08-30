@@ -39,6 +39,7 @@
         @endforelse
         </tbody>
     </table>
+    @if($members->hasPages())<div style="padding:1rem 1.25rem;border-top:1px solid var(--color-border);">{{ $members->links() }}</div>@endif
 </div>
 </x-crm::layout>
 

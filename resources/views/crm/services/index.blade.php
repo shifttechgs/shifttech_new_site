@@ -81,5 +81,6 @@
         @endforelse
         </tbody>
     </table>
+    @if($services->hasPages())<div style="padding:1rem 1.25rem;border-top:1px solid var(--color-border);">{{ $services->links() }}</div>@endif
 </div>
 </x-crm::layout>
