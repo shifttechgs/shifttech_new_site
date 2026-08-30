@@ -1,0 +1,1 @@
+import"./app-BbzB21r_.js";window.crmSidebar=function(){return{open:!1,toggle(){this.open=!this.open},close(){this.open=!1}}};window.crmDropdown=function(){return{open:!1,toggle(){this.open=!this.open},close(){this.open=!1}}};

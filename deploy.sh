@@ -31,15 +31,6 @@ git --no-pager log --oneline -1
 echo "==> composer install"
 composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
 
-# public/build is gitignored (standard practice: compiled assets don't belong
-# in version control), so the pod has no manifest.json until this runs. Without
-# it, every @vite(...) call in a Blade view throws "Vite manifest not found" —
-# 500 on any page that isn't a Filament panel, since Filament ships its own
-# compiled assets and never touches this app's manifest.
-echo "==> npm install && build"
-npm ci
-npm run build
-
 # Build the caches rather than only clearing them. Clearing alone left the pod
 # re-parsing every config file, re-registering every route and recompiling every
 # Blade template on each request. Measured server processing time before this
