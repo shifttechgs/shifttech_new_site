@@ -5,6 +5,7 @@
     "scripts": {
         "build": "vite build",
         "dev": "vite",
+        "verify:deploy": "node scripts/verify-deploy.mjs",
         "build:site-assets": "csso public/assets/css/shifttech.css -o public/assets/css/shifttech.min.css && terser public/assets/js/shifttech-site.js -o public/assets/js/shifttech-site.min.js -c -m"
     },
     "devDependencies": {
