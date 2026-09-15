@@ -28,8 +28,9 @@ return new class extends Migration
         // Duplicate of "IT Consulting", which stays on the form.
         'IT Consulting (Hourly)',
 
-        // Named explicitly; "DevOps / Cloud Setup" remains as the DevOps option.
-        'Cloud & DevOps',
+        // Duplicate of "Cloud & DevOps", which is the canonical name (see
+        // migration 2026_04_18_100002) and stays on the form.
+        'DevOps / Cloud Setup',
 
         // Three overlapping web services were on the form at once, which left a
         // prospect guessing which one to tick. "Web Design & Development" is
