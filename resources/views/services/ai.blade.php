@@ -2,7 +2,7 @@
 
 @section('title', 'AI Integrations & Automation in Cape Town | ShiftTech')
 @section('meta_description', 'Practical AI built into the software we ship for Cape Town and Harare businesses: writing code, automating busywork, and updating old systems, with a senior engineer making every call. No hype, just substance.')
-@section('body_class', 'has-dark-hero')
+@section('body_class', 'has-dark-hero is-service')
 
 @php
     $contact = url('/contact');
@@ -82,15 +82,19 @@
     <section class="hero hero--dark">
         <div class="container">
             <div class="hero-split">
-                <div class="hero-copy" style="max-width: 34rem;">
+                <div class="hero-head">
                     <x-site.eyebrow>AI Integrations</x-site.eyebrow>
                     <h1 class="display-xl hero-headline"><span class="dim">AI writes code faster.</span><br><span class="hl">We still read every line.</span></h1>
+                </div>
+
+                <div class="hero-copy">
                     <p class="lede">Claude, Gemini, and Copilot generate the first draft. A senior engineer reviews every line before it ships.</p>
 
                     <div class="hero-ctas">
-                        <x-site.btn :href="$contact" variant="lime">Book a Free Discovery Call</x-site.btn>
+                        <x-site.btn :href="$contact" variant="lime">Book a discovery call</x-site.btn>
                         <x-site.btn href="#capabilities" :link="true" :arrow="true">See where it fits</x-site.btn>
                     </div>
+                    <p class="cta-reassure cta-reassure--hero">Free &middot; 30 minutes &middot; reply within 24 hours &middot; no sales pressure</p>
                 </div>
 
                 {{-- Isometric tile floor + one raised, glowing block, standing
@@ -191,7 +195,7 @@
 
             <div class="section-cta">
                 <p>Want a result like this for your systems?</p>
-                <x-site.btn :href="$contact" variant="lime">Book a Free Discovery Call</x-site.btn>
+                <x-site.btn :href="$contact" variant="lime">Book a discovery call</x-site.btn>
             </div>
         </div>
     </section>
@@ -287,26 +291,20 @@
     </section>
 
     {{-- ==================== FINAL CTA ==================== --}}
-    <section class="section final" id="contact">
-        <div class="container">
-            <x-site.eyebrow>Next step</x-site.eyebrow>
-            <h2><strong>Thirty minutes. No obligation.</strong><br>Just clarity on where AI actually helps.</h2>
-            <p class="lede">Tell us what's slowing your business down. We'll tell you honestly whether AI is part of the fix — and what it would take.</p>
-
-            <ul class="final-trust">
-                <li><svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13.5 4.5 6.5 11.5 3 8" stroke="#74B812" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Free 30-minute call</li>
-                <li><svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13.5 4.5 6.5 11.5 3 8" stroke="#74B812" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Response within 24 hours</li>
-                <li><svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13.5 4.5 6.5 11.5 3 8" stroke="#74B812" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>No sales pressure</li>
-            </ul>
-
-            <div class="final-actions">
-                <x-site.btn :href="$contact" variant="lime">Book a Free Discovery Call</x-site.btn>
-            </div>
-
-            <div class="final-contact">
+    {{-- ==================== FINAL CTA — same pine bookend as the home page
+         and the case studies. --}}
+    <section class="section final section--say-hello" id="contact">
+        <div class="say-hello__inner reveal">
+            <span class="say-hello__marks" aria-hidden="true"></span>
+            <p class="say-hello__eyebrow">Next step</p>
+            <h2 class="say-hello__title">Thirty minutes.<br>Then you'll know.</h2>
+            <p class="say-hello__sub">Tell us what's slowing your business down. We'll tell you honestly whether AI is part of the fix — and what it would take.</p>
+            <a class="say-hello__cta" href="{{ $contact }}">Book a discovery call</a>
+            <p class="cta-reassure cta-reassure--onpine">Free &middot; 30 minutes &middot; reply within 24 hours &middot; no sales pressure</p>
+            <div class="say-hello__contact">
                 <a href="mailto:sales@shifttechgs.com">sales@shifttechgs.com</a>
                 <a href="tel:+27814303023">+27 81 430 3023</a>
-                <span>Cape Town · Harare</span>
+                <span>Cape Town &middot; Harare</span>
             </div>
         </div>
     </section>

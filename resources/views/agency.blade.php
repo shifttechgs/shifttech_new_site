@@ -2,7 +2,7 @@
 
 @section('title', 'About ShiftTech | Founder-Led Software Studio')
 @section('meta_description', 'ShiftTech is a founder-led software studio in Cape Town and Harare. No account managers, no bait-and-switch seniority. You brief the person who ships your code.')
-@section('body_class', 'has-dark-hero')
+@section('body_class', 'has-dark-hero is-agency')
 
 @php
     $contact = url('/contact');
@@ -72,14 +72,23 @@
     {{-- ==================== HERO (dark) ==================== --}}
     <section class="hero hero--dark">
         <div class="container">
-            <div style="max-width: 40rem;">
-                <x-site.eyebrow>About ShiftTech</x-site.eyebrow>
-                <h1 class="display-xl hero-headline"><span class="dim">Most agencies sell you a team.</span><br><span class="hl">We just build the thing.</span></h1>
-                <p class="lede">A founder-led software studio in Cape Town and Harare. No account managers, no bait-and-switch seniority. You brief the person who ships your code.</p>
+            {{-- Same shape as /work and the service heroes: the headline spans
+                 the full width, then the copy and the stat stack sit as two
+                 columns beneath it. --}}
+            <div class="hero-split">
+                <div class="hero-head">
+                    <x-site.eyebrow>About ShiftTech</x-site.eyebrow>
+                    <h1 class="display-xl hero-headline"><span class="dim">Most agencies sell you a team.</span><br><span class="hl">We just build the thing.</span></h1>
+                </div>
 
-                <div class="hero-ctas">
-                    <x-site.btn :href="$contact" variant="lime">Book a Free Discovery Call</x-site.btn>
-                    <x-site.btn href="{{ url('/work') }}" :link="true" :arrow="true">See proof of work</x-site.btn>
+                <div class="hero-copy">
+                    <p class="lede">A founder-led software studio in Cape Town and Harare. No account managers, no bait-and-switch seniority. You brief the person who ships your code.</p>
+
+                    <div class="hero-ctas">
+                        <x-site.btn :href="$contact" variant="lime">Book a discovery call</x-site.btn>
+                        <x-site.btn href="{{ url('/work') }}" :link="true" :arrow="true">See proof of work</x-site.btn>
+                    </div>
+                    <p class="cta-reassure cta-reassure--hero">Free &middot; 30 minutes &middot; reply within 24 hours &middot; no sales pressure</p>
                 </div>
 
                 <div class="work-hero-stats">
@@ -133,7 +142,7 @@
 
                 <p class="founder-sign"><b>Prosper Tinarwo</b> &middot; Founder &amp; Lead Engineer, ShiftTech</p>
                 <div class="founder-cta">
-                    <x-site.btn :href="$contact" variant="lime">Book a Free Discovery Call</x-site.btn>
+                    <x-site.btn :href="$contact" variant="lime">Book a discovery call</x-site.btn>
                     {{-- Personal profile, not the company page. This button sits
                          under the founder's signature, so it reads as his. --}}
                     <x-site.btn href="https://www.linkedin.com/in/prosper-tinarwo-a540b0b0/" variant="ghost-pine" target="_blank" rel="noopener noreferrer">LinkedIn</x-site.btn>
@@ -203,13 +212,13 @@
                 image-alt="BSL Auction admin platform built by ShiftTech"
                 quote="ShiftTech built our auction website and admin platform exactly to our needs. They understood our business and delivered a system that simplified operations and reduced manual work."
                 cite="Conrad, Operations Manager, BSL Services"
-                stack="Laravel · MySQL · PHP"
+                stack="C# · Angular · PostgreSQL"
                 class="case--dashboard reveal"
             >Their team was running auction listings and lot tracking through paper files and spreadsheets. We built a digital admin platform that handles it end to end, cutting admin time and giving them a single source of truth.</x-site.case-study>
 
             <div class="section-cta">
                 <p>Want a system like this for your business?</p>
-                <x-site.btn :href="$contact" variant="lime">Book a Free Discovery Call</x-site.btn>
+                <x-site.btn :href="$contact" variant="lime">Book a discovery call</x-site.btn>
             </div>
         </div>
     </section>
@@ -250,23 +259,17 @@
     </section>
 
     {{-- ==================== FINAL CTA ==================== --}}
-    <section class="section final" id="contact">
-        <div class="container">
-            <x-site.eyebrow>Next step</x-site.eyebrow>
-            <h2><strong>Thirty minutes. No obligation.</strong><br>Just an honest read from the person who'd build it.</h2>
-            <p class="lede">Tell us what's slowing your business down. We'll tell you honestly whether software can fix it and what it would take.</p>
-
-            <ul class="final-trust">
-                <li><svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13.5 4.5 6.5 11.5 3 8" stroke="#74B812" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Free 30-minute call</li>
-                <li><svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13.5 4.5 6.5 11.5 3 8" stroke="#74B812" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Response within 24 hours</li>
-                <li><svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13.5 4.5 6.5 11.5 3 8" stroke="#74B812" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>No sales pressure</li>
-            </ul>
-
-            <div class="final-actions">
-                <x-site.btn :href="$contact" variant="lime">Book a Free Discovery Call</x-site.btn>
-            </div>
-
-            <div class="final-contact">
+    {{-- ==================== FINAL CTA — same pine bookend used across the
+         site. --}}
+    <section class="section final section--say-hello" id="contact">
+        <div class="say-hello__inner reveal">
+            <span class="say-hello__marks" aria-hidden="true"></span>
+            <p class="say-hello__eyebrow">Next step</p>
+            <h2 class="say-hello__title">Thirty minutes.<br>Then you'll know.</h2>
+            <p class="say-hello__sub">Tell us what's slowing your business down. We'll tell you honestly whether software can fix it and what it would take.</p>
+            <a class="say-hello__cta" href="{{ $contact }}">Book a discovery call</a>
+            <p class="cta-reassure cta-reassure--onpine">Free &middot; 30 minutes &middot; reply within 24 hours &middot; no sales pressure</p>
+            <div class="say-hello__contact">
                 <a href="mailto:sales@shifttechgs.com">sales@shifttechgs.com</a>
                 <a href="tel:+27814303023">+27 81 430 3023</a>
                 <span>Cape Town &middot; Harare</span>

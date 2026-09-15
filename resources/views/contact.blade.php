@@ -2,7 +2,7 @@
 
 @section('title', 'Contact | ShiftTech')
 @section('meta_description', 'Tell us what you are building. Free 30-minute discovery call, response within 24 hours, no sales pressure.')
-@section('body_class', 'has-dark-hero')
+@section('body_class', 'has-dark-hero is-contact')
 
 @php
     $faqs = [
@@ -20,16 +20,14 @@
     {{-- ==================== HERO (dark) ==================== --}}
     <section class="hero hero--dark" style="padding-bottom: 1rem;">
         <div class="container">
-            <div style="max-width: 40rem;">
+            <div class="hero-lede">
                 <x-site.eyebrow>Contact</x-site.eyebrow>
                 <h1 class="display-xl hero-headline"><span class="dim">Thirty minutes.</span><br><span class="hl">Then you'll know.</span></h1>
                 <p class="lede">Tell us what you're building. We'll tell you honestly whether it's a fit and what it would take, no obligation.</p>
 
-                <ul class="final-trust" style="justify-content: flex-start; margin-top: 2.5rem;">
-                    <li><svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13.5 4.5 6.5 11.5 3 8" stroke="#74B812" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Free 30-minute call</li>
-                    <li><svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13.5 4.5 6.5 11.5 3 8" stroke="#74B812" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Response within 24 hours</li>
-                    <li><svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13.5 4.5 6.5 11.5 3 8" stroke="#74B812" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>No sales pressure</li>
-                </ul>
+                {{-- Same one-line risk-reversal used under every CTA on the site,
+                     rather than a three-item checklist that wrapped 2+1 here. --}}
+                <p class="cta-reassure cta-reassure--hero">Free &middot; 30 minutes &middot; reply within 24 hours &middot; no sales pressure</p>
             </div>
         </div>
     </section>
@@ -102,7 +100,7 @@
                         <input type="hidden" name="recaptcha_token" id="recaptchaToken" value="">
 
                         <button type="submit" id="submitBtn" class="btn btn-lime form-submit">
-                            <span id="submitBtnText">Start Your Project</span>
+                            <span id="submitBtnText">Request my discovery call</span>
                             <span id="submitBtnIcon" aria-hidden="true">&rarr;</span>
                         </button>
 
@@ -333,7 +331,7 @@ document.addEventListener('DOMContentLoaded', function () {
             showToast('error', 'Network error. Please check your connection and try again.');
         } finally {
             submitButton.disabled = false;
-            submitButtonText.textContent = 'Start Your Project';
+            submitButtonText.textContent = 'Request my discovery call';
         }
     });
 

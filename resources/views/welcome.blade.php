@@ -4,6 +4,8 @@
 @section('meta_description', 'Founder-led software engineering studio in Cape Town and Harare. Web platforms, mobile apps and operations systems, built by the person you actually talk to. Book a free discovery call.')
 @section('body_class', 'has-dark-hero')
 
+{{-- Display face (Plus Jakarta Sans) is loaded site-wide in layouts/site.blade.php --}}
+
 @php
     $contact = url('/contact');
 
@@ -11,12 +13,13 @@
     $stats = [
         ['num' => '100%', 'label' => 'Founder-led, start to finish'],
         ['num' => '10+',  'label' => 'Systems shipped & still running'],
-        ['num' => '90%+', 'label' => 'Repeat partnerships, built on sustained trust'],
+        ['num' => '90%+', 'label' => 'Repeat partnerships'],
     ];
 
     // --- Case studies (auto-advancing carousel) ---
     $caseStudies = [
         ['client' => 'BSL Auction',      'title' => 'The admin platform that runs the whole auction house.',      'tags' => 'Web · Admin platform · Dashboard',  'img' => 'assets/images/thumbs/work/bsl-auction',     'alt' => 'BSL Auction operations dashboard built by ShiftTech', 'w' => 1280, 'h' => 694],
+        ['client' => 'BSL Services',     'title' => 'The public auction site that opens bidding to all of South Africa.', 'tags' => 'Web · Auctions · Lead generation',  'img' => 'assets/images/thumbs/work/bsl-site',        'alt' => 'BSL Services public auction website built by ShiftTech', 'w' => 1280, 'h' => 697],
         ['client' => 'Luminii',          'title' => 'The CRM this studio runs on, and our clients too.',          'tags' => 'SaaS · CRM · Invoicing',            'img' => 'assets/images/thumbs/work/luminii',         'alt' => 'Luminii CRM built by ShiftTech', 'w' => 1280, 'h' => 698],
         ['client' => 'SpringKleaners',   'title' => 'A website built to turn visitors into booked cleans.',        'tags' => 'Web · Lead generation · Cape Town', 'img' => 'assets/images/thumbs/work/springkleaners',  'alt' => 'SpringKleaners cleaning service website built by ShiftTech', 'w' => 1280, 'h' => 691],
         ['client' => 'Ribbon Plumbing',  'title' => 'A conversion-first site for a 24/7 plumbing & gas company.',  'tags' => 'Web · Lead generation · Booking',   'img' => 'assets/images/thumbs/work/ribbon-plumbing', 'alt' => 'Ribbon Plumbing website built by ShiftTech', 'w' => 1280, 'h' => 703],
@@ -27,7 +30,7 @@
     $logos = [
         ['src' => 'assets/images/logo/clients/white/payhse.png',           'alt' => 'Payhouse Finance'],
         ['src' => 'assets/images/logo/clients/white/vpw.png',              'alt' => 'Vision Plus Wealth'],
-        ['src' => 'assets/images/logo/clients/white/wcbs_header_logo.png', 'alt' => 'Western Cape Blood Service'],
+        ['src' => 'assets/images/logo/clients/white/nexa.png',             'alt' => 'Nexa Mining and Engineering Services'],
         ['src' => 'assets/images/logo/clients/white/BSlwebbold.png',       'alt' => 'BSL Services'],
         ['src' => 'assets/images/logo/clients/white/trax_boats.png',       'alt' => 'Boats and Trailers'],
     ];
@@ -93,6 +96,45 @@
         ],
     ];
 
+    // --- Our approach (3 phases — the "Think outside the box" grid; a
+    //     condensed read of $process for the Phobos-style OUR APPROACH block) ---
+    $approach = [
+        ['n' => '01', 'title' => 'Understand the problem', 'body' => "We start with your business, not your tech stack: what's breaking, what's slowing you down, and what a good outcome looks like. Discovery ends with an agreed scope, timeline and budget before a line of code is written."],
+        ['n' => '02', 'title' => 'Build the solution',     'body' => 'You react to real screens before anything is coded, then we build in short cycles with working software every week. Every feature is tested by hand and with automated checks before it ships.'],
+        ['n' => '03', 'title' => 'Launch and support',     'body' => 'A calm go-live, your team trained, and 30 days of post-launch support included. Most clients keep us on a retainer afterwards, because the person who built the system is still the one you talk to.'],
+    ];
+
+    // Stroke-only line-art per phase (framed by CSS corner brackets).
+    $approachFigures = [
+        '<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="1"><line x1="40" y1="18" x2="40" y2="102"/><line x1="40" y1="60" x2="106" y2="30"/><line x1="40" y1="60" x2="108" y2="46"/><line x1="40" y1="60" x2="108" y2="60"/><line x1="40" y1="60" x2="108" y2="74"/><line x1="40" y1="60" x2="106" y2="90"/><line x1="40" y1="60" x2="88" y2="18"/><line x1="40" y1="60" x2="88" y2="102"/><line x1="22" y1="102" x2="98" y2="102"/><circle cx="40" cy="60" r="3"/></svg>',
+        '<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="1"><rect x="22" y="22" width="76" height="76"/><line x1="60" y1="22" x2="60" y2="98"/><line x1="22" y1="60" x2="98" y2="60"/><rect x="64" y="26" width="32" height="32"/></svg>',
+        '<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="1"><line x1="20" y1="96" x2="100" y2="96"/><path d="M28 92 L92 28"/><path d="M74 28 L92 28 L92 46"/><circle cx="46" cy="74" r="2.5"/><circle cx="64" cy="56" r="2.5"/></svg>',
+    ];
+
+    // --- Case studies (Phobos "PROOF IS IN THE DOING." block). The BSL auction
+    //     system as the featured study, with its three delivered pieces below. ---
+    $studyFeatured = [
+        'chip'  => 'Auction system',
+        'title' => 'One platform for the whole auction house',
+        'body'  => 'BSL ran auctions on paper trails and manual admin. We built the whole system: a public bidding site, an operations dashboard, and a field app, so every lot, bid and settlement lives in one place.',
+        'href'  => url('/work/bsl-auction-services'),
+        'img'   => 'assets/images/thumbs/work/bsl-yard',
+        'alt'   => 'Bidders, machinery and vehicles at a B.S.L. auction',
+    ];
+    $studyGrid = [
+        ['chip' => 'SaaS',    'title' => 'Five disconnected tools, replaced by one platform', 'tone' => 'mauve',    'href' => url('/work/luminii-saas-platform')],
+        ['chip' => 'Education', 'title' => 'A paper admissions trail, replaced by one dashboard', 'tone' => 'charcoal', 'href' => url('/work/peekaboo-daycare')],
+    ];
+
+    // --- Insights (latest 2 blog posts, "Our latest thinking." block) ---
+    $insights = \App\Models\Post::published()->take(2)->get();
+
+    // Stroke-only line-art per insight card cover (currentColor = card text colour).
+    $insightFigures = [
+        '<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="1"><circle cx="60" cy="60" r="14"/><circle cx="60" cy="60" r="30"/><circle cx="60" cy="60" r="46" stroke-dasharray="14 10"/><circle cx="60" cy="60" r="3" fill="currentColor" stroke="none"/><path d="M60 14v-6M60 112v-6M14 60H8M112 60h-6"/></svg>',
+        '<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="1"><path d="M10 10h100v100H10z" stroke-dasharray="6 6"/><path d="M60 22v76M22 60h76"/><path d="M52 52l16 16M68 52l-16 16"/></svg>',
+    ];
+
     // --- Testimonials (real, verbatim) ---
     $testimonials = [
         ['logo' => 'assets/images/logo/clients/payhse.png',           'alt' => 'Payhouse Finance',           'name' => 'Allan Chidawarima', 'role' => 'Director, Payhouse Finance', 'highlight' => 'know how to build systems you can trust', 'quote' => 'ShiftTech built our website and helped us fully digitise and automate our loan application process. Security and compliance were critical for us, and the team handled everything with confidence from PCI-DSS requirements to real-time transaction monitoring. They truly understand fintech and know how to build systems you can trust.'],
@@ -134,121 +176,149 @@
     <div class="rails" aria-hidden="true"></div>
 
 
-    {{-- ==================== HERO (dark, centered, type-led, framed — Glucode DNA) ==================== --}}
-    <section class="hero hero--dark hero--framed">
-        {{-- Blurred backdrop of real shipped screenshots — ambient evidence of
-             craft behind the content, not competing with it. --}}
-        <div class="hero-bg" aria-hidden="true">
-            <div class="hero-bg__grid">
-                @foreach (array_slice($caseStudies, 0, 5) as $cs)
-                    <picture>
-                        <source srcset="{{ asset($cs['img'] . '.webp') }}" type="image/webp">
-                        <img src="{{ asset($cs['img'] . '.jpg') }}" alt="" width="{{ $cs['w'] }}" height="{{ $cs['h'] }}" loading="eager">
-                    </picture>
-                @endforeach
+    {{-- ==================== HERO (Phobos-style: type-led split headline, orbital
+         rings, rotating badge, "+" text CTAs, monospace client bar. Charcoal
+         ground + a single pink accent, both scoped to .hero--phobos.) ========= --}}
+    <section class="hero hero--dark hero--phobos">
+        <div class="hero-phobos__bg" aria-hidden="true">
+            <span class="hero-phobos__bg-band hero-phobos__bg-band--1"></span>
+            <span class="hero-phobos__bg-band hero-phobos__bg-band--2"></span>
+            <span class="hero-phobos__bg-band hero-phobos__bg-band--3"></span>
+            <span class="hero-phobos__bg-band hero-phobos__bg-band--4"></span>
+            <span class="hero-phobos__bg-band hero-phobos__bg-band--5"></span>
+        </div>
+        <div class="hero-phobos__stage">
+            <div class="hero-phobos__center rise">
+                <div class="hero-phobos__hero-copy">
+                    <span class="hero-phobos__kicker"><span class="c">//</span>Replace Manual Processes<span class="c">//</span>Build Internal Systems<span class="c">//</span>Scale Operations</span>
+                    <h1 class="hero-phobos__center-title hero-phobos__center-title--display" aria-label="Software isn't the goal. Business value is.">
+                        <span class="hero-phobos__ln">Software isn't the goal.</span>
+                        <span class="hero-phobos__ln2">
+                            <span class="hero-phobos__cycle" aria-hidden="true">
+                                <span class="hero-phobos__cycle-track">
+                                    <span>Business value</span>
+                                    <span>Reliability</span>
+                                    <span>Revenue</span>
+                                    <span>Business value</span>
+                                </span>
+                            </span><span class="hero-phobos__is">is.</span>
+                        </span>
+                    </h1>
+                    <p class="hero-phobos__center-sub">We replace the spreadsheets, paper trails and double capture your team works around every day with software built for how you actually operate.</p>
+                    <div class="hero-phobos__hero-ctas">
+                        <a class="hero-phobos__btn hero-phobos__btn--solid hero-phobos__center-cta" href="{{ $contact }}">Book a discovery call</a>
+                        <a class="hero-phobos__seelink" href="{{ url('/work') }}">See our work</a>
+                    </div>
+                    <p class="cta-reassure cta-reassure--hero">Free &middot; 30 minutes &middot; reply within 24 hours &middot; no sales pressure</p>
+                </div>
+
+                <div class="hero-phobos__proof">
+                    <div class="hero-phobos__proof-col">
+                        <div class="hero-phobos__card hero-phobos__card--tall">
+                            <div class="hero-phobos__card-body">
+                                <span class="hero-phobos__card-num">100%</span>
+                                <span class="hero-phobos__card-label">Tailored to how your business actually runs. Never a template.</span>
+                            </div>
+                            <svg class="hero-phobos__card-poly" viewBox="-130 -130 260 260" aria-hidden="true">
+                                <g fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round">
+                                    <path d="M100 0 L50 -86.6 L-50 -86.6 L-100 0 L-50 86.6 L50 86.6 Z"/>
+                                    <path d="M0 -52 L45 26 L-45 26 Z"/>
+                                    <path d="M0 52 L45 -26 L-45 -26 Z"/>
+                                    <path d="M100 0 L45 -26 M100 0 L45 26
+                                             M50 -86.6 L0 -52 M50 -86.6 L45 -26
+                                             M-50 -86.6 L0 -52 M-50 -86.6 L-45 -26
+                                             M-100 0 L-45 -26 M-100 0 L-45 26
+                                             M-50 86.6 L-45 26 M-50 86.6 L0 52
+                                             M50 86.6 L0 52 M50 86.6 L45 26"/>
+                                </g>
+                            </svg>
+                        </div>
+                        <div class="hero-phobos__card hero-phobos__card--wide">
+                            <div class="hero-phobos__card-body">
+                                <span class="hero-phobos__card-inline"><b>PCI-DSS</b> Compliant builds</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hero-phobos__proof-col">
+                        <a class="hero-phobos__card hero-phobos__card--flow" href="#process">
+                            <div class="hero-phobos__card-body">
+                                <span class="hero-phobos__flow-eyebrow">How we work</span>
+                                <ol class="hero-phobos__flowsteps">
+                                    <li>
+                                        <span class="n">01</span>
+                                        <span class="t">Understand</span>
+                                        <span class="d">What&rsquo;s breaking, and what a good outcome looks like.</span>
+                                    </li>
+                                    <li>
+                                        <span class="n">02</span>
+                                        <span class="t">Build</span>
+                                        <span class="d">Real screens first, then working software every week.</span>
+                                    </li>
+                                    <li>
+                                        <span class="n">03</span>
+                                        <span class="t">Launch</span>
+                                        <span class="d">A calm go-live, with your team trained on it.</span>
+                                    </li>
+                                </ol>
+                            </div>
+                        </a>
+                        <div class="hero-phobos__card">
+                            <div class="hero-phobos__card-body">
+                                <span class="hero-phobos__card-num">30 days</span>
+                                <span class="hero-phobos__card-label">Post-launch support included, then a retainer only if you want one.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-phobos__badge" aria-hidden="true">
+                <svg viewBox="0 0 100 100">
+                    <defs><path id="heroBadgeCirc" d="M50,50 m-36,0 a36,36 0 1,1 72,0 a36,36 0 1,1 -72,0"/></defs>
+                    <text><textPath href="#heroBadgeCirc">SHIFTTECH + EST. 2025 + SENIOR-LED + </textPath></text>
+                </svg>
             </div>
         </div>
-        <div class="hero-frame">
-            <div class="hero-frame__body">
-                <div class="hero-split">
-                    <div class="hero-copy">
-                        <x-site.eyebrow>Replace Manual Processes &middot; Build Internal Systems &middot; Scale Operations</x-site.eyebrow>
 
-                        <h1 class="display-xl hero-headline"><span class="dim">Software isn't the goal.</span><br><span class="hl">Business value is.</span></h1>
-                        <p class="lede hero-sub">We help founders, businesses, and enterprise teams<br>eliminate manual work, modernize operations, and drive measurable business value.</p>
-
-                        <div class="hero-ctas">
-                            <x-site.btn :href="$contact" variant="lime">Book a Free Discovery Call</x-site.btn>
-                            <x-site.btn href="{{ url('/work') }}" :link="true" :arrow="true">See Proof of Work</x-site.btn>
-                        </div>
-
-                    </div>
-
-                    {{-- Photo grid — one real photo of the founder (the "founder-led" claim
-                         made visible) plus two slots that rotate through real shipped work.
-                         Staggered collage of notched-squircle cards: each card has one stepped
-                         corner bite facing a diagonal neighbour, floating badge chips label
-                         each card (chips are siblings of the cards, not children, because the
-                         cards are clip-pathed and would crop anything overhanging their edge),
-                         and a dashed connector frame sits behind. Replaces the lead-capture form. --}}
-                    <div class="hero-photogrid-wrap">
-                        <div class="hero-photogrid">
-                            <div class="hero-photogrid__frame" aria-hidden="true"></div>
-                            <div class="hero-photogrid__founder">
-                                <img src="{{ asset('assets/images/team/prosper.jpg') }}" alt="Prosper, founder of ShiftTech" width="900" height="900" loading="eager">
-                            </div>
-                            {{-- Two animated process cards — how we diagnose (audit) and how
-                                 we build (delivery). Steps light up in sequence via pure CSS
-                                 so the animation obeys prefers-reduced-motion for free. --}}
-                            <div class="hero-photogrid__product hero-photogrid__product--0 hero-photogrid__panel hero-process hero-process--audit">
-                                <span class="hero-photogrid__panel-tag">01 &middot; Systems Audit</span>
-                                <ul class="hero-process__steps">
-                                    <li><i></i>Map your current systems</li>
-                                    <li><i></i>Find gaps &amp; quick wins</li>
-                                    <li><i></i>Fixed-price roadmap</li>
-                                </ul>
-                            </div>
-                            <div class="hero-photogrid__product hero-photogrid__product--1 hero-photogrid__panel hero-process">
-                                <span class="hero-photogrid__panel-tag">02 &middot; End-to-End Delivery</span>
-                                <div class="hero-pipeline">
-                                    <div class="hero-pipeline__stages" aria-label="Design, build, launch, support: one continuous pipeline">
-                                        <span><i></i>Design</span>
-                                        <span><i></i>Build</span>
-                                        <span><i></i>Launch</span>
-                                        <span><i></i>Support</span>
-                                    </div>
-                                    <p class="hero-pipeline__note">One engineer, strategy to support.</p>
-                                </div>
-                            </div>
-                            <div class="hero-photogrid__chip hero-photogrid__chip--founder">
-                                <span class="hero-photogrid__chip-icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17h18l-2-9-4 3-3-6-3 6-4-3z"/></svg></span>
-                                <span class="hero-photogrid__chip-text"><b>Prosper</b><span>Founder &amp; Lead Engineer</span></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="hero-bar">
-                <p class="hero-bar__line">Trusted by regional leaders in fintech, healthcare and logistics.</p>
-                <div class="hero-bar__logos-mask">
-                    <ul class="hero-bar__logos" aria-label="Clients">
-                        @for ($rep = 0; $rep < 2; $rep++)
-                            @foreach ($logos as $logo)
-                                <li @if ($rep === 1) aria-hidden="true" @endif><img src="{{ asset($logo['src']) }}" alt="{{ $logo['alt'] }}" loading="lazy"></li>
-                            @endforeach
-                        @endfor
-                    </ul>
-                </div>
-            </div>
+        <div class="hero-phobos__bar rise">
+            <p>Trusted by regional leaders in fintech, healthcare &amp; logistics</p>
+            <ul class="hero-phobos__logos" aria-label="Clients">
+                @foreach ($logos as $logo)
+                    <li><img src="{{ asset($logo['src']) }}" alt="{{ $logo['alt'] }}" loading="lazy"></li>
+                @endforeach
+            </ul>
         </div>
     </section>
 
     {{-- Mobile-only sticky re-entry CTA — appears once the hero scrolls out of view --}}
     <div class="mobile-sticky-cta" id="mobileStickyCta">
-        <a href="{{ $contact }}" class="btn btn-lime">Book a Free Discovery Call &rarr;</a>
+        <a href="{{ $contact }}" class="btn btn-lime">Book a discovery call &rarr;</a>
     </div>
 
-    {{-- ==================== WHAT WE BUILD (capabilities, stacked scroll) ==================== --}}
-    <section class="section" id="services">
-        <div class="container caps-layout">
-            <div class="caps-head">
-                <x-site.eyebrow>What we build</x-site.eyebrow>
-                <h2 class="display-l">Organised around <strong>your outcome,</strong> not our tech stack.</h2>
-                <p class="caps-note">Not sure which one fits? Book a discovery call, bring the problem, and we'll map the right solution together.</p>
-                <x-site.btn :href="$contact" variant="primary">Book a Free Discovery Call</x-site.btn>
+    {{-- ==================== WHAT WE BUILD — Phobos "EXPERTISE" style: a row of
+         vertical colour-block panels, one per capability. Collapsed = a rotated
+         monospace label; the first is open by default and any panel expands on
+         hover while the rest compress (pure CSS). ============================= --}}
+    <section class="section section--build" id="services">
+        <div class="container">
+            <div class="build-head reveal">
+                <div class="build-head__text">
+                    <span class="build-head__eyebrow">Expertise</span>
+                    <h2 class="build-head__title">Complex problems.<br>Dependable outcomes.</h2>
+                </div>
+                <a class="build-head__cta" href="{{ $contact }}">Book a discovery call</a>
             </div>
 
-            <div class="caps-list">
+            <div class="build-panels reveal">
                 @foreach ($services as $i => $s)
-                    <a href="{{ $s['href'] }}" class="xitem">
-                        <span class="xitem__num">{{ sprintf('%02d', $i + 1) }}</span>
-                        <span class="xitem__body">
-                            <span class="xitem__title-row">
-                                <span class="xitem__title">{{ $s['title'] }}</span>
-                                <span class="xitem__arrow" aria-hidden="true">&rarr;</span>
-                            </span>
-                            <span class="xitem__reveal"><span class="xitem__reveal-inner"><span class="xitem__desc">{{ $s['body'] }}</span></span></span>
+                    <a href="{{ $s['href'] }}" class="build-panel build-panel--{{ $i }}">
+                        <span class="build-panel__mark" aria-hidden="true">+</span>
+                        <span class="build-panel__name">{{ $s['title'] }}</span>
+                        <span class="build-panel__label">{{ $s['title'] }}</span>
+                        <span class="build-panel__reveal">
+                            <span class="build-panel__reveal-body">{{ $s['body'] }}</span>
+                            <span class="build-panel__explore">Explore</span>
                         </span>
                     </a>
                 @endforeach
@@ -256,10 +326,116 @@
         </div>
     </section>
 
-    {{-- ==================== STATISTICS ==================== --}}
-    <section class="stats-band" id="stats">
+    {{-- ==================== CASE STUDIES — Phobos "PROOF IS IN THE DOING.":
+         a photo-led featured study with an overlapping tinted panel, then a
+         row of flat colour-block child cards. ============================== --}}
+    <section class="section section--studies" id="case-studies">
         <div class="container">
-            <div class="stats-grid">
+            <div class="studies-head reveal">
+                <div class="studies-head__text">
+                    <span class="studies-head__eyebrow">Case studies</span>
+                    <h2 class="studies-head__title">Proof is in the doing.</h2>
+                </div>
+                <a class="studies-head__cta" href="{{ url('/work') }}">All studies</a>
+            </div>
+
+            <div class="studies-showcase reveal">
+                <a href="{{ $studyFeatured['href'] }}" class="studies-featured">
+                    <div class="studies-featured__media" aria-hidden="true">
+                        <picture>
+                            <source srcset="{{ asset($studyFeatured['img'] . '.webp') }}" type="image/webp">
+                            <img src="{{ asset($studyFeatured['img'] . '.jpg') }}" alt="{{ $studyFeatured['alt'] }}" loading="lazy">
+                        </picture>
+                    </div>
+                    <div class="studies-featured__panel">
+                        <span class="studies-chip">{{ $studyFeatured['chip'] }}</span>
+                        <h3 class="studies-featured__title">{{ $studyFeatured['title'] }}</h3>
+                        <p class="studies-featured__body">{{ $studyFeatured['body'] }}</p>
+                        <span class="studies-featured__more">Read more</span>
+                    </div>
+                </a>
+
+                <div class="studies-grid">
+                    @foreach ($studyGrid as $c)
+                        <a href="{{ $c['href'] }}" class="study-card study-card--{{ $c['tone'] }}">
+                            <span class="studies-chip">{{ $c['chip'] }}</span>
+                            <h3 class="study-card__title">{{ $c['title'] }}</h3>
+                            <span class="study-card__more">Read more</span>
+                        </a>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{-- ==================== TESTIMONIALS — Phobos language: a bento mosaic of
+         flat colour-block quote cards. One oversized hero quote (its highlight
+         phrase set as a big Archivo pull-quote) + five smaller cards. Static. --}}
+    <section class="section section--value" id="value">
+        <div class="container">
+            <div class="value-head reveal">
+                <div class="value-head__text">
+                    <span class="value-head__eyebrow">What changes</span>
+                    <h2 class="value-head__title">What you actually get.</h2>
+                </div>
+                <a class="value-head__cta" href="{{ $contact }}">Book a discovery call</a>
+            </div>
+
+            @php
+                // Each value is backed by a verbatim fragment from the real
+                // client testimonial above, so the claim and the proof stay
+                // attached to each other.
+                $valueProps = [
+                    [
+                        'title' => 'Manual admin disappears',
+                        'body'  => 'Paper trails, spreadsheets and double capture get replaced by one system your team actually uses.',
+                        'proof' => 'simplified operations and reduced manual work',
+                        'who'   => 1,
+                    ],
+                    [
+                        'title' => 'Revenue you can see',
+                        'body'  => 'Inventory, quotes and sales tracked in one place, so you know what is working long before month end.',
+                        'proof' => 'Sales are up 40% since launch',
+                        'who'   => 3,
+                    ],
+                    [
+                        'title' => 'Shipped faster than in-house',
+                        'body'  => 'Senior engineers and working software every week, instead of a silent build you only see at the end.',
+                        'proof' => 'delivered it 4× faster than our internal estimates',
+                        'who'   => 2,
+                    ],
+                    [
+                        'title' => 'Compliance handled',
+                        'body'  => 'Security and regulatory requirements designed in from the start, not bolted on once you are live.',
+                        'proof' => 'from PCI-DSS requirements to real-time transaction monitoring',
+                        'who'   => 0,
+                    ],
+                ];
+            @endphp
+
+            <div class="value-grid reveal">
+                @foreach ($valueProps as $v)
+                    @php $t = $testimonials[$v['who']]; @endphp
+                    <article class="value-card">
+                        <h3 class="value-card__title">{{ $v['title'] }}</h3>
+                        <p class="value-card__body">{{ $v['body'] }}</p>
+                        <figure class="value-card__proof">
+                            <blockquote>&ldquo;{{ $v['proof'] }}&rdquo;</blockquote>
+                            <figcaption>
+                                <span class="value-card__who">{{ $t['name'] }}</span>
+                                <span class="value-card__role">{{ $t['role'] }}</span>
+                            </figcaption>
+                        </figure>
+                    </article>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
+    {{-- ==================== STATISTICS ==================== --}}
+    <section class="section section--stats" id="stats">
+        <div class="container">
+            <div class="stats-row reveal">
                 @foreach ($stats as $stat)
                     <div class="stat">
                         <span class="stat-num" data-count="{{ $stat['num'] }}">{{ $stat['num'] }}</span>
@@ -270,93 +446,49 @@
         </div>
     </section>
 
-    {{-- ==================== SELECTED WORK — Stack Scroll Reveal ==================== --}}
-    <section class="section solutions" id="work">
-        <div class="container">
-            <div class="sol-head">
-                <x-site.eyebrow>Selected work</x-site.eyebrow>
-                <h2 class="sol-title"><span class="sol-title__lead">Real systems, running real businesses.</span> <span class="sol-title__sub">From fintech platforms to lead-generating websites. A look at what we built and what it changed.</span></h2>
-            </div>
-        </div>
-
-        {{-- Sticky Card Stack: plain document flow, no JS — each card is
-             position:sticky with an increasing top offset, so it catches
-             near the nav and the next card slides up to stack on top of it. --}}
-        <div class="container">
-            <div class="cs-stack">
-                @foreach ($caseStudies as $cs)
-                <article class="cscard cs-stack__item" style="--i: {{ $loop->index }}">
-                    <div class="cscard__media">
-                        <picture>
-                            <source srcset="{{ asset($cs['img'] . '.webp') }}" type="image/webp">
-                            <img src="{{ asset($cs['img'] . '.jpg') }}" alt="{{ $cs['alt'] }}" width="{{ $cs['w'] }}" height="{{ $cs['h'] }}">
-                        </picture>
-                    </div>
-                    <div class="cscard__body">
-                        <span class="cscard__client">{{ $cs['client'] }}</span>
-                        <h3 class="cscard__title">{{ $cs['title'] }}</h3>
-                        <span class="cscard__tags">{{ $cs['tags'] }}</span>
-                        <div class="cscard__foot">
-                            <x-site.btn href="{{ url('/work') }}" variant="lime" class="cscard__cta">See More Work &rarr;</x-site.btn>
-                            <span class="cscard__counter">{{ $loop->iteration }} / {{ $loop->count }}</span>
-                        </div>
-                    </div>
-                </article>
-                @endforeach
-            </div>
-
-            <div class="cases-more">
-                <x-site.btn href="{{ url('/work') }}" :link="true" :arrow="true">See All Work</x-site.btn>
-            </div>
+    {{-- ==================== CTA BAND (Phobos "PARTNERING TO BUILD…" — flat
+         pine block + "+" registration marks; no halftone). Mid-page ask, placed
+         after the proof cluster (studies + testimonials + stats). =========== --}}
+    <section class="section section--cta-band">
+        <div class="cta-band__inner reveal">
+            <span class="cta-band__marks" aria-hidden="true"></span>
+            <h2 class="cta-band__title">Partnering to build systems that last</h2>
+            <p class="cta-band__sub">Whether you're starting something new or fixing what exists, you work with the senior engineer who stays on it.</p>
+            <a class="cta-band__cta" href="{{ $contact }}">Book a discovery call</a>
+            <p class="cta-reassure cta-reassure--onpine">Free &middot; 30 minutes &middot; reply within 24 hours &middot; no sales pressure</p>
         </div>
     </section>
 
-    {{-- ==================== PROCESS ==================== --}}
-    <section class="section section--flush-top" id="process">
+    {{-- ==================== OUR APPROACH — Phobos "THINK OUTSIDE THE BOX":
+         a bordered 3-column grid, each cell a numbered phase with a stroke-only
+         line-art diagram framed by corner brackets. ======================== --}}
+    <section class="section section--approach" id="process">
         <div class="container">
-            <x-site.section-head eyebrow="How a project runs">A calm, predictable path <strong>from idea to running system.</strong></x-site.section-head>
-
-            {{-- Expandable drawers — hover to reveal, focus-within for keyboard --}}
-            <div class="drawers reveal" id="processDrawers">
-                @foreach ($process as $p)
-                    <div class="drawer">
-                        <div class="drawer__head">
-                            <span class="drawer__num">{{ $p['n'] }}</span>
-                            <span class="drawer__title">{{ $p['title'] }}</span>
-                            <span class="drawer__toggle" aria-hidden="true">
-                                <svg width="11" height="11" viewBox="0 0 11 11" fill="none" focusable="false">
-                                    <path d="M5.5 1v9M1 5.5h9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                                </svg>
-                            </span>
-                        </div>
-                        <div class="drawer__body">
-                            <div class="drawer__inner">
-                                @if (!empty($p['details']))
-                                    <div class="drawer__details">
-                                        @foreach ($p['details'] as $d)
-                                            <div class="drawer-detail">
-                                                <h4 class="drawer-detail__title">{{ $d['title'] }}</h4>
-                                                <p class="drawer-detail__body">{{ $d['body'] }}</p>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                @else
-                                    <p class="drawer__desc">{{ $p['body'] }}</p>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
+            <div class="approach-head reveal">
+                <span class="approach-head__eyebrow">Our approach</span>
+                <h2 class="approach-head__title">Think outside the box</h2>
             </div>
 
-            <div class="section-cta">
-                <p>Ready to see this in motion for your business?</p>
-                <x-site.btn :href="$contact" variant="lime">Book a Free Discovery Call</x-site.btn>
+            <div class="approach-grid reveal">
+                @foreach ($approach as $i => $a)
+                    <article class="approach-card">
+                        <div class="approach-card__head">
+                            <h3 class="approach-card__title">{{ $a['title'] }}</h3>
+                            <span class="approach-card__num">{{ $a['n'] }}</span>
+                        </div>
+                        <p class="approach-card__body">{{ $a['body'] }}</p>
+                        <div class="approach-card__figure" aria-hidden="true">{!! $approachFigures[$i] !!}</div>
+                    </article>
+                @endforeach
             </div>
         </div>
     </section>
 
     {{-- ==================== FOUNDER ==================== --}}
+    {{-- Parked for now — keep the markup for a later pass (needs a Phobos-style
+         restyle before it goes back on the page). Re-enable by removing the
+         @if (false) / @endif wrapper below. --}}
+    @if (false)
     <section class="section founder" id="founder">
         <div class="container founder-grid">
 
@@ -398,7 +530,7 @@
 
                 <p class="founder-sign"><b>Prosper Tinarwo</b> · Founder &amp; Lead Engineer, ShiftTech</p>
                 <div class="founder-cta">
-                    <x-site.btn :href="$contact" variant="lime">Book a Free Discovery Call</x-site.btn>
+                    <x-site.btn :href="$contact" variant="lime">Book a discovery call</x-site.btn>
                     {{-- Personal profile, not the company page. This button sits
                          under the founder's signature, so it reads as his. --}}
                     <x-site.btn href="https://www.linkedin.com/in/prosper-tinarwo-a540b0b0/" variant="ghost-pine" target="_blank" rel="noopener noreferrer">LinkedIn</x-site.btn>
@@ -407,129 +539,97 @@
 
         </div>
     </section>
+    @endif
 
-    {{-- ==================== TESTIMONIALS ==================== --}}
-    <section class="section" id="testimonials">
-        <div class="container">
-            <div class="testimonials-head">
-                <div class="testimonials-head__text">
-                    <x-site.section-head eyebrow="What clients say">In their <strong>own words.</strong></x-site.section-head>
-                </div>
-                {{-- <button type="button" class="marquee__toggle" data-marquee-toggle aria-pressed="false" aria-label="Pause scrolling testimonials">
-                    <span data-marquee-toggle-icon aria-hidden="true">&#10074;&#10074;</span>
-                    <span data-marquee-toggle-label>Pause</span>
-                </button> --}}
-            </div>
-
-            <div class="marquee" data-marquee>
-                <span class="marquee__fade marquee__fade--top" aria-hidden="true"></span>
-                <span class="marquee__fade marquee__fade--bottom" aria-hidden="true"></span>
-
-                <div class="marquee__cols">
-                    @foreach ($testimonialColumns as $col)
-                        <div class="marquee__col">
-                            <div class="marquee__track" style="--marquee-duration: {{ $col['duration'] }}s;">
-                                @for ($rep = 0; $rep < 2; $rep++)
-                                    @foreach ($col['items'] as $t)
-                                        <x-site.testimonial
-                                            :logo="asset($t['logo'])" :logo-alt="$t['alt']"
-                                            :name="$t['name']" :role="$t['role']"
-                                            :highlight="$t['highlight'] ?? null"
-                                            :reveal="false"
-                                            :aria-hidden="$rep === 1 ? 'true' : null"
-                                        >{{ $t['quote'] }}</x-site.testimonial>
-                                    @endforeach
-                                @endfor
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-
-            <div class="section-cta">
-                <p>Want results like these for your business?</p>
-                <x-site.btn :href="$contact" variant="lime">Book a Free Discovery Call</x-site.btn>
-            </div>
-        </div>
-    </section>
-
-    {{-- ==================== FAQ ==================== --}}
-    <section class="section" id="faq">
-        <div class="container">
-            <div class="faq-panel">
-
-                {{-- Left: heading + context + direct contact --}}
-                <div class="faq-head">
-                    <span class="faq-watermark" aria-hidden="true">FAQ</span>
-                    <x-site.eyebrow>Questions</x-site.eyebrow>
-                    <h2 class="display-l">Before you <strong>book.</strong></h2>
-                    <p class="faq-sub">If something's still unclear after reading these, just ask — or reach us directly.</p>
-
-                    <div class="faq-contacts">
-                        <a class="faq-contact" href="tel:+27814303023">
-                            <span class="faq-contact__icon" aria-hidden="true">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                            </span>
-                            <span>+27 81 430 3023</span>
-                        </a>
-                        <a class="faq-contact" href="mailto:sales@shifttechgs.com">
-                            <span class="faq-contact__icon" aria-hidden="true">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>
-                            </span>
-                            <span>sales@shifttechgs.com</span>
-                        </a>
-                    </div>
-                </div>
-
-                {{-- Right: numbered accordion cards --}}
-                <div class="faq-list">
-                    @foreach ($faqs as $i => $faq)
-                        <details class="faq-item" open>
-                            <summary class="faq-item__head">
-                                <span class="faq-item__num">{{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}</span>
-                                <span class="faq-item__q">{{ $faq['q'] }}</span>
-                                <span class="faq-item__toggle" aria-hidden="true">
-                                    <svg width="12" height="8" viewBox="0 0 12 8" fill="none"><path d="M1 1.5L6 6.5L11 1.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                </span>
-                            </summary>
-                            <div class="faq-item__body">
-                                <div class="faq-item__inner">
-                                    <p>{{ $faq['a'] }}</p>
-                                </div>
-                            </div>
-                        </details>
-                    @endforeach
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    {{-- ==================== FINAL CTA ==================== --}}
-    <section class="section final" id="contact">
-        <div class="container">
-            <x-site.eyebrow>Next step</x-site.eyebrow>
-            <h2><strong>Thirty minutes. No obligation.</strong><br>Just clarity on your next system.</h2>
-            <p class="lede">Tell us what's slowing your business down. We'll tell you honestly whether software can fix it and what it would take.</p>
-
-            {{-- Trust micro-commitments — address the 3 objections before the button --}}
-            <ul class="final-trust">
-                <li><svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13.5 4.5 6.5 11.5 3 8" stroke="#74B812" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Free 30-minute call</li>
-                <li><svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13.5 4.5 6.5 11.5 3 8" stroke="#74B812" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Response within 24 hours</li>
-                <li><svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13.5 4.5 6.5 11.5 3 8" stroke="#74B812" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>No sales pressure</li>
-            </ul>
-
-            <div class="final-actions">
-                <x-site.btn :href="$contact" variant="lime">Book a Free Discovery Call</x-site.btn>
-            </div>
-
-            <div class="final-contact">
+    {{-- ==================== FINAL CTA — Phobos "SAY HELLO." — pine block,
+         oversized pink caps, framed by pink "+" registration marks. Scoped to
+         .section--say-hello; the shared .final / .final-* rules are untouched. --}}
+    <section class="section final section--say-hello" id="contact">
+        <div class="say-hello__inner reveal">
+            <span class="say-hello__marks" aria-hidden="true"></span>
+            <p class="say-hello__eyebrow">Next step</p>
+            <h2 class="say-hello__title">Thirty minutes.<br>Then you'll know.</h2>
+            <p class="say-hello__sub">Tell us what's slowing your business down. We'll tell you honestly whether software can fix it and what it would take.</p>
+            <a class="say-hello__cta" href="{{ $contact }}">Book a discovery call</a>
+            <p class="cta-reassure cta-reassure--onpine">Free &middot; 30 minutes &middot; reply within 24 hours &middot; no sales pressure</p>
+            <div class="say-hello__contact">
                 <a href="mailto:sales@shifttechgs.com">sales@shifttechgs.com</a>
                 <a href="tel:+27814303023">+27 81 430 3023</a>
                 <span>Cape Town · Harare</span>
             </div>
         </div>
     </section>
+
+    {{-- ==================== FAQ — Phobos "CAREERS" treatment: a scroll-pinned
+         stepper. The left heading stays put while the right panel's active card
+         cycles through the questions as you scroll, with a progress readout.
+         Degrades to a plain readable list without JS / with reduced motion. --}}
+    <section class="section section--faq-stepper" id="faq" data-faq-stepper style="--faq-count: {{ count($faqs) }}; --faq-track: {{ (count($faqs) * 55) + 45 }}vh;">
+        <div class="container faq-stepper__grid">
+            <div class="faq-stepper__head reveal">
+                <span class="faq-stepper__eyebrow">FAQ</span>
+                <h2 class="faq-stepper__title">Questions,<br>straight answers.</h2>
+
+                <figure class="faq-stepper__figure">
+                    <picture>
+                        <source srcset="{{ asset('assets/images/team/prosper.webp') }}" type="image/webp">
+                        <img src="{{ asset('assets/images/team/prosper.jpg') }}" alt="Prosper, founder of ShiftTech" width="900" height="900" loading="lazy">
+                    </picture>
+                    <figcaption>You're talking to the engineer who builds it, not a call centre.</figcaption>
+                </figure>
+            </div>
+
+            <div class="faq-stepper__panel">
+                <ol class="faq-steps">
+                    @foreach ($faqs as $i => $faq)
+                        <li class="faq-step{{ $i === 0 ? ' is-active' : '' }}">
+                            <div class="faq-step__head">
+                                <span class="faq-step__num">{{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}</span>
+                                <span class="faq-step__q">{{ $faq['q'] }}</span>
+                                <span class="faq-step__mark" aria-hidden="true">+</span>
+                            </div>
+                            <div class="faq-step__body"><p>{{ $faq['a'] }}</p></div>
+                        </li>
+                    @endforeach
+                </ol>
+                <div class="faq-steps__foot" aria-hidden="true">
+                    <span class="faq-steps__pct" data-faq-pct>0%</span>
+                    <span class="faq-steps__bar"><i></i></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    @if ($insights->isNotEmpty())
+    {{-- ==================== INSIGHTS — Phobos "OUR LATEST THINKING.": a 2-up
+         grid of the latest posts, each a flat colour-block cover (category +
+         line-art) with the headline and "+ read more" below. Nurture/SEO tail —
+         placed after the final CTA so it doesn't pull clicks mid-funnel. ==== --}}
+    <section class="section section--insights" id="insights">
+        <div class="container">
+            <div class="insights-head reveal">
+                <div class="insights-head__text">
+                    <span class="insights-head__eyebrow">Insights</span>
+                    <h2 class="insights-head__title">Our latest thinking.</h2>
+                </div>
+                <a class="insights-head__cta" href="{{ url('/blog') }}">More insights</a>
+            </div>
+
+            <div class="insights-grid reveal">
+                @foreach ($insights as $post)
+                    <a href="{{ route('blog.show', $post) }}" class="insight-card insight-card--{{ $loop->index % 2 }}">
+                        <span class="insight-card__cover">
+                            <span class="insight-card__cat">{{ $post->category }}</span>
+                            <span class="insight-card__fig" aria-hidden="true">{!! $insightFigures[$loop->index % 2] !!}</span>
+                        </span>
+                        <span class="insight-card__title">{{ $post->title }}</span>
+                        <span class="insight-card__more">Read more</span>
+                    </a>
+                @endforeach
+            </div>
+        </div>
+    </section>
+    @endif
 
 </main>
 @endsection
@@ -557,15 +657,31 @@
 (function () {
     'use strict';
     var stickyBar = document.getElementById('mobileStickyCta');
-    var heroEl = document.querySelector('.hero--framed');
+    // Match the hero by its base class, not a layout modifier — the modifier
+    // changed with the Phobos restyle (.hero--framed -> .hero--phobos) and the
+    // old selector silently disabled this bar on every mobile visit.
+    var heroEl = document.querySelector('main .hero');
     if (!stickyBar || !heroEl) return;
 
+    // The final CTA already puts a full-size button on screen, so hide the bar
+    // once it's in view rather than covering it.
+    var finalCta = document.getElementById('contact');
+
+    var queued = false;
+    var update = function () {
+        queued = false;
+        var pastHero = heroEl.getBoundingClientRect().bottom < 0;
+        var atFinalCta = finalCta
+            ? finalCta.getBoundingClientRect().top < window.innerHeight
+            : false;
+        stickyBar.classList.toggle('is-visible', pastHero && !atFinalCta);
+    };
     var onScroll = function () {
-        var heroBottom = heroEl.getBoundingClientRect().bottom;
-        stickyBar.classList.toggle('is-visible', heroBottom < 0);
+        if (!queued) { queued = true; requestAnimationFrame(update); }
     };
     window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
+    window.addEventListener('resize', onScroll);
+    update();
 })();
 </script>
 @endpush

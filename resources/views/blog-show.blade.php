@@ -10,6 +10,7 @@
      card: a share does not need the site name appended to it twice. --}}
 @section('og_title', $post->title)
 @section('og_type', 'article')
+@section('body_class', 'is-blog')
 
 @php
     $contact = url('/contact');
@@ -78,30 +79,24 @@
 
                 <div class="section-cta" style="margin-top: 2.25rem;">
                     <p>Want something like this built for your business?</p>
-                    <x-site.btn :href="$contact" variant="lime">Book a Free Discovery Call</x-site.btn>
+                    <x-site.btn :href="$contact" variant="lime">Book a discovery call</x-site.btn>
                 </div>
             </div>
         </div>
     </section>
 
     {{-- ==================== FINAL CTA ==================== --}}
-    <section class="section final" id="contact">
-        <div class="container">
-            <x-site.eyebrow>Next step</x-site.eyebrow>
-            <h2><strong>Thirty minutes. No obligation.</strong><br>Just clarity on your next system.</h2>
-            <p class="lede">Tell us what's slowing your business down. We'll tell you honestly whether software can fix it and what it would take.</p>
-
-            <ul class="final-trust">
-                <li><svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13.5 4.5 6.5 11.5 3 8" stroke="#74B812" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Free 30-minute call</li>
-                <li><svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13.5 4.5 6.5 11.5 3 8" stroke="#74B812" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Response within 24 hours</li>
-                <li><svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13.5 4.5 6.5 11.5 3 8" stroke="#74B812" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>No sales pressure</li>
-            </ul>
-
-            <div class="final-actions">
-                <x-site.btn :href="$contact" variant="lime">Book a Free Discovery Call</x-site.btn>
-            </div>
-
-            <div class="final-contact">
+    {{-- ==================== FINAL CTA — same pine bookend used across the
+         site. --}}
+    <section class="section final section--say-hello" id="contact">
+        <div class="say-hello__inner reveal">
+            <span class="say-hello__marks" aria-hidden="true"></span>
+            <p class="say-hello__eyebrow">Next step</p>
+            <h2 class="say-hello__title">Thirty minutes.<br>Then you'll know.</h2>
+            <p class="say-hello__sub">Tell us what's slowing your business down. We'll tell you honestly whether software can fix it and what it would take.</p>
+            <a class="say-hello__cta" href="{{ $contact }}">Book a discovery call</a>
+            <p class="cta-reassure cta-reassure--onpine">Free &middot; 30 minutes &middot; reply within 24 hours &middot; no sales pressure</p>
+            <div class="say-hello__contact">
                 <a href="mailto:sales@shifttechgs.com">sales@shifttechgs.com</a>
                 <a href="tel:+27814303023">+27 81 430 3023</a>
                 <span>Cape Town &middot; Harare</span>

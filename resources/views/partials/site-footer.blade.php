@@ -1,8 +1,9 @@
 <footer class="footer">
+    <div class="footer-wordmark" aria-hidden="true">ShiftTech</div>
     <div class="container">
         <div class="footer-grid">
             <div class="footer-brand">
-                <img src="{{ asset('assets/images/logo/shifttech.png') }}" alt="ShiftTech" width="322" height="80">
+                <img src="{{ asset('assets/images/logo/shifttech-white.png') }}" alt="ShiftTech" width="780" height="186">
                 <p>A founder-led software engineering studio. Web platforms, mobile apps and operations systems for growing businesses, since 2025.</p>
             </div>
 

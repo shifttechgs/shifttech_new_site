@@ -11,11 +11,13 @@ class BusinessService extends Model
     protected $fillable = [
         'service_id', 'business_id', 'name', 'description',
         'category', 'unit_price', 'unit_type', 'is_active',
+        'show_on_contact_form',
     ];
 
     protected $casts = [
         'unit_price' => 'decimal:2',
         'is_active'  => 'boolean',
+        'show_on_contact_form' => 'boolean',
     ];
 
     protected static function booted(): void

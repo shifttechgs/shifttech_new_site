@@ -15,7 +15,11 @@ class ContactsController extends Controller
 {
     public function index()
     {
+        // Active governs the CRM's dropdowns; show_on_contact_form governs what
+        // a first-time prospect is offered here. Hosting, renewals and
+        // maintenance stay quotable internally without cluttering the enquiry.
         $services = BusinessService::where('is_active', true)
+            ->where('show_on_contact_form', true)
             ->orderBy('category')
             ->orderBy('name')
             ->get(['service_id', 'name', 'category']);

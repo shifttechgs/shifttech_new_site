@@ -87,6 +87,12 @@ class BusinessServiceResource extends Resource
                         ->label('Active (visible in dropdowns)')
                         ->default(true)
                         ->columnSpanFull(),
+
+                    Forms\Components\Toggle::make('show_on_contact_form')
+                        ->label('Offer on the public contact form')
+                        ->helperText('Turn off for aftercare and infrastructure line items you still quote for but do not want a first-time enquiry to pick.')
+                        ->default(true)
+                        ->columnSpanFull(),
                 ]),
         ]);
     }
@@ -129,9 +135,15 @@ class BusinessServiceResource extends Resource
                 Tables\Columns\IconColumn::make('is_active')
                     ->label('Active')
                     ->boolean(),
+
+                Tables\Columns\IconColumn::make('show_on_contact_form')
+                    ->label('On form')
+                    ->boolean()
+                    ->toggleable(),
             ])
             ->filters([
                 Tables\Filters\TernaryFilter::make('is_active')->label('Active only'),
+                Tables\Filters\TernaryFilter::make('show_on_contact_form')->label('On contact form'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make()->iconButton()->tooltip('Edit'),

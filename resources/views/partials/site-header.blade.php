@@ -17,7 +17,7 @@
         </nav>
 
         <div class="nav-right">
-            <a class="btn btn-primary btn-sm" href="{{ url('/contact') }}">Book a Discovery Call</a>
+            <a class="btn btn-primary btn-sm" href="{{ url('/contact') }}">Book a discovery call</a>
             <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="mobilePanel" aria-label="Open menu">&#9776;</button>
         </div>
     </div>

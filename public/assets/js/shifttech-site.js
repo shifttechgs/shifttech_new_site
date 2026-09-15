@@ -171,6 +171,135 @@
         });
     });
 
+    // FAQ scroll stepper (Phobos "Careers" treatment) — the section is made tall
+    // and its panel sticky; as the section scrolls past, the active card cycles
+    // through the questions and a progress readout climbs. No-JS / reduced-motion
+    // leaves the plain stacked list (see .section--faq-stepper CSS, ungated).
+    var faqStep = document.querySelector('[data-faq-stepper]');
+    if (faqStep && !reduced && window.matchMedia('(min-width: 861px)').matches) {
+        faqStep.classList.add('is-live');
+        var faqSteps = faqStep.querySelectorAll('.faq-step');
+        var faqPct = faqStep.querySelector('[data-faq-pct]');
+        var faqCount = faqSteps.length;
+        var faqQueued = false;
+        var faqUpdate = function () {
+            faqQueued = false;
+            var r = faqStep.getBoundingClientRect();
+            var scrollable = faqStep.offsetHeight - window.innerHeight;
+            var p = scrollable > 0 ? Math.max(0, Math.min(1, -r.top / scrollable)) : 0;
+            var active = Math.min(faqCount - 1, Math.floor(p * faqCount + 1e-4));
+            faqStep.style.setProperty('--faq-p', p);
+            if (faqPct) { faqPct.textContent = Math.round(p * 100) + '%'; }
+            for (var i = 0; i < faqCount; i++) {
+                faqSteps[i].classList.toggle('is-active', i === active);
+            }
+        };
+        // rAF-throttled: faqUpdate reads layout and writes a custom property,
+        // so running it raw on every scroll event forces layout repeatedly.
+        var faqOnScroll = function () {
+            if (!faqQueued) { faqQueued = true; requestAnimationFrame(faqUpdate); }
+        };
+        window.addEventListener('scroll', faqOnScroll, { passive: true });
+        window.addEventListener('resize', faqOnScroll);
+        faqUpdate();
+    }
+
+    // Hero artifact — the tilted "deploy log" card stack spreads apart as the
+    // hero scrolls out of view. Sets --sp (0 -> 1) on the stack; the CSS card
+    // transforms are functions of it. No-JS / reduced-motion leaves it static.
+    var heroArt = document.querySelector('.hero--phobos .hero-phobos__artifact');
+    if (heroArt && !reduced) {
+        var heroSec = heroArt.closest('.hero--phobos');
+        var artQueued = false;
+        var artUpdate = function () {
+            artQueued = false;
+            var h = (heroSec && heroSec.offsetHeight) || window.innerHeight;
+            var p = Math.max(0, Math.min(1, window.scrollY / h));
+            heroArt.style.setProperty('--sp', p.toFixed(4));
+        };
+        window.addEventListener('scroll', function () {
+            if (!artQueued) { artQueued = true; requestAnimationFrame(artUpdate); }
+        }, { passive: true });
+        window.addEventListener('resize', artUpdate);
+        artUpdate();
+    }
+
+    // Hero 3D parallax — the hero layers sit on a perspective stage and lean
+    // toward the pointer (headlines + badge shift, the card stack shifts +
+    // tilts), then settle back to rest when it leaves. Approximates
+    // phobos.com.au's cursor-parallax hero. JS only writes --px / --py (-1..1)
+    // on the stage on pointer move; the eased follow and the return-to-rest are
+    // CSS transitions on the layers (see shifttech.css) — no animation loop, so
+    // the page idles at rest with nothing running. Wider than 860px and no
+    // reduced-motion; a stray move on a touch device just eases back to rest.
+    var heroStage = document.querySelector('.hero--phobos .hero-phobos__stage');
+    if (heroStage && !reduced && window.matchMedia('(min-width: 861px)').matches) {
+        var heroInView = function () {
+            var r = heroStage.getBoundingClientRect();
+            return r.bottom > 0 && r.top < window.innerHeight;
+        };
+        var setParallax = function (px, py) {
+            heroStage.style.setProperty('--px', px.toFixed(3));
+            heroStage.style.setProperty('--py', py.toFixed(3));
+        };
+        window.addEventListener('mousemove', function (e) {
+            if (!heroInView()) return;
+            var r = heroStage.getBoundingClientRect();
+            setParallax(
+                Math.max(-1, Math.min(1, ((e.clientX - r.left) / r.width - 0.5) * 2)),
+                Math.max(-1, Math.min(1, ((e.clientY - r.top) / r.height - 0.5) * 2))
+            );
+        }, { passive: true });
+        document.addEventListener('mouseleave', function () { setParallax(0, 0); });
+    }
+
+    // Hero headline word cycle — only the word rotates; the trailing "is."
+    // never moves. The clip box is widened to the measured width of the active
+    // word so the verb stays tight against it at any font size. The list ends
+    // with a duplicate of the first word so the wrap is seamless: on reaching
+    // it we snap back to index 0 with transitions off.
+    var cyc = document.querySelector('.hero--phobos .hero-phobos__cycle');
+    if (cyc) {
+        var track = cyc.querySelector('.hero-phobos__cycle-track');
+        var words = track ? Array.prototype.slice.call(track.children) : [];
+        if (track && words.length > 1) {
+            var idx = 0;
+            var widths = [];
+            var measure = function () {
+                widths = words.map(function (w) { return w.getBoundingClientRect().width; });
+                cyc.style.width = widths[idx] + 'px';
+            };
+            var step = function () {
+                idx++;
+                track.style.transform = 'translateY(-' + (idx * 1.12) + 'em)';
+                cyc.style.width = widths[idx] + 'px';
+                if (idx >= words.length - 1) {
+                    window.setTimeout(function () {
+                        track.style.transition = 'none';
+                        cyc.style.transition = 'none';
+                        idx = 0;
+                        track.style.transform = 'translateY(0)';
+                        cyc.style.width = widths[0] + 'px';
+                        // force reflow, then restore the transitions
+                        void track.offsetWidth;
+                        track.style.transition = '';
+                        cyc.style.transition = '';
+                    }, 600);
+                }
+            };
+            measure();
+            window.addEventListener('resize', measure);
+            // the display font loads with font-display:swap, so the first
+            // measure can land on the fallback metrics and leave the clip box
+            // too narrow — re-measure once the real face is ready.
+            if (document.fonts && document.fonts.ready) {
+                document.fonts.ready.then(measure);
+            }
+            window.addEventListener('load', measure);
+            if (!reduced) { window.setInterval(step, 2600); }
+        }
+    }
+
     // Current year
     var y = document.getElementById('year');
     if (y) { y.textContent = new Date().getFullYear(); }
